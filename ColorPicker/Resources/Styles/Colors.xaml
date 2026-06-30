@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Blue-purple accent ramp -->
+    <Color x:Key="Accent">#7C5CFC</Color>
+    <Color x:Key="AccentLight1">#9B82FF</Color>
+    <Color x:Key="AccentLight2">#B9A6FF</Color>
+    <Color x:Key="AccentLight3">#D6CCFF</Color>
+    <Color x:Key="AccentDark1">#5E3FE0</Color>
+    <Color x:Key="AccentDark2">#4730B0</Color>
+    <Color x:Key="AccentDark3">#2F1F80</Color>
+
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}" />
+    <SolidColorBrush x:Key="AccentBrushLight" Color="{StaticResource AccentLight1}" />
+    <SolidColorBrush x:Key="AccentBrushDark" Color="{StaticResource AccentDark1}" />
+
+    <LinearGradientBrush x:Key="AccentGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#7C5CFC" Offset="0" />
+        <GradientStop Color="#4F46E5" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Surface colors, referenced via AppThemeBinding in Styles.xaml -->
+    <Color x:Key="LightBackground">#F7F6FB</Color>
+    <Color x:Key="LightCard">#FFFFFF</Color>
+    <Color x:Key="LightBorder">#E5E1F7</Color>
+    <Color x:Key="LightTextPrimary">#1E1B29</Color>
+    <Color x:Key="LightTextSecondary">#6B6577</Color>
+
+    <Color x:Key="DarkBackground">#121018</Color>
+    <Color x:Key="DarkCard">#1E1B29</Color>
+    <Color x:Key="DarkBorder">#332D49</Color>
+    <Color x:Key="DarkTextPrimary">#F5F4FA</Color>
+    <Color x:Key="DarkTextSecondary">#A8A2BC</Color>
+
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="Gray200">#E5E1F7</Color>
+    <Color x:Key="Gray900">#1E1B29</Color>
+
+</ResourceDictionary>

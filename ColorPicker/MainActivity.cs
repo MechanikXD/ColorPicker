@@ -1,3 +1,6 @@
+using Android.App;
+using Android.OS;
+
 namespace ColorPicker;
 
 [Activity(Label = "@string/app_name", MainLauncher = true)]
