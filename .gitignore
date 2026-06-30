@@ -1,5 +1,46 @@
-# Created by https://www.toptal.com/developers/gitignore/api/rider,csharp,dotnetcore,linux
-# Edit at https://www.toptal.com/developers/gitignore?templates=rider,csharp,dotnetcore,linux
+# Created by https://www.toptal.com/developers/gitignore/api/rider,dotnetcore,csharp,android,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=rider,dotnetcore,csharp,android,linux
+
+### Android ###
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
+
+### Android Patch ###
+gen-external-apklibs
+
+# Replacement of .externalNativeBuild directories introduced
+# with Android Studio 3.5.
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -93,7 +134,6 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
 *.tlog
 *.vspscc
 *.vssscc
@@ -260,7 +300,6 @@ Generated_Code/
 # because we have git ;-)
 _UpgradeReport_Files/
 Backup*/
-!BackupUtility/
 UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
@@ -502,4 +541,4 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-# End of https://www.toptal.com/developers/gitignore/api/rider,csharp,dotnetcore,linux
+# End of https://www.toptal.com/developers/gitignore/api/rider,dotnetcore,csharp,android,linux
