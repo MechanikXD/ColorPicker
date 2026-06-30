@@ -2,6 +2,7 @@ using ColorPicker.Models;
 using ColorPicker.View;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Hosting;
+using MainViewModel = ColorPicker.ViewModels.MainViewModel;
 
 namespace ColorPicker;
 

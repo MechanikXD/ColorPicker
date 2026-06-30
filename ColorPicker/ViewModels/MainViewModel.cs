@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ColorPicker.Models;
+namespace ColorPicker.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {

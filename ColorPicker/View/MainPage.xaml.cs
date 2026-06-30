@@ -1,4 +1,5 @@
 using ColorPicker.Models;
+using MainViewModel = ColorPicker.ViewModels.MainViewModel;
 
 namespace ColorPicker.View;
 
