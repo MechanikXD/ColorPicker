@@ -2,9 +2,9 @@ using ColorPicker.ViewModels;
 
 namespace ColorPicker.View;
 
-public partial class MainPage : ContentPage
+public partial class ColorCombinationsPanel : ContentView
 {
-    public MainPage(MainViewModel viewModel)
+    public ColorCombinationsPanel(ColorCombinationsPanelViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

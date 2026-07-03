@@ -1,35 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:views="clr-namespace:ColorPicker.View"
+       xmlns:v="clr-namespace:ColorPicker.View"
        x:Class="ColorPicker.AppShell"
        Shell.FlyoutBehavior="Disabled"
-       Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource LightCard}, Dark={StaticResource DarkCard}}"
-       Shell.TabBarForegroundColor="{StaticResource Accent}"
-       Shell.TabBarUnselectedColor="{AppThemeBinding Light={StaticResource LightTextSecondary}, Dark={StaticResource DarkTextSecondary}}">
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False">
 
-    <TabBar>
-        <!--
-        <ShellContent Title="Camera"
-                      Icon="tab_camera.png"
-                      ContentTemplate="{DataTemplate views:CameraPage}"
-                      Route="camera" />
+    <!-- Named routes allow GoToAsync("//main") etc. from BottomNavViewModel -->
+    <ShellContent Route="main" ContentTemplate="{DataTemplate v:MainPage}" />
+    <!--<ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />
+    <ShellContent Route="camera" ContentTemplate="{DataTemplate v:CameraPage}" />
+    <ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
+    <ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
 
-        <ShellContent Title="Suggest"
-                      Icon="tab_suggest.png"
-                      ContentTemplate="{DataTemplate views:SuggestionsPage}"
-                      Route="suggestions" />
-
-        <ShellContent Title="Palette"
-                      Icon="tab_palette.png"
-                      ContentTemplate="{DataTemplate views:PalettePage}"
-                      Route="palette" />
-
-        <ShellContent Title="Settings"
-                      Icon="tab_settings.png"
-                      ContentTemplate="{DataTemplate views:SettingsPage}"
-                      Route="settings" />
--->
-    </TabBar>
+    <Shell.Resources>
+        <ShellContent x:Key="manualColorRoute" Route="manualcolor"
+                      ContentTemplate="{DataTemplate v:ManualColorPage}" />
+    </Shell.Resources>
 
 </Shell>

@@ -1,10 +1,13 @@
+using ColorPicker.Services.Theme;
+
 namespace ColorPicker;
 
 public partial class App : Application
 {
-    public App()
+    public App(AppShell appShell, IThemeService themeService)
     {
         InitializeComponent();
-        MainPage = new AppShell();
+        themeService.ApplySavedTheme();
+        MainPage = appShell;
     }
 }

@@ -18,6 +18,7 @@
 
     <ItemGroup>
         <Folder Include="Resources\Styles\" />
+        <Folder Include="Selectors\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,6 +19,48 @@ public class ColorSwatch
         Blue = (byte)Math.Round(color.Blue * 255)
     };
 
+    public static ColorSwatch FromHsv(double h, double s, double v, string name = "Untitled")
+    {
+        var c = v * s;
+        var x = c * (1 - Math.Abs(h / 60 % 2 - 1));
+        var m = v - c;
+        double r1, g1, b1;
+
+        switch (h)
+        {
+            case < 60:
+                (r1, g1, b1) = (c, x, 0);
+                break;
+            case < 120:
+                (r1, g1, b1) = (x, c, 0);
+                break;
+            case < 180:
+                (r1, g1, b1) = (0, c, x);
+                break;
+            case < 240:
+                (r1, g1, b1) = (0, x, c);
+                break;
+            case < 300:
+                (r1, g1, b1) = (x, 0, c);
+                break;
+            default:
+                (r1, g1, b1) = (c, 0, x);
+                break;
+        }
+
+        var r = (byte)Math.Round((r1 + m) * 255);
+        var g = (byte)Math.Round((g1 + m) * 255);
+        var b = (byte)Math.Round((b1 + m) * 255);
+
+        return new ColorSwatch
+        {
+            Red = r,
+            Green = g,
+            Blue = b,
+            Name = name
+        };
+    }
+
     public (double H, double S, double V) ToHsv()
     {
         double r = Red / 255.0, g = Green / 255.0, b = Blue / 255.0;

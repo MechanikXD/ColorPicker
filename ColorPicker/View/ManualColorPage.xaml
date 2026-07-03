@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:controls="clr-namespace:ColorPicker.View"
+             x:Class="ColorPicker.View.ManualColorPage"
+             x:DataType="vm:ManualColorViewModel"
+             Shell.NavBarIsVisible="False">
+    <!--
+        Non-tab page: navigating away via BottomNavBar acts as Cancel.
+        The nav bar is shown (visible) but tapping any tab invokes CancelCommand
+        first before routing, handled in BottomNavViewModel.
+    -->
+
+    <ContentPage.Resources>
+        <!-- Value readout chip style - displays metric name + value -->
+        <Style x:Key="ValueChipStyle" TargetType="Border">
+            <Setter Property="StrokeShape" Value="RoundRectangle 10" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke"
+                    Value="{AppThemeBinding Light={StaticResource LightBorder}, Dark={StaticResource DarkBorder}}" />
+            <Setter Property="BackgroundColor"
+                    Value="{AppThemeBinding Light={StaticResource LightCard}, Dark={StaticResource DarkCard}}" />
+            <Setter Property="Padding" Value="10,6" />
+        </Style>
+    </ContentPage.Resources>
+
+    <!--
+        Root Grid:
+          Row 0  = top bar (cancel + confirm actions)
+          Row 1  = large color preview
+          Row 2  = value readout chips
+          Row 3  = slider section (scrollable)
+          Row 4  = nav bar (always visible)
+        ColorCombinationsPanel overlays Rows 2-4 as an AbsoluteLayout layer.
+    -->
+    <Grid RowDefinitions="56, 200, Auto, *, Auto">
+
+        <!-- ── Top action bar ───────────────────────────────────────── -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,8">
+            <Button Grid.Column="0"
+                    Text="Cancel"
+                    Style="{StaticResource OutlineButtonStyle}"
+                    HeightRequest="38"
+                    Command="{Binding CancelCommand}" />
+
+            <Label Grid.Column="1"
+                   Text="Pick a Color"
+                   Style="{StaticResource TitleLabelStyle}"
+                   FontSize="18"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+
+            <Button Grid.Column="2"
+                    Text="Add"
+                    Style="{StaticResource AccentButtonStyle}"
+                    HeightRequest="38" WidthRequest="80"
+                    Command="{Binding AddToPaletteCommand}" />
+        </Grid>
+
+        <!-- ── Large color preview ──────────────────────────────────── -->
+        <!--
+            Fills Row 1. Background is bound to CurrentColor.
+            Tapping copies HEX to clipboard (via CopyHexCommand).
+            The HEX label is overlaid with contrasting text color
+            (use a brightness converter to auto-switch white/black).
+        -->
+        <Border Grid.Row="1"
+                BackgroundColor="{Binding CurrentColor}"
+                Margin="20,8"
+                StrokeShape="RoundRectangle 24"
+                StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow Brush="{Binding CurrentColor}"
+                        Opacity="0.35"
+                        Radius="20"
+                        Offset="0,6" />
+            </Border.Shadow>
+
+            <Grid>
+                <!-- HEX overlay label -->
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                    <Label Text="{Binding HexInput}"
+                           FontSize="22" FontAttributes="Bold"
+                           FontFamily="Monospace"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           Opacity="0.9" />
+                    <Label Text="Tap to copy"
+                           FontSize="11"
+                           TextColor="White"
+                           HorizontalOptions="Center"
+                           Opacity="0.6" />
+                </VerticalStackLayout>
+
+                <!-- Tap to copy gesture -->
+                <Border BackgroundColor="Transparent"
+                        StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CopyHexCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- ── Color value readout chips ────────────────────────────── -->
+        <ScrollView Grid.Row="2" Orientation="Horizontal"
+                    Padding="20,0,20,12" HorizontalScrollBarVisibility="Never">
+            <HorizontalStackLayout Spacing="8">
+
+                <!-- HEX -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="HEX" FontSize="9"
+                               Style="{StaticResource BodyLabelStyle}" />
+                        <Label Text="{Binding HexInput}"
+                               FontSize="13" FontFamily="Monospace" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- RGB -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="RGB" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
+                        <Label FontSize="13" FontFamily="Monospace" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0}, {1}, {2}">
+                                    <Binding Path="Red" StringFormat="{}{0:F0}" />
+                                    <Binding Path="Green" StringFormat="{}{0:F0}" />
+                                    <Binding Path="Blue" StringFormat="{}{0:F0}" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- HSV -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="HSV" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
+                        <Label FontSize="13" FontFamily="Monospace" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0}°  {1}%  {2}%">
+                                    <Binding Path="Hue" StringFormat="{}{0:F0}" />
+                                    <Binding Path="Saturation" StringFormat="{}{0:P0}" />
+                                    <Binding Path="Value" StringFormat="{}{0:P0}" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Brightness -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="Brightness" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
+                        <Label Text="{Binding Brightness, StringFormat='{0:P0}'}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Contrast on White -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="vs White" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
+                        <Label Text="{Binding ContrastOnWhite, StringFormat='{0:F2}:1'}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Contrast on Black -->
+                <Border Style="{StaticResource ValueChipStyle}">
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="vs Black" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
+                        <Label Text="{Binding ContrastOnBlack, StringFormat='{0:F2}:1'}"
+                               FontSize="13" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- ── Sliders ────────────────────────────────────────────────── -->
+        <ScrollView Grid.Row="3" Padding="20,0,20,120">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- HSV group -->
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="HSV" FontAttributes="Bold" FontSize="13"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+
+                        <!-- Hue -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Hue" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Hue, StringFormat='{0:F0}°'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="360"
+                                    Value="{Binding Hue}"
+                                    MinimumTrackColor="{StaticResource Accent}"
+                                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                        Dark={StaticResource DarkBorder}}"
+                                    ThumbColor="{StaticResource Accent}" />
+                        </VerticalStackLayout>
+
+                        <!-- Saturation -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Saturation" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Saturation, StringFormat='{0:P0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="1"
+                                    Value="{Binding Saturation}"
+                                    MinimumTrackColor="{StaticResource Accent}"
+                                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                        Dark={StaticResource DarkBorder}}"
+                                    ThumbColor="{StaticResource Accent}" />
+                        </VerticalStackLayout>
+
+                        <!-- Value (brightness in HSV) -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Value" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Value, StringFormat='{0:P0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="1"
+                                    Value="{Binding Value}"
+                                    MinimumTrackColor="{StaticResource Accent}"
+                                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                        Dark={StaticResource DarkBorder}}"
+                                    ThumbColor="{StaticResource Accent}" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- RGB group -->
+                <Border Style="{StaticResource CardStyle}">
+                    <VerticalStackLayout Spacing="16">
+                        <Label Text="RGB" FontAttributes="Bold" FontSize="13"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+
+                        <!-- Red -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Red" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Red, StringFormat='{0:F0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="255" Value="{Binding Red}"
+                                    MinimumTrackColor="#EF4444"
+                                    ThumbColor="#EF4444" />
+                        </VerticalStackLayout>
+
+                        <!-- Green -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Green" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Green, StringFormat='{0:F0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="255" Value="{Binding Green}"
+                                    MinimumTrackColor="#22C55E"
+                                    ThumbColor="#22C55E" />
+                        </VerticalStackLayout>
+
+                        <!-- Blue -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Blue" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Blue, StringFormat='{0:F0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="255" Value="{Binding Blue}"
+                                    MinimumTrackColor="#3B82F6"
+                                    ThumbColor="#3B82F6" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ── Persistent nav bar ────────────────────────────────────── -->
+        <controls:BottomNavBar Grid.Row="4" />
+
+        <!--
+            ── ColorCombinationsPanel (overlay layer) ───────────────────
+            Anchored to the bottom, above the nav bar. Uses negative
+            bottom margin to align with the nav bar's top edge.
+            Peek height (~108dp) is always visible; dragging up reveals
+            the full combinations list (collapses back on drag down or
+            on tap outside — handled by code-behind / Behavior).
+        -->
+        <controls:ColorCombinationsPanel
+            Grid.Row="3" Grid.RowSpan="2"
+            BindingContext="{Binding CombinationsPanel}"
+            VerticalOptions="End"
+            Margin="0,0,0,64" />
+
+    </Grid>
+</ContentPage>
