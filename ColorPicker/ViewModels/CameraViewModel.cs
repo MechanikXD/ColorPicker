@@ -30,7 +30,7 @@ public class CameraViewModel : BaseViewModel
     {
         if (view == null)
         {
-            Console.WriteLine("PROGRAMMER LOG: Camera view is null");
+            await Shell.Current.GoToAsync("..");
             return;
         }
         
@@ -44,8 +44,7 @@ public class CameraViewModel : BaseViewModel
         {
             { "CapturedImageBytes", imageBytes }
         };
-            
-        Console.WriteLine("PROGRAMMER LOG: Passing an image to the result view");
+        
         await Shell.Current.GoToAsync("scanresult", navigationParameters);
     }
 }

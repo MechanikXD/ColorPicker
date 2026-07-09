@@ -182,6 +182,23 @@
                                     ThumbColor="{StaticResource Accent}" />
                         </VerticalStackLayout>
 
+                        <!-- Saturation -->
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Text="Saturation"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                                <Label Grid.Column="1"
+                                       Text="{Binding Saturation, StringFormat='{0:F0}'}"
+                                       Style="{StaticResource BodyLabelStyle}" />
+                            </Grid>
+                            <Slider Minimum="0" Maximum="100"
+                                    Value="{Binding Saturation}"
+                                    MinimumTrackColor="{StaticResource Accent}"
+                                    MaximumTrackColor="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                        Dark={StaticResource DarkBorder}}"
+                                    ThumbColor="{StaticResource Accent}" />
+                        </VerticalStackLayout>
+
                         <!-- RGB divider -->
                         <BoxView HeightRequest="1"
                                  Color="{AppThemeBinding Light={StaticResource LightBorder},
