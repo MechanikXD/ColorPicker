@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
-             xmlns:s="clr-namespace:ColorPicker.Selectors"
              xmlns:m="clr-namespace:ColorPicker.Models.Suggestion"
+             xmlns:selectors="clr-namespace:ColorPicker.Services.Selectors"
              x:Class="ColorPicker.View.MainPage"
              x:DataType="vm:MainViewModel"
              Shell.NavBarIsVisible="False">
@@ -143,7 +143,7 @@
             DataTemplateSelector — declared in code/converter, referenced here by key.
             Replace with your SuggestionTemplateSelector class once implemented.
         -->
-        <s:SuggestionTemplateSelector x:Key="SuggestionSelector"
+        <selectors:SuggestionTemplateSelector x:Key="SuggestionSelector"
                                               NotificationTemplate="{StaticResource NotificationCardTemplate}"
                                               SuggestionTemplate="{StaticResource SuggestionCardTemplate}"
                                               WarningTemplate="{StaticResource WarningCardTemplate}" />

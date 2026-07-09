@@ -9,14 +9,16 @@
 
     <!-- Named routes allow GoToAsync("//main") etc. from BottomNavViewModel -->
     <ShellContent Route="main" ContentTemplate="{DataTemplate v:MainPage}" />
-    <!--<ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />
+    <!--<ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />-->
     <ShellContent Route="camera" ContentTemplate="{DataTemplate v:CameraPage}" />
-    <ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
+    <!--<ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
     <ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
 
     <Shell.Resources>
-        <ShellContent x:Key="manualColorRoute" Route="manualcolor"
+        <ShellContent x:Key="ManualColorRoute" Route="manualcolor"
                       ContentTemplate="{DataTemplate v:ManualColorPage}" />
+        <ShellContent x:Key="ScanResultRoute" Route="scanresult"
+                      ContentTemplate="{DataTemplate v:ColorScanResultPage}" />
     </Shell.Resources>
 
 </Shell>

@@ -2,6 +2,7 @@ using ColorPicker.Services.Theme;
 using ColorPicker.View;
 using ColorPicker.ViewModels;
 using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 using MainViewModel = ColorPicker.ViewModels.MainViewModel;
 
 namespace ColorPicker;
@@ -14,7 +15,7 @@ public static class MauiProgram
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiCommunityToolkit().UseMauiApp<App>()
+                .UseMauiApp<App>().UseMauiCommunityToolkit().UseMauiCommunityToolkitCamera()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -30,14 +31,24 @@ public static class MauiProgram
             // Register ViewModels
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddSingleton<BottomNavViewModel>();
-            builder.Services.AddTransient<ColorCombinationsPanelViewModel>();
+            builder.Services.AddSingleton<ColorCombinationsPanelViewModel>();
             builder.Services.AddTransient<ManualColorViewModel>();
+            builder.Services.AddTransient<CameraPage>();
+            builder.Services.AddTransient<ColorScanResultPage>();
 
             // Register Views
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<BottomNavBar>();
             builder.Services.AddTransient<ColorCombinationsPanel>();
             builder.Services.AddTransient<ManualColorPage>();
+            builder.Services.AddTransient<ColorScanResultViewModel>();
+            builder.Services.AddTransient<CameraViewModel>();
+            
+#if DEBUG
+            builder.Logging.AddDebug();
+            builder.Logging.AddConsole();
+            builder.Logging.SetMinimumLevel(LogLevel.Debug);
+#endif
             
             return builder.Build();
         }

@@ -18,12 +18,15 @@
 
     <ItemGroup>
         <Folder Include="Resources\Styles\" />
-        <Folder Include="Selectors\" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
+        <PackageReference Include="CommunityToolkit.Maui.Camera" Version="5.0.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+        <PackageReference Include="SkiaSharp" Version="4.148.0" />
     </ItemGroup>
 
 </Project>

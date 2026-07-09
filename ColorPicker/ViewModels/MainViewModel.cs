@@ -1,42 +1,46 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Suggestion;
+using ColorPicker.Services.Suggestions;
 
 namespace ColorPicker.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
-    private Color _randomPreviewColor = Colors.Transparent;
-    private string _welcomeMessage = string.Empty;
-
     public Color RandomPreviewColor
     {
-        get => _randomPreviewColor;
-        set => SetField(ref _randomPreviewColor, value);
-    }
+        get;
+        set => SetField(ref field, value);
+    } = Colors.DarkRed;
 
     public string WelcomeMessage
     {
-        get => _welcomeMessage;
-        set => SetField(ref _welcomeMessage, value);
-    }
+        get;
+        set => SetField(ref field, value);
+    } = "Hi!";
 
-    /// <summary>
     /// Mixed list of SuggestionMessage items. The CollectionView uses a
     /// DataTemplateSelector to pick the right card style per Kind.
     /// When empty of Suggestion/Warning items, a Notification placeholder is shown.
-    /// </summary>
-    public ObservableCollection<SuggestionMessage> Messages { get; } = new();
+    public ObservableCollection<SuggestionMessage> Messages { get; } = [];
 
-    /// <summary>Navigates to ManualColorPage with RandomPreviewColor pre-loaded.</summary>
+    // Navigates to ManualColorPage with RandomPreviewColor preloaded
     public ICommand OpenManualColorCommand { get; }
 
-    /// <summary>Dismiss a suggestion or warning card.</summary>
+    // Dismiss a suggestion or warning card.
     public ICommand DismissMessageCommand { get; }
 
     public MainViewModel()
     {
-        OpenManualColorCommand = new Command(_ => { /* Shell.Current.GoToAsync("manualcolor") */ });
-        DismissMessageCommand = new Command<SuggestionMessage>(_ => { });
+        OpenManualColorCommand = new Command(_ => Shell.Current.GoToAsync("manualcolor"));
+        DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
+        LoadMessages();
     }
+
+    private void LoadMessages()
+    {
+        Messages.Add(SuggestionFactory.GetNotification("Testing stuff", "Hold on a moment"));
+    }
+
+    private static void DismissMessage(SuggestionMessage target) { }
 }

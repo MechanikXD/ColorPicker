@@ -83,12 +83,12 @@
                         IsVisible="{Binding IsExpanded, Converter={StaticResource InverseBoolConverter}}"
                         Padding="20,0,20,20">
                 <BindableLayout.ItemsSource>
-                    <Binding Path="Chips" />
+                    <Binding Path="Combinations" />
                 </BindableLayout.ItemsSource>
                 <HorizontalStackLayout Spacing="12"
-                                       BindableLayout.ItemsSource="{Binding Chips}">
+                                       BindableLayout.ItemsSource="{Binding Combinations}">
                     <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="m:ColorCombinationChip">
+                        <DataTemplate x:DataType="m:ColorCombination">
                             <VerticalStackLayout Spacing="6" WidthRequest="{StaticResource ChipSize}">
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
@@ -103,19 +103,12 @@
                                         StrokeThickness="2"
                                         Stroke="{AppThemeBinding Light={StaticResource LightBorder},
                                                                   Dark={StaticResource DarkBorder}}"
-                                        BackgroundColor="{Binding Color}">
+                                        BackgroundColor="{Binding FirstColor}">
                                     <Border.Shadow>
                                         <Shadow Brush="Black" Opacity="0.10"
                                                 Radius="6" Offset="0,2" />
                                     </Border.Shadow>
                                 </Border>
-
-                                <Label Text="{Binding Label}"
-                                       FontSize="9"
-                                       HorizontalOptions="Center"
-                                       HorizontalTextAlignment="Center"
-                                       Style="{StaticResource BodyLabelStyle}"
-                                       MaxLines="2" LineBreakMode="WordWrap" />
                             </VerticalStackLayout>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
@@ -128,11 +121,11 @@
                 Groups Chips by GroupName so each harmony type has its own header row.
             -->
             <CollectionView Grid.Row="2"
-                            ItemsSource="{Binding Chips}"
+                            ItemsSource="{Binding Combinations}"
                             IsVisible="{Binding IsExpanded}"
                             Margin="0,0,0,20">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="m:ColorCombinationChip">
+                    <DataTemplate x:DataType="m:ColorCombination">
                         <Grid ColumnDefinitions="52,*,Auto"
                               ColumnSpacing="14"
                               Padding="20,6">
@@ -140,17 +133,7 @@
                                     WidthRequest="48" HeightRequest="48"
                                     StrokeShape="RoundRectangle 12"
                                     StrokeThickness="0"
-                                    BackgroundColor="{Binding Color}" />
-
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Label}"
-                                       FontAttributes="Bold" FontSize="13"
-                                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                                   Dark={StaticResource DarkTextPrimary}}" />
-                                <Label Text="{Binding Hex}"
-                                       Style="{StaticResource BodyLabelStyle}"
-                                       FontSize="12" FontFamily="Monospace" />
-                            </VerticalStackLayout>
+                                    BackgroundColor="{Binding FirstColor}" />
 
                             <Button Grid.Column="2"
                                     Text="Use"

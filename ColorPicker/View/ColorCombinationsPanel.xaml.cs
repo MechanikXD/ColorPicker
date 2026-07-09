@@ -4,9 +4,9 @@ namespace ColorPicker.View;
 
 public partial class ColorCombinationsPanel : ContentView
 {
-    public ColorCombinationsPanel(ColorCombinationsPanelViewModel viewModel)
+    public ColorCombinationsPanel()
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
     }
 }

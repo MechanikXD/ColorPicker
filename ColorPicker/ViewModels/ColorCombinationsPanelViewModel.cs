@@ -1,32 +1,27 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Services.Color;
 
 namespace ColorPicker.ViewModels;
 
 public class ColorCombinationsPanelViewModel : BaseViewModel
 {
-    private bool _isExpanded = false;
-    private Color _sourceColor = Colors.Transparent;
-
     public bool IsExpanded
     {
-        get => _isExpanded;
-        set => SetField(ref _isExpanded, value);
-    }
+        get;
+        set => SetField(ref field, value);
+    } = false;
 
-    /// <summary>
     /// The color whose combinations are displayed.
     /// Set this from the parent VM whenever the picked color changes.
-    /// </summary>
     public Color SourceColor
     {
-        get => _sourceColor;
-        set => SetField(ref _sourceColor, value);
-    }
+        get;
+        set => SetField(ref field, value);
+    } = Colors.Transparent;
 
-    /// <summary>Flat list of chips grouped by combination type.</summary>
-    public ObservableCollection<ColorCombinationChip> Chips { get; } = [];
+    public ObservableCollection<ColorCombination> Combinations { get; } = [];
 
     public ICommand ToggleExpandCommand { get; }
     public ICommand SelectChipCommand { get; }
@@ -34,6 +29,14 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ColorCombinationsPanelViewModel()
     {
         ToggleExpandCommand = new Command(_ => { IsExpanded = !IsExpanded; });
-        SelectChipCommand = new Command<ColorCombinationChip>(_ => { /* raise event / set parent color */ });
+        SelectChipCommand = new Command<ColorCombination>(_ => { /* raise event / set parent color */ });
+    }
+
+    private void LoadCombinations()
+    {
+        Combinations.Clear();
+        // TODO: Pull active palette
+        foreach (var combination in ColorCombinationService.GetCombinations(SourceColor, new ColorPalette()))
+            Combinations.Add(combination);
     }
 }

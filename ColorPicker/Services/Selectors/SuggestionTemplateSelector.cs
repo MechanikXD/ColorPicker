@@ -1,6 +1,6 @@
 using ColorPicker.Models.Suggestion;
 
-namespace ColorPicker.Selectors;
+namespace ColorPicker.Services.Selectors;
 
 public class SuggestionTemplateSelector : DataTemplateSelector
 {
