@@ -8,7 +8,7 @@ public class ColorSwatch
     public byte Green { get; set; }
     public byte Blue { get; set; }
 
-    public Color ToColor() => Color.FromRgb(Red, Green, Blue);
+    public Color ToColor => Color.FromRgb(Red, Green, Blue);
     public string Hex => $"#{Red:X2}{Green:X2}{Blue:X2}";
 
     public static ColorSwatch FromColor(Color color, string name = "Untitled") => new()

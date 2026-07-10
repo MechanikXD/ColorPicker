@@ -13,9 +13,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         set => SetField(ref field, value);
     } = false;
 
-    /// The color whose combinations are displayed.
-    /// Set this from the parent VM whenever the picked color changes.
-    public Color SourceColor
+    public Color TargetColor
     {
         get;
         set => SetField(ref field, value);
@@ -24,19 +22,19 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ObservableCollection<ColorCombination> Combinations { get; } = [];
 
     public ICommand ToggleExpandCommand { get; }
-    public ICommand SelectChipCommand { get; }
+    public ICommand SelectCombinationCommand { get; }
 
     public ColorCombinationsPanelViewModel()
     {
         ToggleExpandCommand = new Command(_ => { IsExpanded = !IsExpanded; });
-        SelectChipCommand = new Command<ColorCombination>(_ => { /* raise event / set parent color */ });
+        SelectCombinationCommand = new Command<ColorCombination>(_ => { /* raise event / set parent color */ });
     }
 
     private void LoadCombinations()
     {
         Combinations.Clear();
         // TODO: Pull active palette
-        foreach (var combination in ColorCombinationService.GetCombinations(SourceColor, new ColorPalette()))
+        foreach (var combination in ColorCombinationService.GetCombinations(TargetColor, new ColorPalette()))
             Combinations.Add(combination);
     }
 }

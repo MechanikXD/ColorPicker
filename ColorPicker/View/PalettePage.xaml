@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:v="clr-namespace:ColorPicker.View"
+             xmlns:models="clr-namespace:ColorPicker.Models.Colors"
+             x:Class="ColorPicker.View.PalettePage"
+             x:DataType="vm:PaletteViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <!--
+        Root Grid — four rows:
+          0 (Auto) : sticky palette header  (title + picker + action buttons)
+          1 (Auto) : sticky "Add Color" bar
+          2 (*)    : scrollable color list
+          3 (Auto) : BottomNavBar
+    -->
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+
+        <!-- ROW 0 — Sticky palette header -->
+        <Border Grid.Row="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
+                                                   Dark={StaticResource DarkCard}}"
+                StrokeThickness="0"
+                Padding="16,52,16,12">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.06" Radius="8" Offset="0,4" />
+            </Border.Shadow>
+
+            <Grid RowDefinitions="Auto, Auto" RowSpacing="10">
+
+                <!-- Top sub-row: page title + icon action buttons -->
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="8">
+
+                    <Label Grid.Column="0"
+                           Text="Palettes"
+                           Style="{StaticResource TitleLabelStyle}"
+                           VerticalOptions="Center" />
+
+                    <!-- Add new palette -->
+                    <Border Grid.Column="1"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                      Dark={StaticResource DarkBorder}}"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddPaletteCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Text="+"
+                               FontSize="20" FontAttributes="Bold"
+                               TextColor="{StaticResource Accent}"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <!-- Rename current palette -->
+                    <Border Grid.Column="2"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                      Dark={StaticResource DarkBorder}}"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RenamePaletteCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Text="✎"
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                           Dark={StaticResource DarkTextSecondary}}"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <!-- Delete current palette -->
+                    <Border Grid.Column="3"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                      Dark={StaticResource DarkBorder}}"
+                            BackgroundColor="Transparent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeletePaletteCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Text="🗑"
+                               FontSize="15"
+                               TextColor="#EF4444"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+
+                <!-- Bottom sub-row: palette picker (dropdown) -->
+                <!--
+                    Picker.SelectedIndex is two-way bound to SelectedPaletteIndex.
+                    Changing the selection calls SelectPaletteCommand via the setter,
+                    updating IPaletteService.CurrentPalette for all other ViewModels.
+                -->
+                <Border Grid.Row="1"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                  Dark={StaticResource DarkBorder}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
+                                                           Dark={StaticResource DarkBackground}}"
+                        Padding="12,0">
+                    <Picker Title="Select palette"
+                            ItemsSource="{Binding AllPalettes}"
+                            ItemDisplayBinding="{Binding Title}"
+                            SelectedIndex="{Binding SelectedPaletteIndex}"
+                            TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                        Dark={StaticResource DarkTextPrimary}}"
+                            TitleColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                          Dark={StaticResource DarkTextSecondary}}"
+                            HeightRequest="44" />
+                </Border>
+
+            </Grid>
+        </Border>
+
+        <!-- ROW 1 — Sticky "Add Color" bar -->
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
+                                                   Dark={StaticResource DarkBackground}}"
+                StrokeThickness="0"
+                Padding="16,10,16,6">
+
+            <!-- Split into Manual and Camera so the intent is always clear,
+                 no ActionSheet needed. Both are prominent but camera is accented. -->
+            <Grid ColumnDefinitions="*, 12, *" ColumnSpacing="0">
+
+                <Button Grid.Column="0"
+                        Text="+ Manual"
+                        Style="{StaticResource OutlineButtonStyle}"
+                        Command="{Binding AddColorManuallyCommand}" />
+
+                <Button Grid.Column="2"
+                        Text="⬤ Camera"
+                        Style="{StaticResource AccentButtonStyle}"
+                        Command="{Binding AddColorFromCameraCommand}" />
+
+            </Grid>
+        </Border>
+
+        <!-- ROW 2 — Scrollable color list -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding CurrentPalette.Palette}"
+                        SelectionMode="None"
+                        Margin="0,4,0,0">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                                     Spacing="8" Padding="32">
+                    <Label Text="No colors yet."
+                           Style="{StaticResource TitleLabelStyle}"
+                           FontSize="17"
+                           HorizontalOptions="Center" />
+                    <Label Text="Add one manually or scan with the camera."
+                           Style="{StaticResource BodyLabelStyle}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ColorSwatch">
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="16,0,16,10">
+                        <Grid ColumnDefinitions="56, *, Auto, Auto" ColumnSpacing="12">
+
+                            <!-- Color swatch -->
+                            <Border Grid.Column="0"
+                                    WidthRequest="52" HeightRequest="52"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="2"
+                                    Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                              Dark={StaticResource DarkBorder}}"
+                                    BackgroundColor="{Binding ToColor}">
+                                <Border.Shadow>
+                                    <Shadow Brush="{Binding ToColor}"
+                                            Opacity="0.3" Radius="8" Offset="0,3" />
+                                </Border.Shadow>
+                            </Border>
+
+                            <!-- Color values -->
+                            <VerticalStackLayout Grid.Column="1"
+                                                 VerticalOptions="Center"
+                                                 Spacing="3">
+                                <!-- HEX -->
+                                <Label Text="{Binding Hex}"
+                                       FontSize="15"
+                                       FontFamily="Monospace"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                                   Dark={StaticResource DarkTextPrimary}}" />
+                                <!-- RGB -->
+                                <Label FontSize="12"
+                                       Style="{StaticResource BodyLabelStyle}">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="RGB  {0}  {1}  {2}">
+                                            <Binding Path="Red" />
+                                            <Binding Path="Green" />
+                                            <Binding Path="Blue" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <!-- HSV via converter — placeholder label until converter exists -->
+                                <Label Text="{Binding Name}"
+                                       FontSize="11"
+                                       Style="{StaticResource BodyLabelStyle}"
+                                       IsVisible="{Binding Name,
+                                                   Converter={StaticResource StringNotEmptyConverter}}" />
+                            </VerticalStackLayout>
+
+                            <!-- Edit button -->
+                            <Border Grid.Column="2"
+                                    WidthRequest="36" HeightRequest="36"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="1"
+                                    Stroke="{StaticResource Accent}"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaletteViewModel}},
+                                                          Path=EditColorCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Label Text="✎"
+                                       FontSize="15"
+                                       TextColor="{StaticResource Accent}"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+
+                            <!-- Delete button -->
+                            <Border Grid.Column="3"
+                                    WidthRequest="36" HeightRequest="36"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="1"
+                                    Stroke="#EF4444"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaletteViewModel}},
+                                                          Path=DeleteColorCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Label Text="✕"
+                                       FontSize="15"
+                                       TextColor="#EF4444"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!-- ROW 3 — Persistent nav bar  -->
+        <v:BottomNavBar Grid.Row="3" />
+
+    </Grid>
+</ContentPage>

@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
-             xmlns:c="clr-namespace:ColorPicker.View"
+             xmlns:v="clr-namespace:ColorPicker.View"
+             xmlns:c="clr-namespace:ColorPicker.Services.Converters"
              x:Class="ColorPicker.View.ManualColorPage"
              x:DataType="vm:ManualColorViewModel"
              Shell.NavBarIsVisible="False">
@@ -13,6 +14,7 @@
     -->
 
     <ContentPage.Resources>
+        <c:RouteToColorConverter x:Key="InverseBoolConverter" />
         <!-- Value readout chip style - displays metric name + value -->
         <Style x:Key="ValueChipStyle" TargetType="Border">
             <Setter Property="StrokeShape" Value="RoundRectangle 10" />
@@ -36,7 +38,7 @@
     -->
     <Grid RowDefinitions="56, 200, Auto, *, Auto">
 
-        <!-- ── Top action bar ───────────────────────────────────────── -->
+        <!-- Top action bar -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,8">
             <Button Grid.Column="0"
                     Text="Cancel"
@@ -51,11 +53,22 @@
                    HorizontalOptions="Center"
                    VerticalOptions="Center" />
 
+            <!-- Add mode: "Add" button saves to palette -->
             <Button Grid.Column="2"
                     Text="Add"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
+                    IsVisible="{Binding ShowConfirmBar,
+                                Converter={StaticResource InverseBoolConverter}}"
                     Command="{Binding AddToPaletteCommand}" />
+
+            <!-- Edit mode: "Save" button confirms the change -->
+            <Button Grid.Column="2"
+                    Text="Save"
+                    Style="{StaticResource AccentButtonStyle}"
+                    HeightRequest="38" WidthRequest="80"
+                    IsVisible="{Binding ShowConfirmBar}"
+                    Command="{Binding ConfirmEditCommand}" />
         </Grid>
 
         <!-- Large color preview -->
@@ -153,39 +166,6 @@
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Brightness -->
-                <Border Style="{StaticResource ValueChipStyle}">
-                    <VerticalStackLayout Spacing="1">
-                        <Label Text="Brightness" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
-                        <Label Text="{Binding Brightness, StringFormat='{0:P0}'}"
-                               FontSize="13" FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                           Dark={StaticResource DarkTextPrimary}}" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Contrast on White -->
-                <Border Style="{StaticResource ValueChipStyle}">
-                    <VerticalStackLayout Spacing="1">
-                        <Label Text="vs White" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
-                        <Label Text="{Binding ContrastOnWhite, StringFormat='{0:F2}:1'}"
-                               FontSize="13" FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                           Dark={StaticResource DarkTextPrimary}}" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- Contrast on Black -->
-                <Border Style="{StaticResource ValueChipStyle}">
-                    <VerticalStackLayout Spacing="1">
-                        <Label Text="vs Black" FontSize="9" Style="{StaticResource BodyLabelStyle}" />
-                        <Label Text="{Binding ContrastOnBlack, StringFormat='{0:F2}:1'}"
-                               FontSize="13" FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                           Dark={StaticResource DarkTextPrimary}}" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -307,7 +287,7 @@
         </ScrollView>
 
         <!-- Persistent nav bar -->
-        <c:BottomNavBar Grid.Row="4" />
+        <v:BottomNavBar Grid.Row="4" />
 
         <!--
             ColorCombinationsPanel (overlay layer)
@@ -317,7 +297,7 @@
             the full combinations list (collapses back on drag down or
             on tap outside — handled by code-behind / Behavior).
         -->
-        <c:ColorCombinationsPanel
+        <v:ColorCombinationsPanel
             Grid.Row="3" Grid.RowSpan="2"
             BindingContext="{Binding CombinationsPanel}"
             VerticalOptions="End"

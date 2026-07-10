@@ -1,3 +1,4 @@
+using ColorPicker.Services.Palette;
 using ColorPicker.Services.Theme;
 using ColorPicker.View;
 using ColorPicker.ViewModels;
@@ -27,6 +28,7 @@ public static class MauiProgram
         
             // Register Services
             builder.Services.AddSingleton<IThemeService, ThemeService>();
+            builder.Services.AddSingleton<IPaletteService, PaletteService>();
 
             // Register ViewModels
             builder.Services.AddTransient<MainViewModel>();
@@ -35,6 +37,7 @@ public static class MauiProgram
             builder.Services.AddTransient<ManualColorViewModel>();
             builder.Services.AddTransient<CameraPage>();
             builder.Services.AddTransient<ColorScanResultPage>();
+            builder.Services.AddTransient<PalettePage>();
 
             // Register Views
             builder.Services.AddTransient<MainPage>();
@@ -43,6 +46,7 @@ public static class MauiProgram
             builder.Services.AddTransient<ManualColorPage>();
             builder.Services.AddTransient<ColorScanResultViewModel>();
             builder.Services.AddTransient<CameraViewModel>();
+            builder.Services.AddTransient<PaletteViewModel>();
             
 #if DEBUG
             builder.Logging.AddDebug();
