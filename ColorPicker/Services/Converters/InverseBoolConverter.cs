@@ -1,11 +1,10 @@
 using System.Globalization;
-using CommunityToolkit.Maui.Converters;
 
 namespace ColorPicker.Services.Converters;
 
-public class InverseBoolConverter : BaseConverterOneWay<bool, bool>
+public class InverseBoolConverter : IValueConverter
 {
-    public override bool ConvertFrom(bool value, CultureInfo? culture) => !value;
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture) => value is false;
 
-    public override bool DefaultConvertReturnValue { get; set; } = false;
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => false;
 }

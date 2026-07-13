@@ -50,8 +50,6 @@ public static class MauiProgram
             
 #if DEBUG
             builder.Logging.AddDebug();
-            builder.Logging.AddConsole();
-            builder.Logging.SetMinimumLevel(LogLevel.Debug);
 #endif
             
             return builder.Build();

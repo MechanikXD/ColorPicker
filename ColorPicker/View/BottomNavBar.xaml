@@ -2,13 +2,10 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
-             xmlns:c="clr-namespace:ColorPicker.Services.Converters"
              x:Class="ColorPicker.View.BottomNavBar"
              x:DataType="vm:BottomNavViewModel">
 
     <ContentView.Resources>
-        <c:RouteToColorConverter x:Key="RouteToColorConverter" />
-        <c:RouteToColorConverter x:Key="RouteMatchConverter" />
         <!-- Shared icon size -->
         <x:Double x:Key="NavIconSize">22</x:Double>
         <x:Double x:Key="NavFontSize">10</x:Double>
