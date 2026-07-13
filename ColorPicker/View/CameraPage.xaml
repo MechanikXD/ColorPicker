@@ -77,7 +77,8 @@
                 VerticalOptions="Start"
                 Margin="0,52,20,0">
             <Border.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding FlipCameraCommand}" />
+                <TapGestureRecognizer Command="{Binding FlipCameraCommand}" 
+                                      CommandParameter="{Binding Source={x:Reference LiveCamera}, x:DataType={x:Null}}"/>
             </Border.GestureRecognizers>
             <!--
                 Use an image asset for the flip icon.

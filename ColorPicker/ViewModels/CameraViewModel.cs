@@ -18,15 +18,32 @@ public class CameraViewModel : BaseViewModel
     public CameraViewModel()
     {
         CaptureCommand = new Command<CameraView>(PassImage);
-
-        FlipCameraCommand = new Command(_ =>
-        {
-            IsFrontCamera = !IsFrontCamera;
-            // wire to CameraView.CameraPosition binding
-        });
+        FlipCameraCommand = new Command<CameraView>(FlipCamera);
     }
 
-    private static async void PassImage(CameraView view)
+    private async void FlipCamera(CameraView? view)
+    {
+        if (view == null) return;
+
+        var cameras = await view.GetAvailableCameras(CancellationToken.None);
+        if (cameras.Any())
+        {
+            var current = view.SelectedCamera;
+            if (current == null) return;
+            
+            var next = current.Equals(cameras[0]) 
+                ? cameras.Skip(1).FirstOrDefault() 
+                : cameras[0];
+        
+            if (next != null)
+            {
+                view.SelectedCamera = next;
+                IsFrontCamera = !IsFrontCamera;
+            }
+        }
+    }
+
+    private static async void PassImage(CameraView? view)
     {
         if (view == null)
         {

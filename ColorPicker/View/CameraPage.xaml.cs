@@ -27,6 +27,7 @@ public partial class CameraPage : ContentPage
 
     private async void OnCameraViewLoaded(object? sender, EventArgs e)
     {
+        base.OnAppearing();
         await LiveCamera.StartCameraPreview(CancellationToken.None);
     }
     
