@@ -17,7 +17,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     {
         get;
         set => SetField(ref field, value);
-    } = Colors.Transparent;
+    } = Colors.Red;
 
     public ObservableCollection<ColorCombination> Combinations { get; } = [];
 

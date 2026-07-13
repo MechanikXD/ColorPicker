@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:c="clr-namespace:ColorPicker.Services.Converters"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:m="clr-namespace:ColorPicker.Models.Colors"
              x:Class="ColorPicker.View.ColorCombinationsPanel"
              x:DataType="vm:ColorCombinationsPanelViewModel"
              VerticalOptions="End">
-
-    <ContentView.Resources>
-        <c:RouteToColorConverter x:Key="InverseBoolConverter" />
-    </ContentView.Resources>
     
     <!-- Panel surface with top-only rounded corners -->
     <Border BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},

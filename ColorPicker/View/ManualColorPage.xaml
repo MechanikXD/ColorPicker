@@ -159,7 +159,7 @@
                                TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                            Dark={StaticResource DarkTextPrimary}}">
                             <Label.Text>
-                                <MultiBinding StringFormat="{}{0}°  {1}%  {2}%">
+                                <MultiBinding StringFormat="{}{0}°  {1}  {2}">
                                     <Binding Path="Hue" StringFormat="{}{0:F0}" />
                                     <Binding Path="Saturation" StringFormat="{}{0:P0}" />
                                     <Binding Path="Value" StringFormat="{}{0:P0}" />
@@ -286,9 +286,6 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- Persistent nav bar -->
-        <v:BottomNavBar Grid.Row="4" />
-
         <!--
             ColorCombinationsPanel (overlay layer)
             Anchored to the bottom, above the nav bar. Uses negative
@@ -297,11 +294,13 @@
             the full combinations list (collapses back on drag down or
             on tap outside — handled by code-behind / Behavior).
         -->
-        <v:ColorCombinationsPanel
+        <!--<v:ColorCombinationsPanel
             Grid.Row="3" Grid.RowSpan="2"
             BindingContext="{Binding CombinationsPanel}"
             VerticalOptions="End"
-            Margin="0,0,0,64" />
-
+            Margin="0,0,0,64" />-->
+        
+        <!-- Persistent nav bar -->
+        <v:BottomNavBar Grid.Row="4" />
     </Grid>
 </ContentPage>

@@ -18,6 +18,14 @@ public class ColorSwatch
         Green = (byte)Math.Round(color.Green * 255),
         Blue = (byte)Math.Round(color.Blue * 255)
     };
+    
+    public static ColorSwatch FromRgb(double red, double green, double blue, string name = "Untitled") => new()
+    {
+        Name = name,
+        Red = (byte)red,
+        Green = (byte)green,
+        Blue = (byte)blue
+    };
 
     public static ColorSwatch FromHsv(double h, double s, double v, string name = "Untitled")
     {
@@ -80,4 +88,7 @@ public class ColorSwatch
         var s = max <= 0 ? 0 : delta / max;
         return (h, s, max);
     }
+
+    public bool ValueEquals(ColorSwatch other) => 
+        Math.Abs(Red - other.Red) < EPS && Math.Abs(Green - other.Green) < EPS && Math.Abs(Blue - other.Blue) < EPS;
 }

@@ -7,17 +7,19 @@ namespace ColorPicker.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
+    private const string WELCOME_MESSAGE = "Welcome!";
+    
     public Color RandomPreviewColor
     {
         get;
         set => SetField(ref field, value);
-    } = Colors.DarkRed;
+    } = GetRandomColor();
 
     public string WelcomeMessage
     {
         get;
         set => SetField(ref field, value);
-    } = "Hi!";
+    } = WELCOME_MESSAGE;
 
     /// Mixed list of SuggestionMessage items. The CollectionView uses a
     /// DataTemplateSelector to pick the right card style per Kind.
@@ -32,15 +34,21 @@ public class MainViewModel : BaseViewModel
 
     public MainViewModel()
     {
-        OpenManualColorCommand = new Command(_ => Shell.Current.GoToAsync("manualcolor"));
+        OpenManualColorCommand = new Command(_ =>
+            Shell.Current.GoToAsync(
+                $"manualcolor?isEditMode=false&colorHex={RandomPreviewColor.ToHex().TrimStart('#')}"));
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
         LoadMessages();
     }
 
-    private void LoadMessages()
-    {
+    private void LoadMessages() => 
         Messages.Add(SuggestionFactory.GetNotification("Testing stuff", "Hold on a moment"));
-    }
 
-    private static void DismissMessage(SuggestionMessage target) { }
+    private void DismissMessage(SuggestionMessage target) => Messages.Remove(target);
+
+    private static Color GetRandomColor()
+    {
+        var rng = new Random();
+        return new Color(rng.Next(0, 256), rng.Next(0, 256), rng.Next(0, 256));
+    }
 }
