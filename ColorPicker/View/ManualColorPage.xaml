@@ -6,6 +6,7 @@
              xmlns:c="clr-namespace:ColorPicker.Services.Converters"
              x:Class="ColorPicker.View.ManualColorPage"
              x:DataType="vm:ManualColorViewModel"
+             x:Name="ThisPage"
              Shell.NavBarIsVisible="False">
     <!--
         Non-tab page: navigating away via BottomNavBar acts as Cancel.
@@ -288,17 +289,14 @@
 
         <!--
             ColorCombinationsPanel (overlay layer)
-            Anchored to the bottom, above the nav bar. Uses negative
-            bottom margin to align with the nav bar's top edge.
-            Peek height (~108dp) is always visible; dragging up reveals
-            the full combinations list (collapses back on drag down or
-            on tap outside — handled by code-behind / Behavior).
+            Anchored to the bottom, above the nav bar.
         -->
-        <!--<v:ColorCombinationsPanel
+        <v:ColorCombinationsPanel
             Grid.Row="3" Grid.RowSpan="2"
             BindingContext="{Binding CombinationsPanel}"
+            IsVisible="{Binding BindingContext.ShowCombinationsPanel, Source={x:Reference ThisPage}}" 
             VerticalOptions="End"
-            Margin="0,0,0,64" />-->
+            Margin="0,0,0,64" />
         
         <!-- Persistent nav bar -->
         <v:BottomNavBar Grid.Row="4" />
