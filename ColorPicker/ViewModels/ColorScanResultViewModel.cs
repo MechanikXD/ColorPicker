@@ -63,7 +63,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
     } = 128;
 
-    public ColorCombinationsPanelViewModel CombinationsPanel { get; } = new();
+    public ColorCombinationsPanelViewModel? CombinationsPanel { get; }
 
     public ICommand RetakeCommand { get; }
 
@@ -71,6 +71,10 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 
     public ColorScanResultViewModel()
     {
+        CombinationsPanel = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
+        if (CombinationsPanel == null)
+            throw new NullReferenceException("Combination panel is null and must be defined in MauiApplication.cs");
+        
         RetakeCommand = new Command(_ => { Shell.Current.GoToAsync(".."); });
         SaveToPaletteCommand = new Command(_ =>
         {
@@ -157,6 +161,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         var centerPixel = bitmap.GetPixel(bitmap.Width / 2, bitmap.Height / 2);
         SampledColor = Color.FromRgb(centerPixel.Red, centerPixel.Green, centerPixel.Blue);
         HexValue = SampledColor.ToHex();
+        CombinationsPanel?.TargetColor = SampledColor;
     }
     
     private float[] GetAdjustmentsMatrix ()

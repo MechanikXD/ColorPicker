@@ -91,7 +91,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     }
 
     // Color combinations bottom sheet
-    public ColorCombinationsPanelViewModel CombinationsPanel { get; } = new();
+    public ColorCombinationsPanelViewModel? CombinationsPanel { get; }
 
     // Commands
     public ICommand ConfirmEditCommand { get; }
@@ -101,6 +101,10 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     
     public ManualColorViewModel(IPaletteService paletteService)
     {
+        CombinationsPanel = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
+        if (CombinationsPanel == null)
+            throw new NullReferenceException("Combination panel is null and must be defined in MauiApplication.cs");
+        
         CopyHexCommand = new Command(_ => { Clipboard.Default.SetTextAsync(HexInput); });
         CancelCommand = new Command(_ => { ReturnFromPage(); });
         AddToPaletteCommand = new Command(_ => {
@@ -190,6 +194,8 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
             OnPropertyChanged(nameof(Green));
             OnPropertyChanged(nameof(Blue));
         }
+
+        if (ShowCombinationsPanel) CombinationsPanel?.TargetColor = CurrentColor;
     }
 
     private static double GetValue(Color color) => Math.Max(color.Red, Math.Max(color.Green, color.Blue));

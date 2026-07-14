@@ -2,24 +2,24 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Services.Color;
+using ColorPicker.Services.Palette;
 
 namespace ColorPicker.ViewModels;
 
 public class ColorCombinationsPanelViewModel : BaseViewModel
 {
-    private bool _isExpanded = false;
-    private bool _isLoading  = false;
- 
+    private IPaletteService _paletteService;
+    
     public bool IsExpanded
     {
-        get => _isExpanded;
-        set => SetField(ref _isExpanded, value);
+        get;
+        set => SetField(ref field, value);
     }
  
     public bool IsLoading
     {
-        get => _isLoading;
-        set => SetField(ref _isLoading, value);
+        get;
+        set => SetField(ref field, value);
     }
 
     public Color TargetColor { get; set; } = Colors.Transparent;
@@ -29,13 +29,14 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ICommand RefreshCommand { get; }
     public ICommand SelectCombinationCommand { get; }
 
-    public ColorCombinationsPanelViewModel()
+    public ColorCombinationsPanelViewModel(IPaletteService paletteService)
     {
+        _paletteService = paletteService;
         RefreshCommand = new Command(_ => { LoadCombinations(); });
         
         ToggleExpandCommand = new Command(_ =>
         {
-            var opening = !_isExpanded;
+            var opening = !IsExpanded;
             IsExpanded = opening;
             // Auto-compute on first open so there's something to show.
             // Subsequent opens show cached results until Refresh is pressed.
@@ -52,7 +53,9 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     private void LoadCombinations()
     {
         Combinations.Clear();
-        foreach (var combination in ColorCombinationService.GetCombinations(TargetColor, new ColorPalette()))
+        if (_paletteService.CurrentPalette == null) return;
+        
+        foreach (var combination in ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette))
             Combinations.Add(combination);
         IsLoading = false;
     }

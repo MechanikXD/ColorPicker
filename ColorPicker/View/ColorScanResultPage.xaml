@@ -268,21 +268,13 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <!-- BottomNavBar -->
-        <v:BottomNavBar Grid.Row="1" />
-
-        <!-- 
-             ColorCombinationsPanel overlay
-             Spans Row 0+1, pinned to bottom, sits above the nav bar.
-             Peek height (≈108dp) is always visible.
-             Dragging it up reveals the full palette-mix combinations.
-             BindingContext is set to the nested CombinationsPanel VM.
-         -->
-        <!--<v:ColorCombinationsPanel
+        <v:ColorCombinationsPanel
             Grid.Row="0" Grid.RowSpan="2"
             BindingContext="{Binding CombinationsPanel}"
             VerticalOptions="End"
-            Margin="0,0,0,64" />-->
-
+            Margin="0,0,0,64" />
+        
+        <!-- BottomNavBar -->
+        <v:BottomNavBar Grid.Row="1" />
     </Grid>
 </ContentPage>

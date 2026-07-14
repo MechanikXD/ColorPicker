@@ -42,10 +42,7 @@ public static class CieColorTransformService
         return Math.Sqrt(deltaL * deltaL + deltaA * deltaA + deltaB * deltaB);
     }
 
-    // Standard structural representation of the CIELAB color space
-    public record LabColor(double L, double A, double B);
-
-    private static LabColor RgbToLab(Microsoft.Maui.Graphics.Color color)
+    public static LabColor RgbToLab(Microsoft.Maui.Graphics.Color color)
     {
         var xyz = RgbToXyz(InverseSrgbGamma(color.Red) * 100, InverseSrgbGamma(color.Green) * 100,
             InverseSrgbGamma(color.Blue) * 100);
@@ -81,3 +78,6 @@ public static class CieColorTransformService
     private static double CielabLinearization(double value) => 
         value > LAB_CUBIC_THRESHOLD ? Math.Pow(value, 1.0 / 3.0) : LAB_LINEAR_SLOPE * value + LAB_CONSTANT_OFFSET;
 }
+
+// Standard structural representation of the CIELAB color space
+public record LabColor(double L, double A, double B);
