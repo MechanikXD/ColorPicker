@@ -1,4 +1,6 @@
 using System.Windows.Input;
+using ColorPicker.Models.Colors;
+using ColorPicker.Services.Palette;
 using SkiaSharp;
 
 namespace ColorPicker.ViewModels;
@@ -69,7 +71,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 
     public ICommand SaveToPaletteCommand { get; }
 
-    public ColorScanResultViewModel()
+    public ColorScanResultViewModel(IPaletteService paletteService)
     {
         CombinationsPanel = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
         if (CombinationsPanel == null)
@@ -78,7 +80,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         RetakeCommand = new Command(_ => { Shell.Current.GoToAsync(".."); });
         SaveToPaletteCommand = new Command(_ =>
         {
-            /* add SampledColor to active palette */
+            paletteService.AddColor(ColorSwatch.FromColor(SampledColor));
         });
     }
 

@@ -25,7 +25,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     public string InitialHex { get; private set; } = string.Empty;
 
     // Current color
-    public Color CurrentColor { get; private set; } = Colors.Transparent;
+    public Color CurrentColor { get; private set; } = Colors.Black;
     public string HexInput { get; private set; } = string.Empty;
 
     // HSV sliders
@@ -155,25 +155,30 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.TryGetValue("isEditMode", out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
+        Color color;
         if (query.TryGetValue("colorHex", out var obj2) && obj2 is string colorHex)
         {
             InitialHex = colorHex;
-            var color = Color.FromArgb(InitialHex);
-            
-            CurrentColor = color;
-            HexInput = color.ToHex();
-            
-            _hue = color.GetHue() * 360.0;
-            _saturation = GetHsvSaturation(color);
-            _value = GetValue(color);
-                
-            // Set initial scale to 0-255
-            _red = Math.Round(color.Red * 255.0);
-            _green = Math.Round(color.Green * 255.0);
-            _blue = Math.Round(color.Blue * 255.0);
-            
-            UpdateAllProperties(notifyHsv: true, notifyRgb: true);
+            color = Color.FromArgb(InitialHex);
         }
+        else
+        {
+            color = Colors.Black;
+            InitialHex = color.ToHex();
+        }
+        
+        CurrentColor = color;
+        HexInput = color.ToHex();
+            
+        _hue = color.GetHue() * 360.0;
+        _saturation = GetHsvSaturation(color);
+        _value = GetValue(color);
+                
+        // Set initial scale to 0-255
+        _red = Math.Round(color.Red * 255.0);
+        _green = Math.Round(color.Green * 255.0);
+        _blue = Math.Round(color.Blue * 255.0);
+        UpdateAllProperties(notifyHsv: true, notifyRgb: true);
     }
 
     private void UpdateAllProperties(bool notifyHsv, bool notifyRgb)

@@ -8,7 +8,7 @@ namespace ColorPicker.ViewModels;
 
 public class ColorCombinationsPanelViewModel : BaseViewModel
 {
-    private IPaletteService _paletteService;
+    private readonly IPaletteService _paletteService;
     
     public bool IsExpanded
     {

@@ -106,8 +106,8 @@
                         Padding="12,0">
                     <Picker Title="Select palette"
                             ItemsSource="{Binding AllPalettes}"
-                            ItemDisplayBinding="{Binding Title}"
-                            SelectedIndex="{Binding SelectedPaletteIndex}"
+                            ItemDisplayBinding="{Binding CurrentPaletteTitle}"
+                            SelectedIndex="{Binding CurrentPaletteIndex}"
                             TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                         Dark={StaticResource DarkTextPrimary}}"
                             TitleColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
