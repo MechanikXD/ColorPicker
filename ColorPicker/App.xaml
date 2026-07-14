@@ -13,6 +13,7 @@
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
             <converters:RouteMatchConverter x:Key="RouteMatchConverter" />
             <converters:RouteToColorConverter x:Key="RouteToColorConverter" />
+            <converters:BoolToChevronConverter x:Key="BoolToChevronConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

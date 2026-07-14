@@ -18,245 +18,212 @@
             <Shadow Brush="Black" Opacity="0.14" Radius="20" Offset="0,-6" />
         </Border.Shadow>
 
-        <Grid RowDefinitions="Auto, Auto, *">
+        <VerticalStackLayout Spacing="0">
 
-            <!-- Drag handle + title (always visible) -->
-            <VerticalStackLayout Grid.Row="0" Spacing="0" Padding="0,12,0,8">
-                <VerticalStackLayout.GestureRecognizers>
+            <!-- HANDLE STRIP — always visible, 52dp, sole collapsed state.
+                 Tap anywhere on it to toggle open/close. -->
+            <Grid HeightRequest="52"
+                  ColumnDefinitions="*, Auto"
+                  Padding="20,0">
+                <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ToggleExpandCommand}" />
-                    <!-- PanGestureRecognizer wired in code-behind for smooth drag -->
-                </VerticalStackLayout.GestureRecognizers>
+                </Grid.GestureRecognizers>
 
-                <!-- Pill handle -->
-                <BoxView WidthRequest="40" HeightRequest="4" CornerRadius="2"
-                         Color="{AppThemeBinding Light={StaticResource LightBorder},
-                                                  Dark={StaticResource DarkBorder}}"
-                         HorizontalOptions="Center" />
-
-                <Grid ColumnDefinitions="*, Auto" Padding="20,10,20,0">
-                    <Label Grid.Column="0"
-                           Text="Color Combinations"
-                           FontAttributes="Bold" FontSize="14"
-                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                       Dark={StaticResource DarkTextPrimary}}" />
-                </Grid>
-            </VerticalStackLayout>
-
-            <!-- Target color summary row (always visible) -->
-            <Grid Grid.Row="1"
-                  ColumnDefinitions="8, 40, *, 40, 8"
-                  Padding="12,0,12,12">
-                <Border Grid.Column="1"
-                        WidthRequest="36" HeightRequest="36"
-                        StrokeShape="Ellipse"
-                        StrokeThickness="2"
-                        Stroke="{AppThemeBinding Light={StaticResource LightBorder},
-                                                  Dark={StaticResource DarkBorder}}"
-                        BackgroundColor="{Binding TargetColor}" />
-
-                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center"
-                                     HorizontalOptions="Center" Spacing="1">
-                    <Label Text="Target"
-                           FontSize="10"
-                           Style="{StaticResource BodyLabelStyle}"
-                           HorizontalOptions="Center" />
-                    <Label Text="Drag up to see palette mixes"
-                           FontSize="11" FontAttributes="Bold"
-                           HorizontalOptions="Center"
+                <VerticalStackLayout Grid.Column="0"
+                                     Spacing="4"
+                                     VerticalOptions="Center">
+                    <!-- Drag pill -->
+                    <BoxView WidthRequest="36" HeightRequest="4"
+                             CornerRadius="2"
+                             Color="{AppThemeBinding Light={StaticResource LightBorder},
+                                                      Dark={StaticResource DarkBorder}}"
+                             HorizontalOptions="Start" />
+                    <Label Text="Color Combinations"
+                           FontSize="13" FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                        Dark={StaticResource DarkTextPrimary}}" />
                 </VerticalStackLayout>
+
+                <!-- ∨ when closed, ∧ when open -->
+                <Label Grid.Column="1"
+                       Text="{Binding IsExpanded,
+                              Converter={StaticResource BoolToChevronConverter}}"
+                       FontSize="16"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                   Dark={StaticResource DarkTextSecondary}}"
+                       VerticalOptions="Center" />
             </Grid>
 
-            <!-- PEEK MODE — horizontal scroll of result-color chips.
-                 Collapsed (IsExpanded = false). -->
-            <ScrollView Grid.Row="2"
-                        Orientation="Horizontal"
-                        Padding="16,0,16,20"
-                        IsVisible="{Binding IsExpanded,
-                                    Converter={StaticResource  InverseBoolConverter}}">
-                <HorizontalStackLayout Spacing="12"
-                                       BindableLayout.ItemsSource="{Binding Combinations}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="m:ColorCombination">
-                            <VerticalStackLayout Spacing="5" WidthRequest="60">
-                                <VerticalStackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ColorCombinationsPanelViewModel}},
-                                                          Path=SelectCombinationCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </VerticalStackLayout.GestureRecognizers>
+            <!-- CONTENT — removed from layout entirely when collapsed.
+                 IsVisible="False" means zero height, zero render cost,
+                 and no accidental bleed-through into the closed state. -->
+            <Grid RowDefinitions="Auto, *"
+                  IsVisible="{Binding IsExpanded}">
 
-                                <!-- Result color swatch -->
-                                <Border WidthRequest="56" HeightRequest="56"
-                                        StrokeShape="RoundRectangle 14"
-                                        StrokeThickness="2"
+                <!-- Refresh bar -->
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="*, Auto"
+                      Padding="20,8,20,8">
+
+                    <Label Grid.Column="0"
+                           Text="{Binding Combinations.Count,
+                                  StringFormat='{0} combination(s) found'}"
+                           Style="{StaticResource BodyLabelStyle}"
+                           FontSize="12"
+                           VerticalOptions="Center" />
+
+                    <Button Grid.Column="1"
+                            Text="Refresh"
+                            Style="{StaticResource OutlineButtonStyle}"
+                            HeightRequest="32" WidthRequest="80"
+                            FontSize="12"
+                            Command="{Binding RefreshCommand}" />
+                </Grid>
+
+                <!-- Loading indicator -->
+                <ActivityIndicator Grid.Row="1"
+                                   IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="{StaticResource Accent}"
+                                   HeightRequest="48" />
+
+                <!-- Combination cards (hidden while loading) -->
+                <ScrollView Grid.Row="1"
+                            MaximumHeightRequest="420"
+                            Padding="16,0,16,20"
+                            IsVisible="{Binding IsLoading,
+                                        Converter={StaticResource InverseBoolConverter}}">
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding Combinations}">
+
+                        <BindableLayout.EmptyView>
+                            <Label Text="No matching combinations found in your palette."
+                                   Style="{StaticResource BodyLabelStyle}"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"
+                                   Padding="0,16" />
+                        </BindableLayout.EmptyView>
+
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="m:ColorCombination">
+
+                                <Border StrokeShape="RoundRectangle 16"
+                                        StrokeThickness="1"
                                         Stroke="{AppThemeBinding Light={StaticResource LightBorder},
                                                                   Dark={StaticResource DarkBorder}}"
-                                        BackgroundColor="{Binding ResultColor.ToColor}">
-                                    <Border.Shadow>
-                                        <Shadow Brush="{Binding ResultColor.ToColor}"
-                                                Opacity="0.3" Radius="8" Offset="0,3" />
-                                    </Border.Shadow>
-                                </Border>
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
+                                                                           Dark={StaticResource DarkBackground}}"
+                                        Padding="14,12">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ColorCombinationsPanelViewModel}},
+                                                              Path=SelectCombinationCommand}"
+                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
 
-                                <!-- Accuracy pill -->
-                                <Border StrokeShape="RoundRectangle 6"
-                                        StrokeThickness="0"
-                                        BackgroundColor="{AppThemeBinding Light=#EEEAF8,
-                                                                           Dark=#2A2540}"
-                                        Padding="4,2"
-                                        HorizontalOptions="Center">
-                                    <Label Text="{Binding Accuracy, StringFormat='{0:P0}'}"
-                                           FontSize="10" FontAttributes="Bold"
-                                           TextColor="{StaticResource Accent}"
-                                           HorizontalOptions="Center" />
-                                </Border>
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
-            </ScrollView>
+                                    <VerticalStackLayout Spacing="10">
 
-            <!-- EXPANDED MODE — full combination cards. -->
-            <ScrollView Grid.Row="2"
-                        Padding="16,0,16,20"
-                        IsVisible="{Binding IsExpanded}">
-                <VerticalStackLayout Spacing="12"
-                                     BindableLayout.ItemsSource="{Binding Combinations}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="m:ColorCombination">
+                                        <!-- Ratio row: [Color1] Ratio1 ─+─ Ratio2 [Color2] -->
+                                        <Grid ColumnDefinitions="48, Auto, *, Auto, 48"
+                                              ColumnSpacing="8">
 
-                            <Border StrokeShape="RoundRectangle 16"
-                                    StrokeThickness="1"
-                                    Stroke="{AppThemeBinding Light={StaticResource LightBorder},
-                                                              Dark={StaticResource DarkBorder}}"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
-                                                                       Dark={StaticResource DarkBackground}}"
-                                    Padding="14,12">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ColorCombinationsPanelViewModel}},
-                                                          Path=SelectCombinationCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-
-                                <VerticalStackLayout Spacing="10">
-
-                                    <!-- Ratio row -->
-                                    <Grid ColumnDefinitions="48, Auto, *, Auto, 48"
-                                          ColumnSpacing="8"
-                                          VerticalOptions="Center">
-
-                                        <!-- Color 1 swatch -->
-                                        <Border Grid.Column="0"
-                                                WidthRequest="44" HeightRequest="44"
-                                                StrokeShape="RoundRectangle 10"
-                                                StrokeThickness="2"
-                                                Stroke="{AppThemeBinding Light={StaticResource LightBorder},
-                                                                          Dark={StaticResource DarkBorder}}"
-                                                BackgroundColor="{Binding FirstColor.ToColor}">
-                                            <Border.Shadow>
-                                                <Shadow Brush="{Binding FirstColor.ToColor}"
-                                                        Opacity="0.25" Radius="6" Offset="0,2" />
-                                            </Border.Shadow>
-                                        </Border>
-
-                                        <!-- Ratio 1 label -->
-                                        <Label Grid.Column="1"
-                                               Text="{Binding FirstColorRatio, StringFormat='{0:P0}'}"
-                                               FontSize="13" FontAttributes="Bold"
-                                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                                           Dark={StaticResource DarkTextPrimary}}"
-                                               VerticalOptions="Center" />
-
-                                        <!-- Divider line with + in center -->
-                                        <Grid Grid.Column="2" VerticalOptions="Center">
-                                            <BoxView HeightRequest="1.5"
-                                                     VerticalOptions="Center"
-                                                     Color="{AppThemeBinding Light={StaticResource LightBorder},
-                                                                              Dark={StaticResource DarkBorder}}" />
-                                            <Border WidthRequest="22" HeightRequest="22"
-                                                    StrokeShape="Ellipse"
-                                                    StrokeThickness="1.5"
+                                            <Border Grid.Column="0"
+                                                    WidthRequest="44" HeightRequest="44"
+                                                    StrokeShape="RoundRectangle 10"
+                                                    StrokeThickness="2"
                                                     Stroke="{AppThemeBinding Light={StaticResource LightBorder},
                                                                               Dark={StaticResource DarkBorder}}"
-                                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
-                                                                                       Dark={StaticResource DarkCard}}"
-                                                    HorizontalOptions="Center">
-                                                <Label Text="+"
-                                                       FontSize="13" FontAttributes="Bold"
-                                                       TextColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
-                                                                                   Dark={StaticResource DarkTextSecondary}}"
-                                                       HorizontalOptions="Center"
-                                                       VerticalOptions="Center" />
+                                                    BackgroundColor="{Binding FirstColor.ToColor}">
+                                                <Border.Shadow>
+                                                    <Shadow Brush="{Binding FirstColor.ToColor}"
+                                                            Opacity="0.25" Radius="6" Offset="0,2" />
+                                                </Border.Shadow>
                                             </Border>
+
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding FirstColorRatio, StringFormat='{0:P0}'}"
+                                                   FontSize="13" FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                                               Dark={StaticResource DarkTextPrimary}}"
+                                                   VerticalOptions="Center" />
+
+                                            <Grid Grid.Column="2" VerticalOptions="Center">
+                                                <BoxView HeightRequest="1.5" VerticalOptions="Center"
+                                                         Color="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                                  Dark={StaticResource DarkBorder}}" />
+                                                <Border WidthRequest="22" HeightRequest="22"
+                                                        StrokeShape="Ellipse" StrokeThickness="1.5"
+                                                        Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                                  Dark={StaticResource DarkBorder}}"
+                                                        BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
+                                                                                           Dark={StaticResource DarkCard}}"
+                                                        HorizontalOptions="Center">
+                                                    <Label Text="+" FontSize="13" FontAttributes="Bold"
+                                                           TextColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                                                       Dark={StaticResource DarkTextSecondary}}"
+                                                           HorizontalOptions="Center"
+                                                           VerticalOptions="Center" />
+                                                </Border>
+                                            </Grid>
+
+                                            <Label Grid.Column="3"
+                                                   Text="{Binding SecondColorRatio, StringFormat='{0:P0}'}"
+                                                   FontSize="13" FontAttributes="Bold"
+                                                   TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                                               Dark={StaticResource DarkTextPrimary}}"
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="End" />
+
+                                            <Border Grid.Column="4"
+                                                    WidthRequest="44" HeightRequest="44"
+                                                    StrokeShape="RoundRectangle 10"
+                                                    StrokeThickness="2"
+                                                    Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                                              Dark={StaticResource DarkBorder}}"
+                                                    BackgroundColor="{Binding SecondColor.ToColor}">
+                                                <Border.Shadow>
+                                                    <Shadow Brush="{Binding SecondColor.ToColor}"
+                                                            Opacity="0.25" Radius="6" Offset="0,2" />
+                                                </Border.Shadow>
+                                            </Border>
+
                                         </Grid>
 
-                                        <!-- Ratio 2 label -->
-                                        <Label Grid.Column="3"
-                                               Text="{Binding SecondColorRatio, StringFormat='{0:P0}'}"
-                                               FontSize="13" FontAttributes="Bold"
-                                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
-                                                                           Dark={StaticResource DarkTextPrimary}}"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="End" />
-
-                                        <!-- Color 2 swatch -->
-                                        <Border Grid.Column="4"
-                                                WidthRequest="44" HeightRequest="44"
+                                        <!-- Result color bar -->
+                                        <Border HeightRequest="36"
                                                 StrokeShape="RoundRectangle 10"
-                                                StrokeThickness="2"
-                                                Stroke="{AppThemeBinding Light={StaticResource LightBorder},
-                                                                          Dark={StaticResource DarkBorder}}"
-                                                BackgroundColor="{Binding SecondColor.ToColor}">
+                                                StrokeThickness="0"
+                                                BackgroundColor="{Binding ResultColor.ToColor}"
+                                                HorizontalOptions="Fill">
                                             <Border.Shadow>
-                                                <Shadow Brush="{Binding SecondColor.ToColor}"
-                                                        Opacity="0.25" Radius="6" Offset="0,2" />
+                                                <Shadow Brush="{Binding ResultColor.ToColor}"
+                                                        Opacity="0.35" Radius="10" Offset="0,3" />
                                             </Border.Shadow>
+                                            <Label Text="{Binding ResultColor.Hex}"
+                                                   FontSize="12" FontFamily="Monospace"
+                                                   FontAttributes="Bold" TextColor="White"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
+                                                   Opacity="0.9" />
                                         </Border>
 
-                                    </Grid>
+                                        <!-- Accuracy -->
+                                        <Label Text="{Binding Accuracy,
+                                                      StringFormat='Accuracy  {0:P1}'}"
+                                               FontSize="12" FontAttributes="Bold"
+                                               TextColor="{StaticResource Accent}"
+                                               HorizontalOptions="Center" />
 
-                                    <!-- Result color bar -->
-                                    <!--
-                                        Full-width pill showing the blended result color.
-                                        Positioned between the ratio row and accuracy label
-                                        so the eye reads: inputs → result → accuracy.
-                                    -->
-                                    <Border HeightRequest="36"
-                                            StrokeShape="RoundRectangle 10"
-                                            StrokeThickness="0"
-                                            BackgroundColor="{Binding ResultColor.ToColor}"
-                                            HorizontalOptions="Fill">
-                                        <Border.Shadow>
-                                            <Shadow Brush="{Binding ResultColor.ToColor}"
-                                                    Opacity="0.35" Radius="10" Offset="0,3" />
-                                        </Border.Shadow>
-                                        <Label Text="{Binding ResultColor.Hex}"
-                                               FontSize="12" FontFamily="Monospace"
-                                               FontAttributes="Bold"
-                                               TextColor="White"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               Opacity="0.9" />
-                                    </Border>
+                                    </VerticalStackLayout>
+                                </Border>
 
-                                    <!-- ── Accuracy ───────────────────────────────── -->
-                                    <Label Text="{Binding Accuracy, StringFormat='Accuracy  {0:P1}'}"
-                                           FontSize="12"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource Accent}"
-                                           HorizontalOptions="Center" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </ScrollView>
 
-                                </VerticalStackLayout>
-                            </Border>
+            </Grid>
 
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </ScrollView>
-
-        </Grid>
+        </VerticalStackLayout>
     </Border>
 </ContentView>
