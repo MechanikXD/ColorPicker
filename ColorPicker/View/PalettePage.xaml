@@ -112,7 +112,7 @@
                                                         Dark={StaticResource DarkTextPrimary}}"
                             TitleColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
                                                           Dark={StaticResource DarkTextSecondary}}"
-                            HeightRequest="44" />
+                            HeightRequest="44"/>
                 </Border>
 
             </Grid>
@@ -187,7 +187,7 @@
                                                  VerticalOptions="Center"
                                                  Spacing="3">
                                 <!-- HEX -->
-                                <Label Text="{Binding Hex}"
+                                <Label Text="{Binding Name}"
                                        FontSize="15"
                                        FontFamily="Monospace"
                                        FontAttributes="Bold"
@@ -197,10 +197,11 @@
                                 <Label FontSize="12"
                                        Style="{StaticResource BodyLabelStyle}">
                                     <Label.Text>
-                                        <MultiBinding StringFormat="RGB  {0}  {1}  {2}">
+                                        <MultiBinding StringFormat="RGB  {0}  {1}  {2}    HEX  {3}">
                                             <Binding Path="Red" />
                                             <Binding Path="Green" />
                                             <Binding Path="Blue" />
+                                            <Binding Path="Hex"/>
                                         </MultiBinding>
                                     </Label.Text>
                                 </Label>
@@ -262,5 +263,8 @@
         <!-- ROW 3 — Persistent nav bar  -->
         <v:BottomNavBar Grid.Row="3" />
 
+        <v:PromptView Grid.Row="0"
+                      Grid.RowSpan="4"
+                      BindingContext="{Binding Prompt}" />
     </Grid>
 </ContentPage>

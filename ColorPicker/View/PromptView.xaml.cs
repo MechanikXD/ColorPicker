@@ -4,9 +4,9 @@ namespace ColorPicker.View;
 
 public partial class PromptView : ContentView
 {
-    public PromptView(PromptViewModel viewModel)
+    public PromptView()
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = IPlatformApplication.Current?.Services.GetRequiredService<PromptViewModel>();
     }
 }

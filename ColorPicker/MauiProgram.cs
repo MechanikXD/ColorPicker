@@ -38,6 +38,7 @@ public static class MauiProgram
             builder.Services.AddTransient<CameraPage>();
             builder.Services.AddTransient<ColorScanResultPage>();
             builder.Services.AddTransient<PalettePage>();
+            builder.Services.AddTransient<PromptView>();
 
             // Register Views
             builder.Services.AddTransient<MainPage>();
@@ -47,6 +48,7 @@ public static class MauiProgram
             builder.Services.AddTransient<ColorScanResultViewModel>();
             builder.Services.AddTransient<CameraViewModel>();
             builder.Services.AddTransient<PaletteViewModel>();
+            builder.Services.AddTransient<PromptViewModel>();
             
 #if DEBUG
             builder.Logging.AddDebug();

@@ -276,5 +276,9 @@
         
         <!-- BottomNavBar -->
         <v:BottomNavBar Grid.Row="1" />
+        
+        <v:PromptView Grid.Row="0"
+                      Grid.RowSpan="2"
+                      BindingContext="{Binding Prompt}" />
     </Grid>
 </ContentPage>

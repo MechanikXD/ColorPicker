@@ -92,6 +92,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 
     // Color combinations bottom sheet
     public ColorCombinationsPanelViewModel? CombinationsPanel { get; }
+    public PromptViewModel Prompt { get; init; }
 
     // Commands
     public ICommand ConfirmEditCommand { get; }
@@ -99,18 +100,29 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     public ICommand CopyHexCommand { get; }
     public ICommand AddToPaletteCommand { get; }
     
-    public ManualColorViewModel(IPaletteService paletteService)
+    public ManualColorViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, PromptViewModel prompt)
     {
-        CombinationsPanel = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
-        if (CombinationsPanel == null)
-            throw new NullReferenceException("Combination panel is null and must be defined in MauiApplication.cs");
+        CombinationsPanel = colorCombinationsPanel;
+        Prompt = prompt;
         
         CopyHexCommand = new Command(_ => { Clipboard.Default.SetTextAsync(HexInput); });
         CancelCommand = new Command(_ => { ReturnFromPage(); });
         AddToPaletteCommand = new Command(_ => {
         {
-            paletteService.AddColor(ColorSwatch.FromColor(CurrentColor));
-            ReturnFromPage();
+            Prompt.Show(
+                title: "Enter color title",
+                message: "Name your color so you can find it later",
+                inputHint: "Color's name",
+                showInput: true,
+                onConfirm: () =>
+                {
+                    var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                        ? CurrentColor.ToHex()
+                        : Prompt.InputText;
+                    paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
+                    ReturnFromPage();
+                }
+            );
         } });
         ConfirmEditCommand = new Command(_ =>
         {

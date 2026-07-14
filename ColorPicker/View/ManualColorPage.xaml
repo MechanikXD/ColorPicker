@@ -300,5 +300,9 @@
         
         <!-- Persistent nav bar -->
         <v:BottomNavBar Grid.Row="4" />
+        
+        <v:PromptView Grid.Row="0"
+                      Grid.RowSpan="5"
+                      BindingContext="{Binding Prompt}" />
     </Grid>
 </ContentPage>

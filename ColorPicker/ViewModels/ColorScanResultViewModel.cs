@@ -66,21 +66,32 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     } = 128;
 
     public ColorCombinationsPanelViewModel? CombinationsPanel { get; }
+    public PromptViewModel Prompt { get; }
 
     public ICommand RetakeCommand { get; }
-
     public ICommand SaveToPaletteCommand { get; }
 
-    public ColorScanResultViewModel(IPaletteService paletteService)
+    public ColorScanResultViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, PromptViewModel prompt)
     {
-        CombinationsPanel = IPlatformApplication.Current?.Services.GetRequiredService<ColorCombinationsPanelViewModel>();
-        if (CombinationsPanel == null)
-            throw new NullReferenceException("Combination panel is null and must be defined in MauiApplication.cs");
+        CombinationsPanel = colorCombinationsPanel;
+        Prompt = prompt;
         
         RetakeCommand = new Command(_ => { Shell.Current.GoToAsync(".."); });
         SaveToPaletteCommand = new Command(_ =>
         {
-            paletteService.AddColor(ColorSwatch.FromColor(SampledColor));
+            Prompt.Show(
+                title: "Enter color title",
+                message: "Name your color so you can find it later",
+                inputHint: "Color's name",
+                showInput: true,
+                onConfirm: () =>
+                {
+                    var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                        ? SampledColor.ToHex()
+                        : Prompt.InputText;
+                    paletteService.AddColor(ColorSwatch.FromColor(SampledColor, name: title));
+                }
+            );
         });
     }
 

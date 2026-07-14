@@ -76,7 +76,7 @@ public class PromptViewModel : BaseViewModel
 
     public void Show(
         string title,
-        string message,
+        string message = "",
         string confirmText = "Confirm",
         string inputText = "",
         string inputHint = "",
