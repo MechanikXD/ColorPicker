@@ -2,25 +2,41 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Services.Palette;
-using CommunityToolkit.Maui.Core.Extensions;
 
 namespace ColorPicker.ViewModels;
 
 public class PaletteViewModel : BaseViewModel
 {
     private readonly IPaletteService _paletteService;
-
-    public ObservableCollection<ColorPalette> AllPalettes => _paletteService.AllPalettes.ToObservableCollection();
-    public string CurrentPaletteTitle => CurrentPalette == null ? "No Palette" : CurrentPalette.Title;
-    public ColorPalette? CurrentPalette => _paletteService.CurrentPalette;
-    public int CurrentPaletteIndex => _paletteService.CurrentPaletteIndex;
     
+    public ObservableCollection<ColorPalette> AllPalettes => _paletteService.AllPalettes;
+    public List<string> PaletteNames { get; private set; }
+    public string CurrentPaletteTitle => CurrentPalette?.Title ?? "None";
+
+    public ColorPalette? CurrentPalette
+    {
+        get;
+        private set
+        {
+            if (SetField(ref field, value)) OnPropertyChanged(nameof(CurrentPaletteTitle));
+        }
+    }
+
+    public int CurrentPaletteIndex
+    {
+        get;
+        set
+        {
+            if (SetField(ref field, value) && value >= 0 && value < AllPalettes.Count)
+                _paletteService.SelectPalette(AllPalettes[value]);
+        }
+    }
+
     public PromptViewModel Prompt { get; }
 
     public ICommand AddPaletteCommand { get; }
     public ICommand RenamePaletteCommand { get; }
     public ICommand DeletePaletteCommand { get; }
-    public ICommand SelectPaletteCommand { get; }
     public ICommand AddColorManuallyCommand { get; }
     public ICommand AddColorFromCameraCommand { get; }
     public ICommand EditColorCommand { get; }
@@ -30,12 +46,17 @@ public class PaletteViewModel : BaseViewModel
     {
         _paletteService = paletteService;
         Prompt = prompt;
+        _paletteService.CurrentPaletteChanged += RefreshPalette;
+        CurrentPalette = _paletteService.CurrentPalette;
+        CurrentPaletteIndex = _paletteService.CurrentPaletteIndex;
+        PaletteNames = AllPalettes.Select(p => p.Title).ToList();
+        
         AddPaletteCommand = new Command(_ =>
         {
             AskTitle(() =>
             {
                 _paletteService.AddPalette(new ColorPalette { Title = Prompt.InputText });
-                NotifyProperty();
+                RefreshPalette();
             });
         });
         RenamePaletteCommand = new Command(_ =>
@@ -45,7 +66,8 @@ public class PaletteViewModel : BaseViewModel
                 AskTitle(() =>
                 {
                     _paletteService.RenamePalette(CurrentPalette, Prompt.InputText);
-                    NotifyProperty();
+                    RefreshPalette();
+                    OnPropertyChanged(nameof(CurrentPaletteTitle));
                 });
             }
         });
@@ -53,20 +75,12 @@ public class PaletteViewModel : BaseViewModel
         {
             if (CurrentPalette != null)
             {
+                var target = CurrentPalette;
                 ConfirmDeletion(CurrentPaletteTitle, () =>
                 {
-                    _paletteService.RemovePalette(CurrentPalette);
-                    NotifyProperty();
+                    _paletteService.RemovePalette(target);
+                    RefreshPalette();
                 });
-            }
-        });
-
-        SelectPaletteCommand = new Command<ColorPalette>(p =>
-        {
-            if (p is not null)
-            {
-                _paletteService.SelectPalette(p);
-                NotifyProperty();
             }
         });
 
@@ -89,7 +103,6 @@ public class PaletteViewModel : BaseViewModel
                 ConfirmDeletion(swatchName, () =>
                 {
                     _paletteService.RemoveColor(swatch);
-                    NotifyProperty();
                 });
             }
         });
@@ -115,12 +128,12 @@ public class PaletteViewModel : BaseViewModel
             onConfirm: confirmAction
         );
     }
-
-    private void NotifyProperty()
+    
+    private void RefreshPalette()
     {
-        OnPropertyChanged(nameof(AllPalettes));
-        OnPropertyChanged(nameof(CurrentPaletteTitle));
-        OnPropertyChanged(nameof(CurrentPalette));
-        OnPropertyChanged(nameof(CurrentPaletteIndex));
+        CurrentPalette = _paletteService.CurrentPalette;
+        PaletteNames = AllPalettes.Select(p => p.Title).ToList();
+        OnPropertyChanged(nameof(PaletteNames));
+        CurrentPaletteIndex = _paletteService.CurrentPaletteIndex;
     }
 }

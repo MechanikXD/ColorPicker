@@ -5,27 +5,24 @@ namespace ColorPicker.Services.Palette;
 
 public class PaletteService : IPaletteService
 {
-    private readonly ObservableCollection<ColorPalette> _palettes = [];
-
     public ColorPalette? CurrentPalette { get; private set; }
-    public int CurrentPaletteIndex { get; private set; }
-    public IReadOnlyList<ColorPalette> AllPalettes => _palettes;
-    
+    public int CurrentPaletteIndex => AllPalettes.IndexOf(CurrentPalette!);
+    public ObservableCollection<ColorPalette> AllPalettes { get; } = [];
+
     public event Action? CurrentPaletteChanged;
     
     public void SelectPalette(ColorPalette palette)
     {
-        var paletteIndex = _palettes.IndexOf(palette);
+        var paletteIndex = AllPalettes.IndexOf(palette);
         if (paletteIndex < 0) return;
         
         CurrentPalette = palette;
-        CurrentPaletteIndex = paletteIndex;
         CurrentPaletteChanged?.Invoke();
     }
 
     public void AddPalette(ColorPalette palette)
     {
-        _palettes.Add(palette);
+        AllPalettes.Add(palette);
         SelectPalette(palette);
     }
 
@@ -34,19 +31,10 @@ public class PaletteService : IPaletteService
 
     public void RemovePalette(ColorPalette palette)
     {
-        _palettes.Remove(palette);
+        AllPalettes.Remove(palette);
         if (CurrentPalette != palette) return;
 
-        if (_palettes.Count > 0)
-        {
-            CurrentPalette = _palettes[0];
-            CurrentPaletteIndex = 0;
-        }
-        else
-        {
-            CurrentPalette = null;
-            CurrentPaletteIndex = -1;
-        }
+        CurrentPalette = AllPalettes.Count > 0 ? AllPalettes[0] : null;
         CurrentPaletteChanged?.Invoke();
     }
 

@@ -32,10 +32,14 @@
                 <!-- Top sub-row: page title + icon action buttons -->
                 <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="8">
 
-                    <Label Grid.Column="0"
-                           Text="Palettes"
-                           Style="{StaticResource TitleLabelStyle}"
-                           VerticalOptions="Center" />
+                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="0">
+                        <Label Text="Current palette"
+                               FontSize="11"
+                               Style="{StaticResource BodyLabelStyle}" />
+                        <Label Text="{Binding CurrentPaletteTitle}"
+                               Style="{StaticResource TitleLabelStyle}"
+                               FontSize="20" />
+                    </VerticalStackLayout>
 
                     <!-- Add new palette -->
                     <Border Grid.Column="1"
@@ -105,14 +109,13 @@
                                                            Dark={StaticResource DarkBackground}}"
                         Padding="12,0">
                     <Picker Title="Select palette"
-                            ItemsSource="{Binding AllPalettes}"
-                            ItemDisplayBinding="{Binding CurrentPaletteTitle}"
+                            ItemsSource="{Binding PaletteNames}"
                             SelectedIndex="{Binding CurrentPaletteIndex}"
                             TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                         Dark={StaticResource DarkTextPrimary}}"
                             TitleColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
                                                           Dark={StaticResource DarkTextSecondary}}"
-                            HeightRequest="44"/>
+                            HeightRequest="44" />
                 </Border>
 
             </Grid>

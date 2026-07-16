@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using ColorPicker.Models.Colors;
 
 namespace ColorPicker.Services.Palette;
@@ -6,7 +7,7 @@ public interface IPaletteService
 {
     public ColorPalette? CurrentPalette { get; }
     public int CurrentPaletteIndex { get; }
-    public IReadOnlyList<ColorPalette> AllPalettes { get; }
+    public ObservableCollection<ColorPalette> AllPalettes { get; }
 
     public void AddPalette(ColorPalette palette);
     public void SelectPalette(ColorPalette palette);
