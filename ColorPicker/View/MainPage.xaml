@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:v="clr-namespace:ColorPicker.View"
+             xmlns:m="clr-namespace:ColorPicker.Models.Suggestion"
+             xmlns:selectors="clr-namespace:ColorPicker.Services.Selectors"
+             x:Class="ColorPicker.View.MainPage"
+             x:DataType="vm:MainViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+
+        <!-- Suggestion card templates -->
+
+        <!--
+            NOTIFICATION  — shows when there are no Suggestion/Warning items.
+            Neutral tone, secondary text color, info icon.
+        -->
+        <DataTemplate x:Key="NotificationCardTemplate" x:DataType="m:SuggestionMessage">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                <Grid ColumnDefinitions="36,*,Auto" ColumnSpacing="12">
+                    <Border Grid.Column="0"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            BackgroundColor="{AppThemeBinding Light=#EEEAF8, Dark=#2A2540}">
+                        <Label Text="ℹ" FontSize="16"
+                               TextColor="{StaticResource Accent}"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding Title}"
+                               FontAttributes="Bold" FontSize="13"
+                               TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                           Dark={StaticResource DarkTextPrimary}}" />
+                        <Label Text="{Binding Body}"
+                               Style="{StaticResource BodyLabelStyle}" FontSize="12" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!--
+            SUGGESTION — user action recommended (palette gap, missing permission, etc.).
+            Accent-tinted left border, purple icon, dismiss button.
+        -->
+        <DataTemplate x:Key="SuggestionCardTemplate" x:DataType="m:SuggestionMessage">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,10">
+                <!-- Accent left stripe -->
+                <Border.Stroke>
+                    <SolidColorBrush Color="{StaticResource Accent}" />
+                </Border.Stroke>
+                <Grid ColumnDefinitions="4,36,*,Auto" ColumnSpacing="10">
+                    <!-- Left accent stripe -->
+                    <BoxView Grid.Column="0"
+                             WidthRequest="4"
+                             CornerRadius="2"
+                             Color="{StaticResource Accent}"
+                             VerticalOptions="Fill" />
+
+                    <Border Grid.Column="1"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            BackgroundColor="{AppThemeBinding Light=#EDE8FF, Dark=#2E2550}">
+                        <Label Text="💡" FontSize="16"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding Title}"
+                               FontAttributes="Bold" FontSize="13"
+                               TextColor="{StaticResource Accent}" />
+                        <Label Text="{Binding Body}"
+                               Style="{StaticResource BodyLabelStyle}" FontSize="12" />
+                    </VerticalStackLayout>
+
+                    <Button Grid.Column="3"
+                            Text="✕"
+                            FontSize="12"
+                            BackgroundColor="Transparent"
+                            TextColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                        Dark={StaticResource DarkTextSecondary}}"
+                            WidthRequest="32" HeightRequest="32"
+                            Padding="0"
+                            VerticalOptions="Start"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}},
+                                              Path=DismissMessageCommand}"
+                            CommandParameter="{Binding .}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!--
+            WARNING — potential error, e.g. empty palette, no camera permission.
+            Amber tint, warning icon, more prominent styling.
+        -->
+        <DataTemplate x:Key="WarningCardTemplate" x:DataType="m:SuggestionMessage">
+            <Border Margin="0,0,0,10"
+                    StrokeThickness="1"
+                    Stroke="#F59E0B"
+                    StrokeShape="RoundRectangle 16"
+                    Padding="16"
+                    BackgroundColor="{AppThemeBinding Light=#FFFBEB, Dark=#2A1F00}">
+                <Grid ColumnDefinitions="36,*,Auto" ColumnSpacing="12">
+                    <Border Grid.Column="0"
+                            WidthRequest="36" HeightRequest="36"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            BackgroundColor="#FEF3C7">
+                        <Label Text="⚠" FontSize="16"
+                               TextColor="#D97706"
+                               HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                        <Label Text="{Binding Title}"
+                               FontAttributes="Bold" FontSize="13"
+                               TextColor="#D97706" />
+                        <Label Text="{Binding Body}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Light=#92400E, Dark=#FCD34D}" />
+                    </VerticalStackLayout>
+
+                    <Button Grid.Column="2"
+                            Text="✕"
+                            FontSize="12"
+                            BackgroundColor="Transparent"
+                            TextColor="#D97706"
+                            WidthRequest="32" HeightRequest="32"
+                            Padding="0"
+                            VerticalOptions="Start"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}},
+                                              Path=DismissMessageCommand}"
+                            CommandParameter="{Binding .}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!--
+            DataTemplateSelector — declared in code/converter, referenced here by key.
+            Replace with your SuggestionTemplateSelector class once implemented.
+        -->
+        <selectors:SuggestionTemplateSelector x:Key="SuggestionSelector"
+                                              NotificationTemplate="{StaticResource NotificationCardTemplate}"
+                                              SuggestionTemplate="{StaticResource SuggestionCardTemplate}"
+                                              WarningTemplate="{StaticResource WarningCardTemplate}" />
+
+    </ContentPage.Resources>
+
+    <!--
+        Root Grid: content scrolls above the persistent nav bar.
+        Row 0 = scrollable page body, Row 1 = nav bar (always visible).
+    -->
+    <Grid RowDefinitions="*, Auto">
+
+        <!-- ── Scrollable body ───────────────────────────────────────── -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20,52,20,16" Spacing="0">
+
+                <!-- Title / greeting -->
+                <Label Text="{Binding WelcomeMessage}"
+                       Style="{StaticResource TitleLabelStyle}"
+                       FontSize="26"
+                       Margin="0,0,0,4" />
+                <Label Text="Pick a color to get started."
+                       Style="{StaticResource BodyLabelStyle}"
+                       Margin="0,0,0,28" />
+
+                <!-- Manual color button — shows a random color preview swatch -->
+                <Border Style="{StaticResource CardStyle}"
+                        Margin="0,0,0,28">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="4">
+                            <Label Text="Try a Color Manually"
+                                   FontAttributes="Bold" FontSize="15"
+                                   TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                               Dark={StaticResource DarkTextPrimary}}" />
+                            <Label Text="A random starting color, ready to tune."
+                                   Style="{StaticResource BodyLabelStyle}" FontSize="12" />
+                        </VerticalStackLayout>
+
+                        <!-- Random color preview swatch -->
+                        <Border Grid.Column="1"
+                                WidthRequest="56" HeightRequest="56"
+                                StrokeShape="RoundRectangle 14"
+                                StrokeThickness="0"
+                                BackgroundColor="{Binding RandomPreviewColor}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenManualColorCommand}" />
+                            </Border.GestureRecognizers>
+                            <!-- Arrow hint -->
+                            <Label Text="→" FontSize="18" TextColor="White"
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Suggestions section header -->
+                <Label Text="Suggestions"
+                       FontAttributes="Bold" FontSize="17"
+                       TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                   Dark={StaticResource DarkTextPrimary}}"
+                       Margin="0,0,0,12" />
+
+                <!--
+                    Suggestion cards list.
+                    CollectionView uses SuggestionTemplateSelector so each item renders
+                    the correct card style (Notification / Suggestion / Warning) automatically.
+                    When Messages only contains Notification items the list shows the
+                    neutral placeholder tone; as Suggestions/Warnings are added they take priority.
+                -->
+                <CollectionView ItemsSource="{Binding Messages}"
+                                ItemTemplate="{StaticResource SuggestionSelector}"
+                                SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <!-- Fallback if Messages collection itself is empty -->
+                        <Border Style="{StaticResource CardStyle}">
+                            <VerticalStackLayout Spacing="6" HorizontalOptions="Center" Padding="8">
+                                <Label Text="ℹ" FontSize="28" HorizontalOptions="Center"
+                                       TextColor="{StaticResource Accent}" />
+                                <Label Text="No suggestions yet."
+                                       Style="{StaticResource BodyLabelStyle}"
+                                       HorizontalOptions="Center" />
+                                <Label Text="Try making a color manually or scan one with the camera."
+                                       Style="{StaticResource BodyLabelStyle}"
+                                       FontSize="11"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Persistent nav bar -->
+        <v:BottomNavBar Grid.Row="1" />
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:v="clr-namespace:ColorPicker.View"
+       x:Class="ColorPicker.AppShell"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarIsVisible="False">
+
+    <!-- Named routes allow GoToAsync("//main") etc. from BottomNavViewModel -->
+    <ShellContent Route="main" ContentTemplate="{DataTemplate v:MainPage}" />
+    <ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />
+    <ShellContent Route="camera" ContentTemplate="{DataTemplate v:CameraPage}" />
+    <!--<ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
+    <ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
+
+    <Shell.Resources>
+        <ShellContent x:Key="ManualColorRoute" Route="manualcolor"
+                      ContentTemplate="{DataTemplate v:ManualColorPage}" />
+        <ShellContent x:Key="ScanResultRoute" Route="scanresult"
+                      ContentTemplate="{DataTemplate v:ColorScanResultPage}" />
+    </Shell.Resources>
+
+</Shell>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             x:Class="ColorPicker.View.PromptView"
+             x:DataType="vm:PromptViewModel"
+             IsVisible="{Binding IsVisible}">
+    
+    <!-- Full-screen semi-transparent backdrop -->
+    <Grid>
+
+        <!-- Backdrop — tapping it dismisses the prompt (acts as cancel) -->
+        <BoxView Color="Black" Opacity="0.55">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CancelCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- Prompt card — centered, does NOT forward taps to the backdrop -->
+        <Border WidthRequest="320"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
+                                                   Dark={StaticResource DarkCard}}"
+                Padding="24">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.25" Radius="24" Offset="0,8" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="16">
+
+                <!-- Title -->
+                <Label Text="{Binding Title}"
+                       Style="{StaticResource TitleLabelStyle}"
+                       FontSize="18"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+
+                <!-- Message — only shown when ShowMessage = true -->
+                <Label Text="{Binding Message}"
+                       Style="{StaticResource BodyLabelStyle}"
+                       FontSize="13"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"
+                       IsVisible="{Binding ShowMessage}" />
+
+                <!-- Text input — only shown when ShowInput = true -->
+                <Border IsVisible="{Binding ShowInput}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1.5"
+                        Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                  Dark={StaticResource DarkBorder}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
+                                                           Dark={StaticResource DarkBackground}}"
+                        Padding="12,0">
+                    <Entry Text="{Binding InputText}"
+                           Placeholder="{Binding InputHint}"
+                           PlaceholderColor="{AppThemeBinding Light={StaticResource LightTextSecondary},
+                                                               Dark={StaticResource DarkTextSecondary}}"
+                           TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
+                                                       Dark={StaticResource DarkTextPrimary}}"
+                           BackgroundColor="Transparent"
+                           HeightRequest="44"
+                           ReturnCommand="{Binding ConfirmCommand}" />
+                </Border>
+
+                <!-- Divider -->
+                <BoxView HeightRequest="1"
+                         Color="{AppThemeBinding Light={StaticResource LightBorder},
+                                                  Dark={StaticResource DarkBorder}}"
+                         Margin="0,0" />
+
+                <!-- Action buttons -->
+                <Grid ColumnDefinitions="*, 12, *" ColumnSpacing="0">
+
+                    <Button Grid.Column="0"
+                            Text="Cancel"
+                            Style="{StaticResource OutlineButtonStyle}"
+                            Command="{Binding CancelCommand}" />
+
+                    <!-- Normal (accent) confirm button — hidden when IsDestructive -->
+                    <Button Grid.Column="2"
+                            Text="{Binding ConfirmText}"
+                            Style="{StaticResource AccentButtonStyle}"
+                            IsVisible="{Binding IsDestructive, 
+                                Converter={StaticResource InverseBoolConverter}}"
+                            Command="{Binding ConfirmCommand}" />
+
+                    <!-- Destructive (red) confirm button — shown when IsDestructive -->
+                    <Button Grid.Column="2"
+                            Text="{Binding ConfirmText}"
+                            BackgroundColor="#EF4444"
+                            TextColor="White"
+                            CornerRadius="14"
+                            FontAttributes="Bold"
+                            HeightRequest="48"
+                            IsVisible="{Binding IsDestructive}"
+                            Command="{Binding ConfirmCommand}" />
+
+                </Grid>
+
+            </VerticalStackLayout>
+        </Border>
+
+    </Grid>
+</ContentView>
