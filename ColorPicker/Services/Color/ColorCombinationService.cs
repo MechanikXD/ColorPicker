@@ -13,45 +13,34 @@ public static class ColorCombinationService
         if (palette.Palette.Count <= 1) return resultSet;
 
         var targetLab = CieColorTransformService.RgbToLab(source);
-        var labColors = new Dictionary<ColorSwatch, LabColor>();
         const int COMBINATIONS_PER_PAIR = (int)(1 / COMBINATION_RATIO_STEP);
 
         for (var i = 0; i < palette.Palette.Count; i++)
         {
-            if (!labColors.TryGetValue(palette.Palette[i], out var lab1))
-            {
-                lab1 = CieColorTransformService.RgbToLab(palette.Palette[i].ToColor);
-                labColors.Add(palette.Palette[i], lab1);
-            }
+            var color1 = palette.Palette[i];
             // Only unique color combinations 
             for (var j = i + 1; j < palette.Palette.Count; j++)
             {
-                if (!labColors.TryGetValue(palette.Palette[j], out var lab2))
-                {
-                    lab2 = CieColorTransformService.RgbToLab(palette.Palette[j].ToColor);
-                    labColors.Add(palette.Palette[j], lab2);
-                }
-                
+                var color2 = palette.Palette[j];
+
                 var bestDeltaE = double.MaxValue;
                 var bestRatio = 0.0;
-                var bestLab = new LabColor(0, 0, 0);
+                var bestRgb = new Rgb(0, 0, 0);
                 
                 for (var step = 1; step < COMBINATIONS_PER_PAIR; step++)
                 {
                     var ratio = COMBINATION_RATIO_STEP * step;
+                    var combinedRed = (int)(color1.Red * ratio + color2.Red * (1 - ratio));
+                    var combinedGreen = (int)(color1.Green * ratio + color2.Green * (1 - ratio));
+                    var combinedBlue = (int)(color1.Blue * ratio + color2.Blue * (1 - ratio));
                     
-                    var mixedL = lab1.L * ratio + lab2.L * (1.0 - ratio);
-                    var mixedA = lab1.A * ratio + lab2.A * (1.0 - ratio);
-                    var mixedB = lab1.B * ratio + lab2.B * (1.0 - ratio);
-                    
-                    var mixedLab = new LabColor(mixedL, mixedA, mixedB);
-                    var combinationDeltaE = CieColorTransformService.GetDeltaE(targetLab, mixedLab);
-                    
+                    var combinedColor = new Rgb(combinedRed, combinedGreen, combinedBlue);
+                    var combinationDeltaE = CieColorTransformService.GetDeltaE(targetLab, combinedColor.ToColor());
                     if (combinationDeltaE < bestDeltaE)
                     {
                         bestDeltaE = combinationDeltaE;
                         bestRatio = ratio;
-                        bestLab = mixedLab;
+                        bestRgb = combinedColor;
                     }
                 }
                 
@@ -59,10 +48,10 @@ public static class ColorCombinationService
                 var combination = new ColorCombination
                 {
                     Accuracy = accuracy,
-                    FirstColor = ColorSwatch.FromColor(CieColorTransformService.LabToRgb(lab1)),
+                    FirstColor = color1,
                     FirstColorRatio = bestRatio,
-                    ResultColor = ColorSwatch.FromColor(CieColorTransformService.LabToRgb(bestLab)),
-                    SecondColor = ColorSwatch.FromColor(CieColorTransformService.LabToRgb(lab2)),
+                    ResultColor = ColorSwatch.FromRgb(bestRgb.R, bestRgb.G, bestRgb.B),
+                    SecondColor = color2,
                     SecondColorRatio = 1 - bestRatio
                 };
                 
@@ -82,5 +71,21 @@ public static class ColorCombinationService
 
         resultSet.Sort(comparison:(c1, c2) => c2.Accuracy.CompareTo(c1.Accuracy));
         return resultSet;
+    }
+    private record Rgb(int R, int G, int B)
+    {
+        public static Rgb FromColor(Microsoft.Maui.Graphics.Color color) => 
+            new((int)(color.Red * 255), (int)(color.Green * 255), (int)(color.Blue * 255));
+
+        public Microsoft.Maui.Graphics.Color ToColor() => 
+            Microsoft.Maui.Graphics.Color.FromRgb(R / 255.0, G / 255.0, B / 255.0);
+
+        public virtual bool Equals(Rgb? other)
+        {
+            if (other == null) return false;
+            return R == other.B && G == other.G && B == other.B;
+        }
+
+        public override int GetHashCode() => HashCode.Combine(R, G, B);
     }
 }
