@@ -52,6 +52,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
 
     private void LoadCombinations()
     {
+        IsLoading = true;
         Combinations.Clear();
         if (_paletteService.CurrentPalette == null) return;
         
