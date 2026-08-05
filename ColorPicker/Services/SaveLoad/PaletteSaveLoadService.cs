@@ -24,19 +24,10 @@ public class PaletteSaveLoadService : ISaveLoadService
             LoadDefault();
             return;
         }
-        
-        var data = JsonSerializer.Deserialize(json, AppJsonContext.Default.SerializableUserData);
-        if (data == null)
-        {
-            LoadDefault();
-            return;
-        }
-        
-        _paletteService.AllPalettes.Clear();
-        foreach (var serializablePalette in data.Palette) 
-            _paletteService.AddPalette(serializablePalette.ToPalette());
-        
-        _paletteService.SelectPalette(_paletteService.AllPalettes[data.ActivePaletteIndex]);
+
+        var data = JsonSerializer.Deserialize(json, AppJsonContext.Default.SerializableUserData) ??
+                   DefaultUserPalette.UserData;
+        LoadPalettes(data);
     }
 
     public void Save()
@@ -46,13 +37,16 @@ public class PaletteSaveLoadService : ISaveLoadService
         Preferences.Set(STORAGE_KEY, json);
     }
 
-    public void LoadDefault()
+    public void LoadDefault() => LoadPalettes(DefaultUserPalette.UserData);
+
+    private void LoadPalettes(SerializableUserData userData)
     {
         _paletteService.AllPalettes.Clear();
-        foreach (var serializablePalette in DefaultUserPalette.UserData.Palette) 
+        foreach (var serializablePalette in userData.Palette) 
             _paletteService.AddPalette(serializablePalette.ToPalette());
         
-        _paletteService.SelectPalette(_paletteService.AllPalettes[DefaultUserPalette.UserData.ActivePaletteIndex]);
+        _paletteService.SelectPalette(_paletteService.AllPalettes[userData.ActivePaletteIndex]);
+        _paletteService.PalettesChanged += Save;
     }
 
     public void Clear(bool loadDefault=true)

@@ -6,7 +6,7 @@ public static class DefaultUserPalette
 {
     public static SerializableUserData UserData { get; } = new()
     {
-        ActivePaletteIndex = 1,
+        ActivePaletteIndex = 0,
         Palette =
         [
             new SerializablePalette
