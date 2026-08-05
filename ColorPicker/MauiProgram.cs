@@ -1,4 +1,5 @@
 using ColorPicker.Services.Palette;
+using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Theme;
 using ColorPicker.View;
 using ColorPicker.ViewModels;
@@ -29,6 +30,7 @@ public static class MauiProgram
             // Register Services
             builder.Services.AddSingleton<IThemeService, ThemeService>();
             builder.Services.AddSingleton<IPaletteService, PaletteService>();
+            builder.Services.AddSingleton<ISaveLoadService, PaletteSaveLoadService>();
 
             // Register ViewModels
             builder.Services.AddTransient<MainViewModel>();
