@@ -4,9 +4,9 @@ namespace ColorPicker.Services.Navigation;
 
 public static class ShellNavigationService
 {
-    public static void SwitchPage(string pageRoute) => Shell.Current.GoToAsync( $"//{pageRoute}");
+    public static void GoToPage(string pageRoute) => Shell.Current.GoToAsync( $"//{pageRoute}");
     
-    public static void SwitchSubPage(string pageRoute, Dictionary<string, object>? routeParams=null)
+    public static void DoToSubPage(string pageRoute, Dictionary<string, object>? routeParams=null)
     {
         var url = new StringBuilder();
         if (routeParams is { Count: > 0 })
@@ -21,13 +21,13 @@ public static class ShellNavigationService
         Shell.Current.GoToAsync(pageRoute + url);
     }
 
-    public static void StepBack() => Shell.Current.GoToAsync("..");
+    public static void GoBack() => Shell.Current.GoToAsync("..");
     
-    public static async Task StepBackAsync() => await Shell.Current.GoToAsync("..");
+    public static async Task GoBackAsync() => await Shell.Current.GoToAsync("..");
     
-    public static async Task SwitchPageAsync(string pageRoute) => await Shell.Current.GoToAsync( $"//{pageRoute}");
+    public static async Task DoToPageAsync(string pageRoute) => await Shell.Current.GoToAsync( $"//{pageRoute}");
     
-    public static async Task SwitchSubPageAsync(string pageRoute, Dictionary<string, object>? routeParams=null)
+    public static async Task GoToSubPageAsync(string pageRoute, Dictionary<string, object>? routeParams=null)
     {
         var url = new StringBuilder();
         if (routeParams is { Count: > 0 })
@@ -41,4 +41,7 @@ public static class ShellNavigationService
         
         await Shell.Current.GoToAsync(pageRoute + url);
     }
+
+    public static async Task GoToPageWithParamsAsync(string pageRoute, Dictionary<string, object> routeParams) =>
+        await Shell.Current.GoToAsync(pageRoute, routeParams);
 }

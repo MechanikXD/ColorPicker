@@ -21,7 +21,7 @@ public partial class CameraPage : ContentPage
             var accessPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
             if (accessPermissionStatus != PermissionStatus.Granted)
             {
-                await ShellNavigationService.StepBackAsync();
+                await ShellNavigationService.GoBackAsync();
             }
         }
     }

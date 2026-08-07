@@ -36,7 +36,7 @@ public class MainViewModel : BaseViewModel
     public MainViewModel()
     {
         OpenManualColorCommand = new Command(_ =>
-            ShellNavigationService.SwitchSubPage("manualcolor",
+            ShellNavigationService.DoToSubPage("manualcolor",
                 new Dictionary<string, object>
                     { ["isEditMode"] = false, ["colorHex"] = RandomPreviewColor.ToHex().TrimStart('#') }));
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);

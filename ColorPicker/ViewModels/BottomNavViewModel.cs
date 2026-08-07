@@ -18,7 +18,7 @@ public class BottomNavViewModel : BaseViewModel
         NavigateCommand = new Command<string>(pageRoute =>
         {
             ActiveRoute = pageRoute;
-            ShellNavigationService.SwitchPage(pageRoute);
+            ShellNavigationService.GoToPage(pageRoute);
         });
     }
 }

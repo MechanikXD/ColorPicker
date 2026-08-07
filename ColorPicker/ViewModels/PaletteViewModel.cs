@@ -85,14 +85,14 @@ public class PaletteViewModel : BaseViewModel
             }
         });
 
-        AddColorManuallyCommand = new Command(_ => { ShellNavigationService.SwitchSubPage("manualcolor", 
+        AddColorManuallyCommand = new Command(_ => { ShellNavigationService.DoToSubPage("manualcolor", 
             new Dictionary<string, object> { ["isEditMode"] = false}); });
-        AddColorFromCameraCommand = new Command(_ => { ShellNavigationService.SwitchPage("camera"); });
+        AddColorFromCameraCommand = new Command(_ => { ShellNavigationService.GoToPage("camera"); });
 
         EditColorCommand = new Command<ColorSwatch>(swatch =>
         {
             if (swatch is null) return;
-            ShellNavigationService.SwitchSubPage("manualcolor",
+            ShellNavigationService.DoToSubPage("manualcolor",
                 new Dictionary<string, object>
                     { ["isEditMode"] = true, ["colorHex"] = swatch.Hex.TrimStart('#') });
         });

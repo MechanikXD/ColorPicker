@@ -107,7 +107,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         Prompt = prompt;
         
         CopyHexCommand = new Command(_ => { Clipboard.Default.SetTextAsync(HexInput); });
-        CancelCommand = new Command(_ => { ShellNavigationService.StepBack(); });
+        CancelCommand = new Command(_ => { ShellNavigationService.GoBack(); });
         AddToPaletteCommand = new Command(_ => {
         {
             Prompt.Show(
@@ -121,7 +121,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
                         ? CurrentColor.ToHex()
                         : Prompt.InputText;
                     paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
-                    ShellNavigationService.StepBack();
+                    ShellNavigationService.GoBack();
                 }
             );
         } });
@@ -133,7 +133,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
             if (originalSwatch == null) return;
             
             paletteService.UpdateColor(originalSwatch, currentSwatch);
-            ShellNavigationService.StepBack();
+            ShellNavigationService.GoBack();
         });
     }
 

@@ -48,7 +48,7 @@ public class CameraViewModel : BaseViewModel
     {
         if (view == null)
         {
-            await ShellNavigationService.StepBackAsync();
+            await ShellNavigationService.GoBackAsync();
             return;
         }
         
@@ -63,6 +63,6 @@ public class CameraViewModel : BaseViewModel
             { "CapturedImageBytes", imageBytes }
         };
         
-        await ShellNavigationService.SwitchSubPageAsync("scanresult", navigationParameters);
+        await ShellNavigationService.GoToPageWithParamsAsync("scanresult", navigationParameters);
     }
 }
