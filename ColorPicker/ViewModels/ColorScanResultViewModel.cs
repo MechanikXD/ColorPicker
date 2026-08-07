@@ -91,6 +91,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
                         ? SampledColor.ToHex()
                         : Prompt.InputText;
                     paletteService.AddColor(ColorSwatch.FromColor(SampledColor, name: title));
+                    ShellNavigationService.GoBack();
                 }
             );
         });

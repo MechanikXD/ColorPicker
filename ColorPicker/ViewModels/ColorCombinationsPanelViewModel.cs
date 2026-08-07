@@ -27,7 +27,6 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
 
     public ICommand ToggleExpandCommand { get; }
     public ICommand RefreshCommand { get; }
-    public ICommand SelectCombinationCommand { get; }
 
     public ColorCombinationsPanelViewModel(IPaletteService paletteService)
     {
@@ -42,11 +41,6 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
             // Subsequent opens show cached results until Refresh is pressed.
             if (opening && Combinations.Count == 0)
                 RefreshCommand.Execute(null);
-        });
- 
-        SelectCombinationCommand = new Command<ColorCombination>(_ =>
-        {
-            // Raise event or callback to parent VM
         });
     }
 

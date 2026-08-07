@@ -114,12 +114,6 @@
                                         BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
                                                                            Dark={StaticResource DarkBackground}}"
                                         Padding="14,12">
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ColorCombinationsPanelViewModel}},
-                                                              Path=SelectCombinationCommand}"
-                                            CommandParameter="{Binding .}" />
-                                    </Border.GestureRecognizers>
 
                                     <VerticalStackLayout Spacing="10">
 
