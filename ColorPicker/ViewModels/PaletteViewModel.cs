@@ -86,21 +86,26 @@ public class PaletteViewModel : BaseViewModel
         });
 
         AddColorManuallyCommand = new Command(_ => { ShellNavigationService.DoToSubPage("manualcolor", 
-            new Dictionary<string, object> { ["isEditMode"] = false}); });
+            new Dictionary<string, object> { ["isEditMode"] = false, ["showCombinations"] = false }); });
         AddColorFromCameraCommand = new Command(_ => { ShellNavigationService.GoToPage("camera"); });
 
         EditColorCommand = new Command<ColorSwatch>(swatch =>
         {
-            if (swatch is null) return;
+            if (swatch is null) { Console.WriteLine("swatch is null"); return; }
+            Console.WriteLine("swatch is NOT null");
             ShellNavigationService.DoToSubPage("manualcolor",
                 new Dictionary<string, object>
-                    { ["isEditMode"] = true, ["colorHex"] = swatch.Hex.TrimStart('#') });
+                    { ["isEditMode"] = true, 
+                        ["colorHex"] = swatch.Hex.TrimStart('#'),
+                        ["showCombinations"] = false
+                    });
         });
 
         DeleteColorCommand = new Command<ColorSwatch>(swatch =>
         {
             if (swatch is not null)
             {
+                Console.WriteLine("swatch is NOT null");
                 var swatchName = string.IsNullOrEmpty(swatch.Name) || string.IsNullOrWhiteSpace(swatch.Name)
                     ? swatch.Hex
                     : swatch.Name;
@@ -109,6 +114,7 @@ public class PaletteViewModel : BaseViewModel
                     _paletteService.RemoveColor(swatch);
                 });
             }
+            else Console.WriteLine("swatch is null");
         });
     }
 

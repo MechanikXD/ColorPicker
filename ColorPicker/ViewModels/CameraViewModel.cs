@@ -66,7 +66,7 @@ public class CameraViewModel : BaseViewModel
             { "CapturedImageBytes", imageBytes }
         };
         
-        await ShellNavigationService.GoToPageWithParamsAsync("scanresult", navigationParameters);
+        await ShellNavigationService.GoToSubPageAsync("scanresult", navigationParameters);
         _isCapturing = false;
     }
 }

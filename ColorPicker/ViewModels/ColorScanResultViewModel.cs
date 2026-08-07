@@ -77,7 +77,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
-        RetakeCommand = new Command(_ => { ShellNavigationService.GoBack(); });
+        RetakeCommand = new Command(_ => { ShellNavigationService.GoToPage("camera"); });
         SaveToPaletteCommand = new Command(_ =>
         {
             Prompt.Show(

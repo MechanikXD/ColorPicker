@@ -8,8 +8,12 @@ namespace ColorPicker.ViewModels;
 public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 {
     public string PageTitle => IsEditMode ? "Edit Color" : "Pick a Color";
-    public bool ShowCombinationsPanel => !IsEditMode;
-    public bool ShowConfirmBar => IsEditMode;
+
+    public bool ShowCombinationsPanel
+    {
+        get;
+        set => SetField(ref field, value);
+    }
 
     public bool IsEditMode
     {
@@ -18,15 +22,13 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         {
             SetField(ref field, value);
             OnPropertyChanged(nameof(PageTitle));
-            OnPropertyChanged(nameof(ShowCombinationsPanel));
-            OnPropertyChanged(nameof(ShowConfirmBar));
         }
     }
 
     public string InitialHex { get; private set; } = string.Empty;
 
     // Current color
-    public Color CurrentColor { get; private set; } = Colors.Black;
+    public Color CurrentColor { get; private set; } = Colors.Gray;
     public string HexInput { get; private set; } = string.Empty;
 
     // HSV sliders
@@ -167,6 +169,13 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
+        if (query.TryGetValue("showCombinations", out var obj) && obj is bool showCombinations)
+            ShowCombinationsPanel = showCombinations;
+        else
+        {
+            ShowCombinationsPanel = true;
+            Console.WriteLine($"{obj} | {obj == null} | {obj?.GetType()} | {obj?.ToString()}");
+        }
         if (query.TryGetValue("isEditMode", out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
         Color color;
         if (query.TryGetValue("colorHex", out var obj2) && obj2 is string colorHex)

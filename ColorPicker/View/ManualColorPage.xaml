@@ -59,8 +59,7 @@
                     Text="Add"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
-                    IsVisible="{Binding ShowConfirmBar,
-                                Converter={StaticResource InverseBoolConverter}}"
+                    IsVisible="{Binding IsEditMode}"
                     Command="{Binding AddToPaletteCommand}" />
 
             <!-- Edit mode: "Save" button confirms the change -->
@@ -68,7 +67,8 @@
                     Text="Save"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
-                    IsVisible="{Binding ShowConfirmBar}"
+                    IsVisible="{Binding IsEditMode,
+                                Converter={StaticResource InverseBoolConverter}}"
                     Command="{Binding ConfirmEditCommand}" />
         </Grid>
 
@@ -291,12 +291,13 @@
             ColorCombinationsPanel (overlay layer)
             Anchored to the bottom, above the nav bar.
         -->
-        <v:ColorCombinationsPanel
-            Grid.Row="3" Grid.RowSpan="2"
-            BindingContext="{Binding CombinationsPanel}"
-            IsVisible="{Binding BindingContext.ShowCombinationsPanel, Source={x:Reference ThisPage}}" 
-            VerticalOptions="End"
-            Margin="0,0,0,64" />
+        <Grid Grid.Row="3" Grid.RowSpan="2"
+              IsVisible="{Binding ShowCombinationsPanel}"
+              VerticalOptions="End"
+              Margin="0,0,0,64">
+    
+            <v:ColorCombinationsPanel BindingContext="{Binding CombinationsPanel}" />
+        </Grid>
         
         <!-- Persistent nav bar -->
         <v:BottomNavBar Grid.Row="4" />
