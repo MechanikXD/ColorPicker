@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 using SkiaSharp;
 
@@ -76,7 +77,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
-        RetakeCommand = new Command(_ => { Shell.Current.GoToAsync(".."); });
+        RetakeCommand = new Command(_ => { ShellNavigationService.StepBack(); });
         SaveToPaletteCommand = new Command(_ =>
         {
             Prompt.Show(

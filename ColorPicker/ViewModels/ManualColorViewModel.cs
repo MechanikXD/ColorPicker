@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
 namespace ColorPicker.ViewModels;
@@ -106,7 +107,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         Prompt = prompt;
         
         CopyHexCommand = new Command(_ => { Clipboard.Default.SetTextAsync(HexInput); });
-        CancelCommand = new Command(_ => { ReturnFromPage(); });
+        CancelCommand = new Command(_ => { ShellNavigationService.StepBack(); });
         AddToPaletteCommand = new Command(_ => {
         {
             Prompt.Show(
@@ -120,7 +121,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
                         ? CurrentColor.ToHex()
                         : Prompt.InputText;
                     paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
-                    ReturnFromPage();
+                    ShellNavigationService.StepBack();
                 }
             );
         } });
@@ -132,7 +133,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
             if (originalSwatch == null) return;
             
             paletteService.UpdateColor(originalSwatch, currentSwatch);
-            ReturnFromPage();
+            ShellNavigationService.StepBack();
         });
     }
 
@@ -226,6 +227,4 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     
         return (max - min) / max;
     }
-
-    private static void ReturnFromPage() => Shell.Current.GoToAsync("..");
 }

@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using ColorPicker.Services.Navigation;
 
 namespace ColorPicker.ViewModels;
 
@@ -17,7 +18,7 @@ public class BottomNavViewModel : BaseViewModel
         NavigateCommand = new Command<string>(pageRoute =>
         {
             ActiveRoute = pageRoute;
-            Shell.Current.GoToAsync( $"//{pageRoute}");
+            ShellNavigationService.SwitchPage(pageRoute);
         });
     }
 }

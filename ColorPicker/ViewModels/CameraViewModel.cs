@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using ColorPicker.Services.Navigation;
 using CommunityToolkit.Maui.Views;
 
 namespace ColorPicker.ViewModels;
@@ -47,7 +48,7 @@ public class CameraViewModel : BaseViewModel
     {
         if (view == null)
         {
-            await Shell.Current.GoToAsync("..");
+            await ShellNavigationService.StepBackAsync();
             return;
         }
         
@@ -62,6 +63,6 @@ public class CameraViewModel : BaseViewModel
             { "CapturedImageBytes", imageBytes }
         };
         
-        await Shell.Current.GoToAsync("scanresult", navigationParameters);
+        await ShellNavigationService.SwitchSubPageAsync("scanresult", navigationParameters);
     }
 }

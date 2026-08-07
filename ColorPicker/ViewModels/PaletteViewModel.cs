@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
 namespace ColorPicker.ViewModels;
@@ -84,13 +85,16 @@ public class PaletteViewModel : BaseViewModel
             }
         });
 
-        AddColorManuallyCommand = new Command(_ => { Shell.Current.GoToAsync("manualcolor?isEditMode=false"); });
-        AddColorFromCameraCommand = new Command(_ => { Shell.Current.GoToAsync("camera"); });
+        AddColorManuallyCommand = new Command(_ => { ShellNavigationService.SwitchSubPage("manualcolor", 
+            new Dictionary<string, object> { ["isEditMode"] = false}); });
+        AddColorFromCameraCommand = new Command(_ => { ShellNavigationService.SwitchPage("camera"); });
 
         EditColorCommand = new Command<ColorSwatch>(swatch =>
         {
             if (swatch is null) return;
-            Shell.Current.GoToAsync($"manualcolor?isEditMode=true&colorHex={swatch.Hex.TrimStart('#')}");
+            ShellNavigationService.SwitchSubPage("manualcolor",
+                new Dictionary<string, object>
+                    { ["isEditMode"] = true, ["colorHex"] = swatch.Hex.TrimStart('#') });
         });
 
         DeleteColorCommand = new Command<ColorSwatch>(swatch =>

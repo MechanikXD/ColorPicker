@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Suggestion;
+using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Suggestions;
 
 namespace ColorPicker.ViewModels;
@@ -35,8 +36,9 @@ public class MainViewModel : BaseViewModel
     public MainViewModel()
     {
         OpenManualColorCommand = new Command(_ =>
-            Shell.Current.GoToAsync(
-                $"manualcolor?isEditMode=false&colorHex={RandomPreviewColor.ToHex().TrimStart('#')}"));
+            ShellNavigationService.SwitchSubPage("manualcolor",
+                new Dictionary<string, object>
+                    { ["isEditMode"] = false, ["colorHex"] = RandomPreviewColor.ToHex().TrimStart('#') }));
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
         LoadMessages();
     }

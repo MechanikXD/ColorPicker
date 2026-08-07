@@ -1,3 +1,4 @@
+using ColorPicker.Services.Navigation;
 using ColorPicker.ViewModels;
 
 namespace ColorPicker.View;
@@ -20,7 +21,7 @@ public partial class CameraPage : ContentPage
             var accessPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
             if (accessPermissionStatus != PermissionStatus.Granted)
             {
-                await Shell.Current.GoToAsync("..");
+                await ShellNavigationService.StepBackAsync();
             }
         }
     }
