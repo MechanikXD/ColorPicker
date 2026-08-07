@@ -131,11 +131,28 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         {
             if (string.IsNullOrEmpty(InitialHex)) return;
             var currentSwatch = ColorSwatch.FromColor(CurrentColor);
-            var originalSwatch = paletteService.CurrentPalette?.Palette.FirstOrDefault(currentSwatch.ValueEquals);
-            if (originalSwatch == null) return;
-            
-            paletteService.UpdateColor(originalSwatch, currentSwatch);
-            ShellNavigationService.GoBack();
+
+            if (paletteService.CurrentPalette == null) return;
+            foreach (var color in paletteService.CurrentPalette.Palette)
+            {
+                if (color.HexEquals(InitialHex))
+                {
+                    Prompt.Show(
+                        title: "Rename color title",
+                        message: "Change name of this color",
+                        inputHint: "Color's name",
+                        showInput: true,
+                        onConfirm: () =>
+                        {
+                            var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                                ? null
+                                : Prompt.InputText;
+                            paletteService.UpdateColor(color, currentSwatch, title);
+                            ShellNavigationService.GoBack();
+                        }
+                    );
+                }
+            }
         });
     }
 
@@ -171,11 +188,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     {
         if (query.TryGetValue("showCombinations", out var obj) && obj is bool showCombinations)
             ShowCombinationsPanel = showCombinations;
-        else
-        {
-            ShowCombinationsPanel = true;
-            Console.WriteLine($"{obj} | {obj == null} | {obj?.GetType()} | {obj?.ToString()}");
-        }
+        else ShowCombinationsPanel = true;
         if (query.TryGetValue("isEditMode", out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
         Color color;
         if (query.TryGetValue("colorHex", out var obj2) && obj2 is string colorHex)
@@ -185,7 +198,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         }
         else
         {
-            color = Colors.Black;
+            color = Colors.Gray;
             InitialHex = color.ToHex();
         }
         

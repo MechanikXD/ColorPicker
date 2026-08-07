@@ -56,12 +56,17 @@ public class PaletteService : IPaletteService
         PalettesChanged?.Invoke();
     }
 
-    public void UpdateColor(ColorSwatch original, ColorSwatch updated)
+    public void UpdateColor(ColorSwatch original, ColorSwatch updated, string? newName=null)
     {
         if (CurrentPalette == null) return;
 
         var colorIndex = CurrentPalette.Palette.IndexOf(original);
-        if (colorIndex >= 0) CurrentPalette.Palette[colorIndex] = updated;
+        if (colorIndex >= 0)
+        {
+            var old = CurrentPalette.Palette[colorIndex];
+            CurrentPalette.Palette[colorIndex] = updated;
+            CurrentPalette.Palette[colorIndex].Name = newName ?? old.Name;
+        }
         PalettesChanged?.Invoke();
     }
 

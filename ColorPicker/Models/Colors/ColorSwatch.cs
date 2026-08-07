@@ -91,4 +91,6 @@ public class ColorSwatch
 
     public bool ValueEquals(ColorSwatch other) => 
         Math.Abs(Red - other.Red) < EPS && Math.Abs(Green - other.Green) < EPS && Math.Abs(Blue - other.Blue) < EPS;
+    
+    public bool HexEquals(string other) => Hex.TrimStart('#').Equals(other.TrimStart('#'), StringComparison.InvariantCultureIgnoreCase);
 }

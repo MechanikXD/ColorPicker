@@ -91,8 +91,7 @@ public class PaletteViewModel : BaseViewModel
 
         EditColorCommand = new Command<ColorSwatch>(swatch =>
         {
-            if (swatch is null) { Console.WriteLine("swatch is null"); return; }
-            Console.WriteLine("swatch is NOT null");
+            if (swatch is null) return;
             ShellNavigationService.DoToSubPage("manualcolor",
                 new Dictionary<string, object>
                     { ["isEditMode"] = true, 
@@ -105,7 +104,6 @@ public class PaletteViewModel : BaseViewModel
         {
             if (swatch is not null)
             {
-                Console.WriteLine("swatch is NOT null");
                 var swatchName = string.IsNullOrEmpty(swatch.Name) || string.IsNullOrWhiteSpace(swatch.Name)
                     ? swatch.Hex
                     : swatch.Name;
@@ -114,7 +112,6 @@ public class PaletteViewModel : BaseViewModel
                     _paletteService.RemoveColor(swatch);
                 });
             }
-            else Console.WriteLine("swatch is null");
         });
     }
 

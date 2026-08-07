@@ -229,7 +229,7 @@
                                     WidthRequest="36" HeightRequest="36"
                                     Padding="0"
                                     VerticalOptions="Center"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditColorCommand}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditColorCommand, x:DataType={x:Type ContentPage}}"
                                     CommandParameter="{Binding .}" />
 
                             <!-- Delete button -->
@@ -244,7 +244,7 @@
                                     WidthRequest="36" HeightRequest="36"
                                     Padding="0"
                                     VerticalOptions="Center"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteColorCommand}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteColorCommand, x:DataType={x:Type ContentPage}}"
                                     CommandParameter="{Binding .}" />
 
                         </Grid>

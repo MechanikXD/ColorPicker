@@ -59,7 +59,8 @@
                     Text="Add"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
-                    IsVisible="{Binding IsEditMode}"
+                    IsVisible="{Binding IsEditMode,
+                                Converter={StaticResource InverseBoolConverter}}"
                     Command="{Binding AddToPaletteCommand}" />
 
             <!-- Edit mode: "Save" button confirms the change -->
@@ -67,8 +68,7 @@
                     Text="Save"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
-                    IsVisible="{Binding IsEditMode,
-                                Converter={StaticResource InverseBoolConverter}}"
+                    IsVisible="{Binding IsEditMode}"
                     Command="{Binding ConfirmEditCommand}" />
         </Grid>
 
