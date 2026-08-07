@@ -19,4 +19,5 @@ public interface IPaletteService
     public void RemoveColor(ColorSwatch color);
 
     public event Action? CurrentPaletteChanged;
+    public event Action? PalettesChanged;
 }
