@@ -31,10 +31,10 @@ public partial class CameraPage : ContentPage
         base.OnAppearing();
         await LiveCamera.StartCameraPreview(CancellationToken.None);
     }
-    
-    protected override void OnDisappearing()
+
+    private void OnCameraViewUnloaded(object? sender, EventArgs e)
     {
-        LiveCamera.StopCameraPreview();
         base.OnDisappearing();
+        LiveCamera.StopCameraPreview();
     }
 }

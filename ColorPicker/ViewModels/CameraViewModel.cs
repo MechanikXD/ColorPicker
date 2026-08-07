@@ -6,6 +6,7 @@ namespace ColorPicker.ViewModels;
 
 public class CameraViewModel : BaseViewModel
 {
+    private bool _isCapturing;
     public bool IsFrontCamera
     {
         get;
@@ -44,8 +45,10 @@ public class CameraViewModel : BaseViewModel
         }
     }
 
-    private static async void PassImage(CameraView? view)
+    private async void PassImage(CameraView? view)
     {
+        if (_isCapturing) return;
+        _isCapturing = true;
         if (view == null)
         {
             await ShellNavigationService.GoBackAsync();
@@ -64,5 +67,6 @@ public class CameraViewModel : BaseViewModel
         };
         
         await ShellNavigationService.GoToPageWithParamsAsync("scanresult", navigationParameters);
+        _isCapturing = false;
     }
 }

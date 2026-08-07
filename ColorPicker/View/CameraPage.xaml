@@ -23,7 +23,8 @@
                            Grid.Row="0"
                            HorizontalOptions="Fill"
                            VerticalOptions="Fill"
-                           Loaded="OnCameraViewLoaded">
+                           Loaded="OnCameraViewLoaded"
+                           Unloaded="OnCameraViewUnloaded">
             <!--
                 Bind CameraPosition to IsFrontCamera via a converter:
                 true  → CameraPosition.Front
