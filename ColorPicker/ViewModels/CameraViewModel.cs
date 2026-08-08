@@ -13,6 +13,9 @@ public class CameraViewModel : BaseViewModel
         set => SetField(ref field, value);
     } = false;
 
+    public event EventHandler? OnCaptureStarted;
+    public event EventHandler? OnCaptureFinished;
+
     public ICommand CaptureCommand { get; }
 
     public ICommand FlipCameraCommand { get; }
@@ -55,12 +58,16 @@ public class CameraViewModel : BaseViewModel
             return;
         }
         
+        OnCaptureStarted?.Invoke(this, EventArgs.Empty);
+        
         await using var imageStream = await view.CaptureImage(CancellationToken.None);
         
         using MemoryStream memoryStream = new();
         await imageStream.CopyToAsync(memoryStream);
         var imageBytes = memoryStream.ToArray();
-            
+        
+        OnCaptureFinished?.Invoke(this, EventArgs.Empty);
+        
         var navigationParameters = new Dictionary<string, object>
         {
             { "CapturedImageBytes", imageBytes }

@@ -58,7 +58,7 @@
                  IsVisible="False" means zero height, zero render cost,
                  and no accidental bleed-through into the closed state. -->
             <Grid RowDefinitions="Auto, *"
-                  IsVisible="{Binding IsExpanded}">
+                  x:Name="ContentArea">
 
                 <!-- Refresh bar -->
                 <Grid Grid.Row="0"

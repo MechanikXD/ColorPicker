@@ -32,7 +32,34 @@
                 (IsFrontCameraToPositionConverter — to be implemented)
             -->
         </camera:CameraView>
-
+        
+        <!-- Loading overlay — appears after shutter tap, covers controls -->
+        <Grid x:Name="LoadingOverlay"
+              Grid.Row="0"
+              IsVisible="False"
+              BackgroundColor="#88000000">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="16">
+                <ActivityIndicator IsRunning="True"
+                                   Color="White"
+                                   HeightRequest="48"
+                                   WidthRequest="48" />
+                <Label Text="Processing..."
+                       TextColor="White"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+        
+        <!-- Flash overlay — invisible by default, top of the Z stack -->
+        <BoxView x:Name="FlashOverlay"
+                 Grid.Row="0"
+                 Color="White"
+                 Opacity="0"
+                 IsVisible="False"
+                 InputTransparent="True" />
+        
         <!-- Reticle overlay (center of screen) -->
         <!--
             Two concentric shapes:
@@ -44,7 +71,8 @@
               HorizontalOptions="Center"
               VerticalOptions="Center"
               WidthRequest="80"
-              HeightRequest="80">
+              HeightRequest="80"
+              x:Name="CameraPointer">
 
             <!-- Outer ring -->
             <Border WidthRequest="80" HeightRequest="80"

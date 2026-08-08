@@ -9,6 +9,8 @@ public partial class CameraPage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel;
+        viewModel.OnCaptureStarted += async (_, _) => await FlashFeedback();
+        viewModel.OnCaptureFinished += (_, _) => ToggleLoadingOverlay(true);
     }
     
     protected override async void OnAppearing()
@@ -24,6 +26,8 @@ public partial class CameraPage : ContentPage
                 await ShellNavigationService.GoBackAsync();
             }
         }
+
+        ToggleLoadingOverlay(false);
     }
 
     private async void OnCameraViewLoaded(object? sender, EventArgs e)
@@ -36,5 +40,21 @@ public partial class CameraPage : ContentPage
     {
         base.OnDisappearing();
         LiveCamera.StopCameraPreview();
+    }
+    
+    private async Task FlashFeedback()
+    {
+        FlashOverlay.IsVisible = true;
+        await FlashOverlay.FadeToAsync(1, 60);
+        await FlashOverlay.FadeToAsync(0, 120);
+        FlashOverlay.IsVisible = false;
+
+        ToggleLoadingOverlay(true);
+    }
+
+    private void ToggleLoadingOverlay(bool toggle)
+    {
+        LoadingOverlay.IsVisible = toggle;
+        CameraPointer.IsVisible = !toggle;
     }
 }
