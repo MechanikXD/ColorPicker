@@ -72,6 +72,7 @@ public static class ColorCombinationService
         resultSet.Sort(comparison:(c1, c2) => c2.Accuracy.CompareTo(c1.Accuracy));
         return resultSet;
     }
+    
     private record Rgb(int R, int G, int B)
     {
         public static Rgb FromColor(Microsoft.Maui.Graphics.Color color) => 

@@ -31,27 +31,27 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ColorCombinationsPanelViewModel(IPaletteService paletteService)
     {
         _paletteService = paletteService;
-        RefreshCommand = new Command(_ => { LoadCombinations(); });
+        RefreshCommand = new Command(async void (_) => { await LoadCombinations(); });
         
-        ToggleExpandCommand = new Command(_ =>
+        ToggleExpandCommand = new Command(async void (_) =>
         {
             var opening = !IsExpanded;
             IsExpanded = opening;
             // Auto-compute on first open so there's something to show.
             // Subsequent opens show cached results until Refresh is pressed.
-            if (opening && Combinations.Count == 0)
-                RefreshCommand.Execute(null);
+            if (opening && Combinations.Count == 0) await Task.Run(() => RefreshCommand.Execute(null));
         });
     }
 
-    private void LoadCombinations()
+    private async Task LoadCombinations()
     {
         IsLoading = true;
         Combinations.Clear();
         if (_paletteService.CurrentPalette == null) return;
-        
-        foreach (var combination in ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette))
-            Combinations.Add(combination);
+
+        var combinations = await Task.Run(() =>
+            ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette));
+        foreach (var combination in combinations) Combinations.Add(combination);
         IsLoading = false;
     }
 }
