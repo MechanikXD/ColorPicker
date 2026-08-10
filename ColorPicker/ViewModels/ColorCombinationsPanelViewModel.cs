@@ -41,8 +41,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         Combinations.Clear();
         if (_paletteService.CurrentPalette == null) return;
 
-        var combinations = await Task.Run(() =>
-            ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette));
+        var combinations = await ColorCombinationService.GetCombinationsAsync(TargetColor, _paletteService.CurrentPalette);
         foreach (var combination in combinations) Combinations.Add(combination);
         IsLoading = false;
     }

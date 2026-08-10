@@ -1,3 +1,5 @@
+using ColorPicker.Models.StaticData;
+
 namespace ColorPicker;
 
 public partial class AppShell
@@ -5,7 +7,7 @@ public partial class AppShell
     public AppShell()
     {
         InitializeComponent();
-        Routing.RegisterRoute("manual_color", typeof(View.ManualColorPage));
-        Routing.RegisterRoute("scan_result",  typeof(View.ColorScanResultPage));
+        Routing.RegisterRoute(Pages.Sub.ManualColorSelection, typeof(View.ManualColorPage));
+        Routing.RegisterRoute(Pages.Sub.ColorScanResult, typeof(View.ColorScanResultPage));
     }
 }
