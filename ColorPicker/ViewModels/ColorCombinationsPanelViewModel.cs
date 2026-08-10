@@ -23,6 +23,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     }
 
     public Color TargetColor { get; set; } = Colors.Transparent;
+    private Color _combinationsLoadedForColor = Colors.Transparent;
     public ObservableCollection<ColorCombination> Combinations { get; } = [];
 
     public ICommand ToggleExpandCommand { get; }
@@ -31,8 +32,8 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ColorCombinationsPanelViewModel(IPaletteService paletteService)
     {
         _paletteService = paletteService;
-        RefreshCommand = new Command(async void (_) => { await LoadCombinations(); });
-        ToggleExpandCommand = new Command(async void (_) => { await ToggleIsExpanded(); });
+        RefreshCommand = new Command(async void (_) => await LoadCombinations());
+        ToggleExpandCommand = new Command(async void (_) => await ToggleIsExpanded());
     }
 
     private async Task LoadCombinations()
@@ -43,6 +44,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
 
         var combinations = await ColorCombinationService.GetCombinationsAsync(TargetColor, _paletteService.CurrentPalette);
         foreach (var combination in combinations) Combinations.Add(combination);
+        _combinationsLoadedForColor = TargetColor;
         IsLoading = false;
     }
 
@@ -50,6 +52,6 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     {
         var opening = !IsExpanded;
         IsExpanded = opening;
-        if (opening) await Task.Run(() => RefreshCommand.Execute(null));
+        if (opening && !Equals(_combinationsLoadedForColor, TargetColor)) await LoadCombinations();
     }
 }
