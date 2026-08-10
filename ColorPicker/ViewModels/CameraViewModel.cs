@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 using CommunityToolkit.Maui.Views;
 
@@ -22,11 +23,11 @@ public class CameraViewModel : BaseViewModel
     
     public CameraViewModel()
     {
-        CaptureCommand = new Command<CameraView>(PassImage);
-        FlipCameraCommand = new Command<CameraView>(FlipCamera);
+        CaptureCommand = new Command<CameraView>(async void (view) => { await PassImage(view); });
+        FlipCameraCommand = new Command<CameraView>(async void (view) => { await FlipCamera(view); });
     }
 
-    private async void FlipCamera(CameraView? view)
+    private async Task FlipCamera(CameraView? view)
     {
         if (view == null) return;
 
@@ -48,7 +49,7 @@ public class CameraViewModel : BaseViewModel
         }
     }
 
-    private async void PassImage(CameraView? view)
+    private async Task PassImage(CameraView? view)
     {
         if (_isCapturing) return;
         _isCapturing = true;
@@ -67,13 +68,14 @@ public class CameraViewModel : BaseViewModel
         var imageBytes = memoryStream.ToArray();
         
         OnCaptureFinished?.Invoke(this, EventArgs.Empty);
-        
-        var navigationParameters = new Dictionary<string, object>
-        {
-            { "CapturedImageBytes", imageBytes }
-        };
-        
-        await ShellNavigationService.GoToSubPageAsync("scanresult", navigationParameters);
+
+        await NavigateToColorScanResult(imageBytes);
         _isCapturing = false;
+    }
+
+    private static async Task NavigateToColorScanResult(byte[] image)
+    {
+        var navigationParameters = new Dictionary<string, object> { [QueryAttributes.IMAGE_BYTES] = image };
+        await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ColorScanResult, navigationParameters);
     }
 }

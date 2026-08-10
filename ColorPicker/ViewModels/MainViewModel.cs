@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Models.Suggestion;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Suggestions;
@@ -22,29 +23,32 @@ public class MainViewModel : BaseViewModel
         set => SetField(ref field, value);
     } = WELCOME_MESSAGE;
 
-    /// Mixed list of SuggestionMessage items. The CollectionView uses a
-    /// DataTemplateSelector to pick the right card style per Kind.
-    /// When empty of Suggestion/Warning items, a Notification placeholder is shown.
     public ObservableCollection<SuggestionMessage> Messages { get; } = [];
 
-    // Navigates to ManualColorPage with RandomPreviewColor preloaded
     public ICommand OpenManualColorCommand { get; }
-
-    // Dismiss a suggestion or warning card.
     public ICommand DismissMessageCommand { get; }
 
     public MainViewModel()
     {
-        OpenManualColorCommand = new Command(_ =>
-            ShellNavigationService.DoToSubPage("manualcolor",
-                new Dictionary<string, object>
-                    { ["isEditMode"] = false, ["colorHex"] = RandomPreviewColor.ToHex().TrimStart('#') }));
+        OpenManualColorCommand = new Command(NavigateToManualColorSelection);
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
         LoadMessages();
     }
 
-    private void LoadMessages() => 
-        Messages.Add(SuggestionFactory.GetNotification("Testing stuff", "Hold on a moment"));
+    private void NavigateToManualColorSelection()
+    {
+        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection, new Dictionary<string, object>
+        {
+            [QueryAttributes.IS_EDIT_MODE] = false,
+            [QueryAttributes.COLOR_HEX] = RandomPreviewColor.ToHex().TrimStart('#')
+        });
+    }
+    
+    private void LoadMessages()
+    {
+        Messages.Clear();
+        foreach (var suggestion in SuggestionService.GetSuggestions()) Messages.Add(suggestion);
+    }
 
     private void DismissMessage(SuggestionMessage target) => Messages.Remove(target);
 

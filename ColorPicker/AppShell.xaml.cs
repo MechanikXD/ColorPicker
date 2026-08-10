@@ -5,7 +5,7 @@ public partial class AppShell
     public AppShell()
     {
         InitializeComponent();
-        Routing.RegisterRoute("manualcolor", typeof(View.ManualColorPage));
-        Routing.RegisterRoute("scanresult",  typeof(View.ColorScanResultPage));
+        Routing.RegisterRoute("manual_color", typeof(View.ManualColorPage));
+        Routing.RegisterRoute("scan_result",  typeof(View.ColorScanResultPage));
     }
 }

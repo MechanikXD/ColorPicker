@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 
 namespace ColorPicker.ViewModels;
@@ -9,7 +10,7 @@ public class BottomNavViewModel : BaseViewModel
     {
         get;
         set => SetField(ref field, value);
-    } = "main";
+    } = Pages.Main.Dashboard;
 
     public ICommand NavigateCommand { get; }
 

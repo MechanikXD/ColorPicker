@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 using SkiaSharp;
@@ -8,9 +9,10 @@ namespace ColorPicker.ViewModels;
 
 public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 {
+    private const int DEBOUNCE_DELAY_MILLISECONDS = 100;
+    private readonly IPaletteService _paletteService;
     private SKBitmap? _imageBitmap;
     private CancellationTokenSource? _sliderDebounceCancellationTokenSource;
-    private const int DEBOUNCE_DELAY_MILLISECONDS = 100;
     
     public ImageSource? ScannedImageSource
     {
@@ -22,7 +24,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     {
         get;
         set => SetField(ref field, value);
-    } = Colors.Transparent;
+    } = Colors.Gray;
 
     public string HexValue
     {
@@ -74,32 +76,35 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 
     public ColorScanResultViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, PromptViewModel prompt)
     {
+        _paletteService = paletteService;
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
-        RetakeCommand = new Command(_ => { ShellNavigationService.GoToPage("camera"); });
-        SaveToPaletteCommand = new Command(_ =>
-        {
-            Prompt.Show(
-                title: "Enter color title",
-                message: "Name your color so you can find it later",
-                inputHint: "Color's name",
-                showInput: true,
-                onConfirm: () =>
-                {
-                    var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
-                        ? SampledColor.ToHex()
-                        : Prompt.InputText;
-                    paletteService.AddColor(ColorSwatch.FromColor(SampledColor, name: title));
-                    ShellNavigationService.GoBack();
-                }
-            );
-        });
+        RetakeCommand = new Command(_ => { ShellNavigationService.GoToPage(Pages.Main.Camera); });
+        SaveToPaletteCommand = new Command(_ => { ShowSaveToPalettePrompt(); });
+    }
+
+    private void ShowSaveToPalettePrompt()
+    {
+        Prompt.Show(
+            title: "Enter color title",
+            message: "Name your color so you can find it later",
+            inputHint: "Color's name",
+            showInput: true,
+            onConfirm: () =>
+            {
+                var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                    ? SampledColor.ToHex()
+                    : Prompt.InputText;
+                _paletteService.AddColor(ColorSwatch.FromColor(SampledColor, name: title));
+                ShellNavigationService.GoBack();
+            }
+        );
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.TryGetValue("CapturedImageBytes", out var obj) && obj is byte[] imageBytes)
+        if (query.TryGetValue(QueryAttributes.IMAGE_BYTES, out var obj) && obj is byte[] imageBytes)
         {
             _imageBitmap = CorrectBitmapOrientation(imageBytes);
             ScannedImageSource = ImageSource.FromStream(() => new MemoryStream(imageBytes));
@@ -109,7 +114,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         UpdateSampledColor(_imageBitmap);
     }
     
-    private SKBitmap CorrectBitmapOrientation(byte[] rawBytes)
+    private static SKBitmap CorrectBitmapOrientation(byte[] rawBytes)
     {
         // Use SKCodec to read metadata embedded by Android
         using var stream = new MemoryStream(rawBytes);
@@ -139,10 +144,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         var token = _sliderDebounceCancellationTokenSource.Token;
         Task.Delay(DEBOUNCE_DELAY_MILLISECONDS, token).ContinueWith(_ =>
         {
-            if (!token.IsCancellationRequested)
-            {
-                MainThread.BeginInvokeOnMainThread(UpdateImage);
-            }
+            if (!token.IsCancellationRequested) MainThread.BeginInvokeOnMainThread(UpdateImage);
         }, token);
     }
     
@@ -157,7 +159,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         // Render the image
         using var paint = new SKPaint();
         paint.ColorFilter = SKColorFilter.CreateColorMatrix(matrix);
-        canvas.DrawBitmap(_imageBitmap, 0, 0, paint);
+        canvas.DrawBitmap(_imageBitmap, new SKPoint(0, 0), SKSamplingOptions.Default, paint);
 
         UpdateSampledColor(adjustedBitmap);
         
@@ -178,34 +180,32 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         HexValue = SampledColor.ToHex();
         CombinationsPanel?.TargetColor = SampledColor;
     }
-    
-    private float[] GetAdjustmentsMatrix ()
+
+    private float[] GetAdjustmentsMatrix()
     {
-        var a = GetBrightnessContrastMatrix();
-        var b = GetSaturationMatrix();
+        var b = GetBrightnessContrastMatrix();
+        var s = GetSaturationMatrix();
         var result = new float[20];
         for (var row = 0; row < 4; row++)
+        for (var col = 0; col < 5; col++)
         {
-            for (var col = 0; col < 5; col++)
-            {
-                var index = row * 5 + col;
-                if (col == 4)
-                    result[index] = a[row * 5 + 0] * b[4] + a[row * 5 + 1] * b[9] + a[row * 5 + 2] * b[14] +
-                                    a[row * 5 + 3] * b[19] + a[row * 5 + 4];
-                else
-                    result[index] = a[row * 5 + 0] * b[0 * 5 + col] + a[row * 5 + 1] * b[1 * 5 + col] +
-                                    a[row * 5 + 2] * b[2 * 5 + col] + a[row * 5 + 3] * b[3 * 5 + col];
-            }
+            var index = row * 5 + col;
+            if (col == 4)
+                result[index] = b[row * 5 + 0] * s[4] + b[row * 5 + 1] * s[9] + b[row * 5 + 2] * s[14] +
+                                b[row * 5 + 3] * s[19] + b[row * 5 + 4];
+            else
+                result[index] = b[row * 5 + 0] * s[0 * 5 + col] + b[row * 5 + 1] * s[1 * 5 + col] +
+                                b[row * 5 + 2] * s[2 * 5 + col] + b[row * 5 + 3] * s[3 * 5 + col];
         }
-        
-        result[4]  += (float)((Red - 128) / 255.0);   // Red offset
-        result[9]  += (float)((Green - 128) / 255.0); // Green offset
-        result[14] += (float)((Blue - 128) / 255.0);  // Blue offset
+
+        result[4] += (float)((Red - 128) / 255.0); // Red offset
+        result[9] += (float)((Green - 128) / 255.0); // Green offset
+        result[14] += (float)((Blue - 128) / 255.0); // Blue offset
 
         return result;
     }
 
-    private SKBitmap RotateBitmap(SKBitmap bitmap, int degrees)
+    private static SKBitmap RotateBitmap(SKBitmap bitmap, int degrees)
     {
         if (degrees == 0) return bitmap;
 
@@ -219,18 +219,18 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
             canvas.Translate(width / 2f, height / 2f);
             canvas.RotateDegrees(degrees);
             canvas.Translate(-bitmap.Width / 2f, -bitmap.Height / 2f);
-            canvas.DrawBitmap(bitmap, 0, 0);
+            canvas.DrawBitmap(bitmap, new SKPoint(0, 0), SKSamplingOptions.Default);
         }
-    
+
         bitmap.Dispose(); // Free unmanaged memory of the old wrong layout
         return rotatedBitmap;
     }
-    
+
     private float[] GetBrightnessContrastMatrix()
     {
         var c = (float)(Contrast / 50.0);
         var b = (float)(Brightness / 50.0);
-        
+
         var scale = c * b;
         var translate = (1.0f - c) / 2.0f;
 

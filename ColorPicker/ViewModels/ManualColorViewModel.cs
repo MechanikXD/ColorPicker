@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
@@ -7,6 +8,7 @@ namespace ColorPicker.ViewModels;
 
 public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 {
+    private readonly IPaletteService _paletteService;
     public string PageTitle => IsEditMode ? "Edit Color" : "Pick a Color";
 
     public bool ShowCombinationsPanel
@@ -103,57 +105,63 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     public ICommand CopyHexCommand { get; }
     public ICommand AddToPaletteCommand { get; }
     
-    public ManualColorViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, PromptViewModel prompt)
+    public ManualColorViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, 
+        PromptViewModel prompt)
     {
+        _paletteService = paletteService;
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
-        CopyHexCommand = new Command(_ => { Clipboard.Default.SetTextAsync(HexInput); });
-        CancelCommand = new Command(_ => { ShellNavigationService.GoBack(); });
-        AddToPaletteCommand = new Command(_ => {
-        {
-            Prompt.Show(
-                title: "Enter color title",
-                message: "Name your color so you can find it later",
-                inputHint: "Color's name",
-                showInput: true,
-                onConfirm: () =>
-                {
-                    var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
-                        ? CurrentColor.ToHex()
-                        : Prompt.InputText;
-                    paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
-                    ShellNavigationService.GoBack();
-                }
-            );
-        } });
-        ConfirmEditCommand = new Command(_ =>
-        {
-            if (string.IsNullOrEmpty(InitialHex)) return;
-            var currentSwatch = ColorSwatch.FromColor(CurrentColor);
+        CopyHexCommand = new Command(_ => Clipboard.Default.SetTextAsync(HexInput));
+        CancelCommand = new Command(_ => ShellNavigationService.GoBack());
+        AddToPaletteCommand = new Command(_ => ShowAddToPalettePrompt());
+        ConfirmEditCommand = new Command(_ => ShowConfirmEditPrompt());
+    }
 
-            if (paletteService.CurrentPalette == null) return;
-            foreach (var color in paletteService.CurrentPalette.Palette)
+    private void ShowAddToPalettePrompt()
+    {
+        Prompt.Show(
+            title: "Enter color title",
+            message: "Name your color so you can find it later",
+            inputHint: "Color's name",
+            showInput: true,
+            onConfirm: () =>
             {
-                if (color.HexEquals(InitialHex))
-                {
-                    Prompt.Show(
-                        title: "Rename color title",
-                        message: "Change name of this color",
-                        inputHint: "Color's name",
-                        showInput: true,
-                        onConfirm: () =>
-                        {
-                            var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
-                                ? null
-                                : Prompt.InputText;
-                            paletteService.UpdateColor(color, currentSwatch, title);
-                            ShellNavigationService.GoBack();
-                        }
-                    );
-                }
+                var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                    ? CurrentColor.ToHex()
+                    : Prompt.InputText;
+                _paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
+                ShellNavigationService.GoBack();
             }
-        });
+        );
+    }
+
+    private void ShowConfirmEditPrompt()
+    {
+        if (string.IsNullOrEmpty(InitialHex)) return;
+        var currentSwatch = ColorSwatch.FromColor(CurrentColor);
+
+        if (_paletteService.CurrentPalette == null) return;
+        foreach (var color in _paletteService.CurrentPalette.Palette)
+        {
+            if (color.HexEquals(InitialHex))
+            {
+                Prompt.Show(
+                    title: "Rename color title",
+                    message: "Change name of this color",
+                    inputHint: "Color's name",
+                    showInput: true,
+                    onConfirm: () =>
+                    {
+                        var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
+                            ? null
+                            : Prompt.InputText;
+                        _paletteService.UpdateColor(color, currentSwatch, title);
+                        ShellNavigationService.GoBack();
+                    }
+                );
+            }
+        }
     }
 
     private void SyncFromHsv()
@@ -186,12 +194,12 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.TryGetValue("showCombinations", out var obj) && obj is bool showCombinations)
+        if (query.TryGetValue(QueryAttributes.SHOW_COMBINATION_PANEL, out var obj) && obj is bool showCombinations)
             ShowCombinationsPanel = showCombinations;
         else ShowCombinationsPanel = true;
-        if (query.TryGetValue("isEditMode", out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
+        if (query.TryGetValue(QueryAttributes.IS_EDIT_MODE, out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
         Color color;
-        if (query.TryGetValue("colorHex", out var obj2) && obj2 is string colorHex)
+        if (query.TryGetValue(QueryAttributes.COLOR_HEX, out var obj2) && obj2 is string colorHex)
         {
             InitialHex = colorHex;
             color = Color.FromArgb(InitialHex);

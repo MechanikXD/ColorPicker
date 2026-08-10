@@ -9,24 +9,14 @@ public partial class CameraPage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel;
-        viewModel.OnCaptureStarted += async (_, _) => await FlashFeedback();
+        viewModel.OnCaptureStarted += async (_, _) => await CameraCaptureFeedback();
         viewModel.OnCaptureFinished += (_, _) => ToggleLoadingOverlay(true);
     }
     
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
-        var permissionStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
-        if (permissionStatus is PermissionStatus.Disabled or PermissionStatus.Restricted or PermissionStatus.Denied)
-        {
-            var accessPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
-            if (accessPermissionStatus != PermissionStatus.Granted)
-            {
-                await ShellNavigationService.GoBackAsync();
-            }
-        }
-
+        if (!await HasValidCameraPermission()) await ShellNavigationService.GoBackAsync();
         ToggleLoadingOverlay(false);
     }
 
@@ -42,7 +32,19 @@ public partial class CameraPage : ContentPage
         LiveCamera.StopCameraPreview();
     }
     
-    private async Task FlashFeedback()
+    private async Task<bool> HasValidCameraPermission()
+    {
+        var permissionStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
+        if (permissionStatus is PermissionStatus.Disabled or PermissionStatus.Restricted or PermissionStatus.Denied)
+        {
+            var accessPermissionStatus = await Permissions.RequestAsync<Permissions.Camera>();
+            if (accessPermissionStatus != PermissionStatus.Granted) return false;
+        }
+
+        return true;
+    }
+    
+    private async Task CameraCaptureFeedback()
     {
         FlashOverlay.IsVisible = true;
         await FlashOverlay.FadeToAsync(1, 60);

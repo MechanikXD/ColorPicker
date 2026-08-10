@@ -65,15 +65,23 @@ public class PromptViewModel : BaseViewModel
 
     public PromptViewModel()
     {
-        ConfirmCommand = new Command(_ =>
-        {
-            _onConfirm?.Invoke();
-            Dismiss();
-        });
-
-        CancelCommand = new Command(_ => Dismiss());
+        ConfirmCommand = new Command(Confirm);
+        CancelCommand = new Command(Dismiss);
     }
 
+    private void Confirm()
+    {
+        _onConfirm?.Invoke();
+        Dismiss();
+    }
+
+    private void Dismiss()
+    {
+        IsVisible = false;
+        _onConfirm = null;
+        InputText = string.Empty;
+    }
+    
     public void Show(
         string title,
         string message = "",
@@ -95,12 +103,5 @@ public class PromptViewModel : BaseViewModel
         IsDestructive = isDestructive;
         _onConfirm = onConfirm;
         IsVisible = true;
-    }
-
-    private void Dismiss()
-    {
-        IsVisible = false;
-        _onConfirm = null;
-        InputText = string.Empty;
     }
 }

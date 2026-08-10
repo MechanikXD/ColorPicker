@@ -7,8 +7,6 @@ public partial class ColorScanResultPage : ContentPage
     public ColorScanResultPage(ColorScanResultViewModel viewModel)
     {
         InitializeComponent();
-        //
         BindingContext = viewModel;
-        //
     }
 }

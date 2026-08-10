@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
@@ -52,67 +53,82 @@ public class PaletteViewModel : BaseViewModel
         CurrentPaletteIndex = _paletteService.CurrentPaletteIndex;
         PaletteNames = AllPalettes.Select(p => p.Title).ToList();
         
-        AddPaletteCommand = new Command(_ =>
+        AddPaletteCommand = new Command(AddPalette);
+        RenamePaletteCommand = new Command(RenamePalette);
+        DeletePaletteCommand = new Command(DeletePalette);
+
+        AddColorManuallyCommand = new Command(GoToManualColorSelection);
+        AddColorFromCameraCommand = new Command(GoToCamera);
+        EditColorCommand = new Command<ColorSwatch>(EditColor);
+        DeleteColorCommand = new Command<ColorSwatch>(DeleteColor);
+    }
+
+    private void AddPalette()
+    {
+        AskTitle(() =>
+        {
+            _paletteService.AddPalette(new ColorPalette { Title = Prompt.InputText });
+            RefreshPalette();
+        });
+    }
+    
+    private void RenamePalette()
+    {
+        if (CurrentPalette != null)
         {
             AskTitle(() =>
             {
-                _paletteService.AddPalette(new ColorPalette { Title = Prompt.InputText });
+                _paletteService.RenamePalette(CurrentPalette, Prompt.InputText);
+                RefreshPalette();
+                OnPropertyChanged(nameof(CurrentPaletteTitle));
+            });
+        }
+    }
+    
+    private void DeletePalette()
+    {
+        if (CurrentPalette != null)
+        {
+            var target = CurrentPalette;
+            ConfirmDeletion(CurrentPaletteTitle, () =>
+            {
+                _paletteService.RemovePalette(target);
                 RefreshPalette();
             });
-        });
-        RenamePaletteCommand = new Command(_ =>
-        {
-            if (CurrentPalette != null)
-            {
-                AskTitle(() =>
-                {
-                    _paletteService.RenamePalette(CurrentPalette, Prompt.InputText);
-                    RefreshPalette();
-                    OnPropertyChanged(nameof(CurrentPaletteTitle));
-                });
-            }
-        });
-        DeletePaletteCommand = new Command(_ =>
-        {
-            if (CurrentPalette != null)
-            {
-                var target = CurrentPalette;
-                ConfirmDeletion(CurrentPaletteTitle, () =>
-                {
-                    _paletteService.RemovePalette(target);
-                    RefreshPalette();
-                });
-            }
-        });
+        }
+    }
 
-        AddColorManuallyCommand = new Command(_ => { ShellNavigationService.DoToSubPage("manualcolor", 
-            new Dictionary<string, object> { ["isEditMode"] = false, ["showCombinations"] = false }); });
-        AddColorFromCameraCommand = new Command(_ => { ShellNavigationService.GoToPage("camera"); });
+    private void GoToManualColorSelection() =>
+        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection,
+            new Dictionary<string, object>
+                { [QueryAttributes.IS_EDIT_MODE] = false, [QueryAttributes.SHOW_COMBINATION_PANEL] = false });
 
-        EditColorCommand = new Command<ColorSwatch>(swatch =>
-        {
-            if (swatch is null) return;
-            ShellNavigationService.DoToSubPage("manualcolor",
-                new Dictionary<string, object>
-                    { ["isEditMode"] = true, 
-                        ["colorHex"] = swatch.Hex.TrimStart('#'),
-                        ["showCombinations"] = false
-                    });
-        });
+    private void GoToCamera() => ShellNavigationService.GoToPage(Pages.Main.Camera);
 
-        DeleteColorCommand = new Command<ColorSwatch>(swatch =>
-        {
-            if (swatch is not null)
+    private void EditColor(ColorSwatch? swatch)
+    {
+        if (swatch is null) return;
+        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection,
+            new Dictionary<string, object>
             {
-                var swatchName = string.IsNullOrEmpty(swatch.Name) || string.IsNullOrWhiteSpace(swatch.Name)
-                    ? swatch.Hex
-                    : swatch.Name;
-                ConfirmDeletion(swatchName, () =>
-                {
-                    _paletteService.RemoveColor(swatch);
-                });
-            }
-        });
+                [QueryAttributes.IS_EDIT_MODE] = true,
+                [QueryAttributes.COLOR_HEX] = swatch.Hex.TrimStart('#'),
+                [QueryAttributes.SHOW_COMBINATION_PANEL] = false
+            });
+    }
+
+    private void DeleteColor(ColorSwatch? swatch)
+    {
+        if (swatch is not null)
+        {
+            var swatchName = string.IsNullOrEmpty(swatch.Name) || string.IsNullOrWhiteSpace(swatch.Name)
+                ? swatch.Hex
+                : swatch.Name;
+            ConfirmDeletion(swatchName, () =>
+            {
+                _paletteService.RemoveColor(swatch);
+            });
+        }
     }
 
     private void ConfirmDeletion(string targetName, Action confirmAction)

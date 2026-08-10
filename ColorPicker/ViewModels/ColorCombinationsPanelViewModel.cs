@@ -32,15 +32,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     {
         _paletteService = paletteService;
         RefreshCommand = new Command(async void (_) => { await LoadCombinations(); });
-        
-        ToggleExpandCommand = new Command(async void (_) =>
-        {
-            var opening = !IsExpanded;
-            IsExpanded = opening;
-            // Auto-compute on first open so there's something to show.
-            // Subsequent opens show cached results until Refresh is pressed.
-            if (opening && Combinations.Count == 0) await Task.Run(() => RefreshCommand.Execute(null));
-        });
+        ToggleExpandCommand = new Command(async void (_) => { await ToggleIsExpanded(); });
     }
 
     private async Task LoadCombinations()
@@ -53,5 +45,12 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
             ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette));
         foreach (var combination in combinations) Combinations.Add(combination);
         IsLoading = false;
+    }
+
+    private async Task ToggleIsExpanded()
+    {
+        var opening = !IsExpanded;
+        IsExpanded = opening;
+        if (opening) await Task.Run(() => RefreshCommand.Execute(null));
     }
 }
