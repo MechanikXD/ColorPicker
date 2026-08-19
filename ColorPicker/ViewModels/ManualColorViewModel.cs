@@ -113,7 +113,7 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         Prompt = prompt;
         
         CopyHexCommand = new Command(_ => Clipboard.Default.SetTextAsync(HexInput));
-        CancelCommand = new Command(_ => ShellNavigationService.GoBack());
+        CancelCommand = new Command(async void (_) => await ShellNavigationService.GoBackAsync());
         AddToPaletteCommand = new Command(_ => ShowAddToPalettePrompt());
         ConfirmEditCommand = new Command(_ => ShowConfirmEditPrompt());
     }
@@ -125,13 +125,13 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
             message: "Name your color so you can find it later",
             inputHint: "Color's name",
             showInput: true,
-            onConfirm: () =>
+            onConfirm: async void () =>
             {
                 var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
                     ? CurrentColor.ToHex()
                     : Prompt.InputText;
                 _paletteService.AddColor(ColorSwatch.FromColor(CurrentColor, name: title));
-                ShellNavigationService.GoBack();
+                await ShellNavigationService.GoBackAsync();
             }
         );
     }
@@ -151,13 +151,13 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
                     message: "Change name of this color",
                     inputHint: "Color's name",
                     showInput: true,
-                    onConfirm: () =>
+                    onConfirm: async void () =>
                     {
                         var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
                             ? null
                             : Prompt.InputText;
                         _paletteService.UpdateColor(color, currentSwatch, title);
-                        ShellNavigationService.GoBack();
+                        await ShellNavigationService.GoBackAsync();
                     }
                 );
             }

@@ -3,7 +3,7 @@ using ColorPicker.ViewModels;
 
 namespace ColorPicker.View;
 
-public partial class CameraPage : ContentPage
+public partial class CameraPage : AnimatedPage
 {
     public CameraPage(CameraViewModel viewModel)
     {

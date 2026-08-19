@@ -80,7 +80,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
-        RetakeCommand = new Command(_ => { ShellNavigationService.GoToPage(Pages.Main.Camera); });
+        RetakeCommand = new Command( async void (_) => { await ShellNavigationService.GoToPageAsync(Pages.Main.Camera); });
         SaveToPaletteCommand = new Command(_ => { ShowSaveToPalettePrompt(); });
     }
 
@@ -91,13 +91,13 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
             message: "Name your color so you can find it later",
             inputHint: "Color's name",
             showInput: true,
-            onConfirm: () =>
+            onConfirm: async void () =>
             {
                 var title = string.IsNullOrEmpty(Prompt.InputText) || string.IsNullOrWhiteSpace(Prompt.InputText)
                     ? SampledColor.ToHex()
                     : Prompt.InputText;
                 _paletteService.AddColor(ColorSwatch.FromColor(SampledColor, name: title));
-                ShellNavigationService.GoBack();
+                await ShellNavigationService.GoBackAsync();
             }
         );
     }

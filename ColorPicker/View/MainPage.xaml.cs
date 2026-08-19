@@ -2,7 +2,7 @@ using ColorPicker.ViewModels;
 
 namespace ColorPicker.View;
 
-public partial class MainPage : ContentPage
+public partial class MainPage : AnimatedPage
 {
     public MainPage(MainViewModel viewModel)
     {

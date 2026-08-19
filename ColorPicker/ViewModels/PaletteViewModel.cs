@@ -98,17 +98,17 @@ public class PaletteViewModel : BaseViewModel
         }
     }
 
-    private void GoToManualColorSelection() =>
-        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection,
+    private async void GoToManualColorSelection() =>
+        await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ManualColorSelection,
             new Dictionary<string, object>
                 { [QueryAttributes.IS_EDIT_MODE] = false, [QueryAttributes.SHOW_COMBINATION_PANEL] = false });
 
-    private void GoToCamera() => ShellNavigationService.GoToPage(Pages.Main.Camera);
+    private async void GoToCamera() => await ShellNavigationService.GoToPageAsync(Pages.Main.Camera);
 
-    private void EditColor(ColorSwatch? swatch)
+    private async void EditColor(ColorSwatch? swatch)
     {
         if (swatch is null) return;
-        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection,
+        await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ManualColorSelection,
             new Dictionary<string, object>
             {
                 [QueryAttributes.IS_EDIT_MODE] = true,

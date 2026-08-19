@@ -1,3 +1,4 @@
+using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Theme;
 using ColorPicker.View;
@@ -31,5 +32,7 @@ public partial class App : Application
             _ = Handler?.MauiContext?.Services.GetService<CameraPage>();
             _ = Handler?.MauiContext?.Services.GetService<CameraViewModel>();
         });
+        
+        NavigationTracker.Initialize();
     }
 }

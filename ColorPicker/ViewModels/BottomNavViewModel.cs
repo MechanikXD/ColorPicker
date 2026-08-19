@@ -16,10 +16,10 @@ public class BottomNavViewModel : BaseViewModel
 
     public BottomNavViewModel()
     {
-        NavigateCommand = new Command<string>(pageRoute =>
+        NavigateCommand = new Command<string>(async void (pageRoute) =>
         {
             ActiveRoute = pageRoute;
-            ShellNavigationService.GoToPage(pageRoute);
+            await ShellNavigationService.GoToPageAsync(pageRoute);
         });
     }
 }

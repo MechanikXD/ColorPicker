@@ -35,9 +35,9 @@ public class MainViewModel : BaseViewModel
         LoadMessages();
     }
 
-    private void NavigateToManualColorSelection()
+    private async void NavigateToManualColorSelection()
     {
-        ShellNavigationService.DoToSubPage(Pages.Sub.ManualColorSelection, new Dictionary<string, object>
+        await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ManualColorSelection, new Dictionary<string, object>
         {
             [QueryAttributes.IS_EDIT_MODE] = false,
             [QueryAttributes.COLOR_HEX] = RandomPreviewColor.ToHex().TrimStart('#')

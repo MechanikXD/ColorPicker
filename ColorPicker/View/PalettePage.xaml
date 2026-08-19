@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<colorPicker:AnimatedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:models="clr-namespace:ColorPicker.Models.Colors"
+             xmlns:colorPicker="clr-namespace:ColorPicker"
              x:Class="ColorPicker.View.PalettePage"
              x:DataType="vm:PaletteViewModel"
              x:Name="ThisPage"
@@ -261,4 +262,4 @@
                       Grid.RowSpan="4"
                       BindingContext="{Binding Prompt}" />
     </Grid>
-</ContentPage>
+</colorPicker:AnimatedPage>

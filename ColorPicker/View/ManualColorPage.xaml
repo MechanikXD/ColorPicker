@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<colorPicker:AnimatedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:c="clr-namespace:ColorPicker.Services.Converters"
+             xmlns:colorPicker="clr-namespace:ColorPicker"
              x:Class="ColorPicker.View.ManualColorPage"
              x:DataType="vm:ManualColorViewModel"
              x:Name="ThisPage"
@@ -14,7 +15,7 @@
         first before routing, handled in BottomNavViewModel.
     -->
 
-    <ContentPage.Resources>
+    <colorPicker:AnimatedPage.Resources>
         <c:RouteToColorConverter x:Key="InverseBoolConverter" />
         <!-- Value readout chip style - displays metric name + value -->
         <Style x:Key="ValueChipStyle" TargetType="Border">
@@ -26,7 +27,7 @@
                     Value="{AppThemeBinding Light={StaticResource LightCard}, Dark={StaticResource DarkCard}}" />
             <Setter Property="Padding" Value="10,6" />
         </Style>
-    </ContentPage.Resources>
+    </colorPicker:AnimatedPage.Resources>
 
     <!--
         Root Grid:
@@ -306,4 +307,4 @@
                       Grid.RowSpan="5"
                       BindingContext="{Binding Prompt}" />
     </Grid>
-</ContentPage>
+</colorPicker:AnimatedPage>
