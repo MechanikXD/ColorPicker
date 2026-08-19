@@ -1,15 +1,21 @@
 using System.Windows.Input;
+using ColorPicker.Models.StaticData;
+using ColorPicker.Services.Navigation;
 using CommunityToolkit.Maui.Views;
 
 namespace ColorPicker.ViewModels;
 
 public class CameraViewModel : BaseViewModel
 {
+    private bool _isCapturing;
     public bool IsFrontCamera
     {
         get;
         set => SetField(ref field, value);
     } = false;
+
+    public event EventHandler? OnCaptureStarted;
+    public event EventHandler? OnCaptureFinished;
 
     public ICommand CaptureCommand { get; }
 
@@ -17,11 +23,11 @@ public class CameraViewModel : BaseViewModel
     
     public CameraViewModel()
     {
-        CaptureCommand = new Command<CameraView>(PassImage);
-        FlipCameraCommand = new Command<CameraView>(FlipCamera);
+        CaptureCommand = new Command<CameraView>(async void (view) => { await PassImage(view); });
+        FlipCameraCommand = new Command<CameraView>(async void (view) => { await FlipCamera(view); });
     }
 
-    private async void FlipCamera(CameraView? view)
+    private async Task FlipCamera(CameraView? view)
     {
         if (view == null) return;
 
@@ -43,25 +49,33 @@ public class CameraViewModel : BaseViewModel
         }
     }
 
-    private static async void PassImage(CameraView? view)
+    private async Task PassImage(CameraView? view)
     {
+        if (_isCapturing) return;
+        _isCapturing = true;
         if (view == null)
         {
-            await Shell.Current.GoToAsync("..");
+            await ShellNavigationService.GoBackAsync();
             return;
         }
+        
+        OnCaptureStarted?.Invoke(this, EventArgs.Empty);
         
         await using var imageStream = await view.CaptureImage(CancellationToken.None);
         
         using MemoryStream memoryStream = new();
         await imageStream.CopyToAsync(memoryStream);
         var imageBytes = memoryStream.ToArray();
-            
-        var navigationParameters = new Dictionary<string, object>
-        {
-            { "CapturedImageBytes", imageBytes }
-        };
         
-        await Shell.Current.GoToAsync("scanresult", navigationParameters);
+        OnCaptureFinished?.Invoke(this, EventArgs.Empty);
+
+        await NavigateToColorScanResult(imageBytes);
+        _isCapturing = false;
+    }
+
+    private static async Task NavigateToColorScanResult(byte[] image)
+    {
+        var navigationParameters = new Dictionary<string, object> { [QueryAttributes.IMAGE_BYTES] = image };
+        await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ColorScanResult, navigationParameters);
     }
 }

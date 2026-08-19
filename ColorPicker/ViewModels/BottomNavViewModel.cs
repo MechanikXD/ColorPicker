@@ -1,4 +1,6 @@
 using System.Windows.Input;
+using ColorPicker.Models.StaticData;
+using ColorPicker.Services.Navigation;
 
 namespace ColorPicker.ViewModels;
 
@@ -8,16 +10,16 @@ public class BottomNavViewModel : BaseViewModel
     {
         get;
         set => SetField(ref field, value);
-    } = "main";
+    } = Pages.Main.Dashboard;
 
     public ICommand NavigateCommand { get; }
 
     public BottomNavViewModel()
     {
-        NavigateCommand = new Command<string>(pageRoute =>
+        NavigateCommand = new Command<string>(async void (pageRoute) =>
         {
             ActiveRoute = pageRoute;
-            Shell.Current.GoToAsync( $"//{pageRoute}");
+            await ShellNavigationService.GoToPageAsync(pageRoute);
         });
     }
 }

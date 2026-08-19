@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<colorPicker:AnimatedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:camera="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui.Camera"
+             xmlns:colorPicker="clr-namespace:ColorPicker"
              x:Class="ColorPicker.View.CameraPage"
              x:DataType="vm:CameraViewModel"
              Shell.NavBarIsVisible="False"
@@ -23,7 +24,8 @@
                            Grid.Row="0"
                            HorizontalOptions="Fill"
                            VerticalOptions="Fill"
-                           Loaded="OnCameraViewLoaded">
+                           Loaded="OnCameraViewLoaded"
+                           Unloaded="OnCameraViewUnloaded">
             <!--
                 Bind CameraPosition to IsFrontCamera via a converter:
                 true  → CameraPosition.Front
@@ -31,7 +33,34 @@
                 (IsFrontCameraToPositionConverter — to be implemented)
             -->
         </camera:CameraView>
-
+        
+        <!-- Loading overlay — appears after shutter tap, covers controls -->
+        <Grid x:Name="LoadingOverlay"
+              Grid.Row="0"
+              IsVisible="False"
+              BackgroundColor="#88000000">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="16">
+                <ActivityIndicator IsRunning="True"
+                                   Color="White"
+                                   HeightRequest="48"
+                                   WidthRequest="48" />
+                <Label Text="Processing..."
+                       TextColor="White"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+        
+        <!-- Flash overlay — invisible by default, top of the Z stack -->
+        <BoxView x:Name="FlashOverlay"
+                 Grid.Row="0"
+                 Color="White"
+                 Opacity="0"
+                 IsVisible="False"
+                 InputTransparent="True" />
+        
         <!-- Reticle overlay (center of screen) -->
         <!--
             Two concentric shapes:
@@ -43,7 +72,8 @@
               HorizontalOptions="Center"
               VerticalOptions="Center"
               WidthRequest="80"
-              HeightRequest="80">
+              HeightRequest="80"
+              x:Name="CameraPointer">
 
             <!-- Outer ring -->
             <Border WidthRequest="80" HeightRequest="80"
@@ -142,4 +172,4 @@
         <v:BottomNavBar Grid.Row="1" />
 
     </Grid>
-</ContentPage>
+</colorPicker:AnimatedPage>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<colorPicker:AnimatedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:models="clr-namespace:ColorPicker.Models.Colors"
+             xmlns:colorPicker="clr-namespace:ColorPicker"
              x:Class="ColorPicker.View.PalettePage"
              x:DataType="vm:PaletteViewModel"
+             x:Name="ThisPage"
              Shell.NavBarIsVisible="False">
 
     <!--
@@ -217,44 +219,34 @@
                             </VerticalStackLayout>
 
                             <!-- Edit button -->
-                            <Border Grid.Column="2"
-                                    WidthRequest="36" HeightRequest="36"
-                                    StrokeShape="RoundRectangle 10"
-                                    StrokeThickness="1"
-                                    Stroke="{StaticResource Accent}"
+                            <Button Grid.Column="2"
+                                    Text="✎"
+                                    FontSize="15"
+                                    TextColor="{StaticResource Accent}"
                                     BackgroundColor="Transparent"
-                                    VerticalOptions="Center">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaletteViewModel}},
-                                                          Path=EditColorCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-                                <Label Text="✎"
-                                       FontSize="15"
-                                       TextColor="{StaticResource Accent}"
-                                       HorizontalOptions="Center" VerticalOptions="Center" />
-                            </Border>
+                                    BorderColor="{StaticResource Accent}"
+                                    BorderWidth="1"
+                                    CornerRadius="10"
+                                    WidthRequest="36" HeightRequest="36"
+                                    Padding="0"
+                                    VerticalOptions="Center"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditColorCommand, x:DataType={x:Type ContentPage}}"
+                                    CommandParameter="{Binding .}" />
 
                             <!-- Delete button -->
-                            <Border Grid.Column="3"
-                                    WidthRequest="36" HeightRequest="36"
-                                    StrokeShape="RoundRectangle 10"
-                                    StrokeThickness="1"
-                                    Stroke="#EF4444"
+                            <Button Grid.Column="3"
+                                    Text="✕"
+                                    FontSize="15"
+                                    TextColor="#EF4444"
                                     BackgroundColor="Transparent"
-                                    VerticalOptions="Center">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PaletteViewModel}},
-                                                          Path=DeleteColorCommand}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-                                <Label Text="✕"
-                                       FontSize="15"
-                                       TextColor="#EF4444"
-                                       HorizontalOptions="Center" VerticalOptions="Center" />
-                            </Border>
+                                    BorderColor="#EF4444"
+                                    BorderWidth="1"
+                                    CornerRadius="10"
+                                    WidthRequest="36" HeightRequest="36"
+                                    Padding="0"
+                                    VerticalOptions="Center"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteColorCommand, x:DataType={x:Type ContentPage}}"
+                                    CommandParameter="{Binding .}" />
 
                         </Grid>
                     </Border>
@@ -270,4 +262,4 @@
                       Grid.RowSpan="4"
                       BindingContext="{Binding Prompt}" />
     </Grid>
-</ContentPage>
+</colorPicker:AnimatedPage>

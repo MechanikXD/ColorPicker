@@ -23,41 +23,35 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     }
 
     public Color TargetColor { get; set; } = Colors.Transparent;
+    private Color _combinationsLoadedForColor = Colors.Transparent;
     public ObservableCollection<ColorCombination> Combinations { get; } = [];
 
     public ICommand ToggleExpandCommand { get; }
     public ICommand RefreshCommand { get; }
-    public ICommand SelectCombinationCommand { get; }
 
     public ColorCombinationsPanelViewModel(IPaletteService paletteService)
     {
         _paletteService = paletteService;
-        RefreshCommand = new Command(_ => { LoadCombinations(); });
-        
-        ToggleExpandCommand = new Command(_ =>
-        {
-            var opening = !IsExpanded;
-            IsExpanded = opening;
-            // Auto-compute on first open so there's something to show.
-            // Subsequent opens show cached results until Refresh is pressed.
-            if (opening && Combinations.Count == 0)
-                RefreshCommand.Execute(null);
-        });
- 
-        SelectCombinationCommand = new Command<ColorCombination>(_ =>
-        {
-            // Raise event or callback to parent VM
-        });
+        RefreshCommand = new Command(async void (_) => await LoadCombinations());
+        ToggleExpandCommand = new Command(async void (_) => await ToggleIsExpanded());
     }
 
-    private void LoadCombinations()
+    private async Task LoadCombinations()
     {
         IsLoading = true;
         Combinations.Clear();
         if (_paletteService.CurrentPalette == null) return;
-        
-        foreach (var combination in ColorCombinationService.GetCombinations(TargetColor, _paletteService.CurrentPalette))
-            Combinations.Add(combination);
+
+        var combinations = await ColorCombinationService.GetCombinationsAsync(TargetColor, _paletteService.CurrentPalette);
+        foreach (var combination in combinations) Combinations.Add(combination);
+        _combinationsLoadedForColor = TargetColor;
         IsLoading = false;
+    }
+
+    private async Task ToggleIsExpanded()
+    {
+        var opening = !IsExpanded;
+        IsExpanded = opening;
+        if (opening && !Equals(_combinationsLoadedForColor, TargetColor)) await LoadCombinations();
     }
 }

@@ -15,7 +15,7 @@ public interface IPaletteService
     public void RemovePalette(ColorPalette palette);
     
     public void AddColor(ColorSwatch color);
-    public void UpdateColor(ColorSwatch original, ColorSwatch updated);
+    public void UpdateColor(ColorSwatch original, ColorSwatch updated, string? newName=null);
     public void RemoveColor(ColorSwatch color);
 
     public event Action? CurrentPaletteChanged;
