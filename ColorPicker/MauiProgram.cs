@@ -33,28 +33,25 @@ public static class MauiProgram
             builder.Services.AddSingleton<ISaveLoadService, PaletteSaveLoadService>();
 
             // Register ViewModels
-            //  Main pages - singletons
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<CameraPage>();
             builder.Services.AddSingleton<PalettePage>();
             
-            builder.Services.AddTransient<ManualColorViewModel>();
-            builder.Services.AddTransient<ColorScanResultPage>();
+            builder.Services.AddSingleton<ManualColorViewModel>();
+            builder.Services.AddSingleton<ColorScanResultPage>();
             builder.Services.AddSingleton<BottomNavViewModel>();
             builder.Services.AddSingleton<ColorCombinationsPanelViewModel>();
-            builder.Services.AddTransient<PromptView>();
+            builder.Services.AddSingleton<PromptView>();
 
             // Register Views
-            //  Main page's ViewModels are singletons as well
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<PaletteViewModel>();
             builder.Services.AddSingleton<CameraViewModel>();
-            
-            builder.Services.AddTransient<ColorCombinationsPanel>();
-            builder.Services.AddTransient<ManualColorPage>();
-            builder.Services.AddTransient<ColorScanResultViewModel>();
-            builder.Services.AddTransient<BottomNavBar>();
-            builder.Services.AddTransient<PromptViewModel>();
+            builder.Services.AddSingleton<ColorCombinationsPanel>();
+            builder.Services.AddSingleton<ManualColorPage>();
+            builder.Services.AddSingleton<ColorScanResultViewModel>();
+            builder.Services.AddSingleton<BottomNavBar>();
+            builder.Services.AddSingleton<PromptViewModel>();
             
 #if DEBUG
             builder.Logging.AddDebug();

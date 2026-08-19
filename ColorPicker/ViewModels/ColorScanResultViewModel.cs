@@ -9,6 +9,8 @@ namespace ColorPicker.ViewModels;
 
 public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 {
+    private const double DEFAULT_FILTER_VALUE = 50;
+    private const double DEFAULT_COLOR_FILTER_VALUE = 128;
     private const int DEBOUNCE_DELAY_MILLISECONDS = 100;
     private readonly IPaletteService _paletteService;
     private SKBitmap? _imageBitmap;
@@ -36,37 +38,37 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 50;
+    } = DEFAULT_FILTER_VALUE;
 
     public double Contrast
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 50;
+    } = DEFAULT_FILTER_VALUE;
     
     public double Saturation
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 50;
+    } = DEFAULT_FILTER_VALUE;
 
     public double Red
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 128;
+    } = DEFAULT_COLOR_FILTER_VALUE;
 
     public double Green
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 128;
+    } = DEFAULT_COLOR_FILTER_VALUE;
 
     public double Blue
     {
         get;
         set { if (SetField(ref field, value)) OnSliderValueChanged(); }
-    } = 128;
+    } = DEFAULT_COLOR_FILTER_VALUE;
 
     public ColorCombinationsPanelViewModel? CombinationsPanel { get; }
     public PromptViewModel Prompt { get; }
@@ -112,6 +114,13 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 
         if (_imageBitmap == null) return;
         UpdateSampledColor(_imageBitmap);
+
+        Brightness = DEFAULT_FILTER_VALUE;
+        Contrast = DEFAULT_FILTER_VALUE;
+        Saturation = DEFAULT_FILTER_VALUE;
+        Red = DEFAULT_COLOR_FILTER_VALUE;
+        Green = DEFAULT_COLOR_FILTER_VALUE;
+        Blue = DEFAULT_COLOR_FILTER_VALUE;
     }
     
     private static SKBitmap CorrectBitmapOrientation(byte[] rawBytes)

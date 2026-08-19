@@ -8,6 +8,8 @@ namespace ColorPicker.ViewModels;
 
 public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 {
+    private const bool DEFAULT_SHOW_COMBINATIONS_PANEL = true;
+    private const bool DEFAULT_IS_EDIT_MODE = false;
     private readonly IPaletteService _paletteService;
     public string PageTitle => IsEditMode ? "Edit Color" : "Pick a Color";
 
@@ -196,8 +198,11 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     {
         if (query.TryGetValue(QueryAttributes.SHOW_COMBINATION_PANEL, out var obj) && obj is bool showCombinations)
             ShowCombinationsPanel = showCombinations;
-        else ShowCombinationsPanel = true;
-        if (query.TryGetValue(QueryAttributes.IS_EDIT_MODE, out var obj1) && obj1 is bool isEditMode) IsEditMode = isEditMode;
+        else ShowCombinationsPanel = DEFAULT_SHOW_COMBINATIONS_PANEL;
+        if (query.TryGetValue(QueryAttributes.IS_EDIT_MODE, out var obj1) && obj1 is bool isEditMode)
+            IsEditMode = isEditMode;
+        else IsEditMode = DEFAULT_IS_EDIT_MODE;
+        
         Color color;
         if (query.TryGetValue(QueryAttributes.COLOR_HEX, out var obj2) && obj2 is string colorHex)
         {
