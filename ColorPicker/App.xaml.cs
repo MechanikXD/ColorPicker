@@ -2,7 +2,6 @@ using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Theme;
 using ColorPicker.View;
-using ColorPicker.ViewModels;
 
 namespace ColorPicker;
 
@@ -20,5 +19,19 @@ public partial class App : Application
     {
         base.OnStart();
         NavigationTracker.Initialize();
+        PreheatPages();
     }
+    
+    private static void PreheatPages()
+{
+    var s = IPlatformApplication.Current?.Services;
+    if (s == null) return;
+    
+    _ = s.GetService<MainPage>();
+    _ = s.GetService<PalettePage>();
+    _ = s.GetService<CameraPage>();
+
+    _ = s.GetService<ManualColorPage>();
+    _ = s.GetService<ColorScanResultPage>();
+}
 }
