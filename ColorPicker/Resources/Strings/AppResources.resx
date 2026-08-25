@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="main_welcome_message" xml:space="preserve">
+        <value>Welcome!</value>
+    </data>
+    <data name="main_pick_a_color" xml:space="preserve">
+        <value>Pick a color to get started.</value>
+    </data>
+    <data name="main_manual_color_selection" xml:space="preserve">
+        <value>Try a Color Manually</value>
+    </data>
+    <data name="main_manual_color_selection_subtext" xml:space="preserve">
+        <value>A random starting color, ready to tune.</value>
+    </data>
+    <data name="main_suggestions" xml:space="preserve">
+        <value>Suggestions</value>
+    </data>
+    <data name="main_suggestions_empty" xml:space="preserve">
+        <value>No suggestions yet.</value>
+    </data>
+    <data name="main_suggestions_empty_subtext" xml:space="preserve">
+        <value>Try making a color manually or scan one with the camera.</value>
+    </data>
+    <data name="navbar_home" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="navbar_palette" xml:space="preserve">
+        <value>Palettes</value>
+    </data>
+    <data name="navbar_camera" xml:space="preserve">
+        <value>Camera</value>
+    </data>
+    <data name="navbar_history" xml:space="preserve">
+        <value>History</value>
+    </data>
+    <data name="navbar_settings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="camera_processing" xml:space="preserve">
+        <value>Processing...</value>
+    </data>
+    <data name="c_combinations_title" xml:space="preserve">
+        <value>Color Combinations</value>
+    </data>
+    <data name="c_combinations_refresh" xml:space="preserve">
+        <value>Refresh</value>
+    </data>
+    <data name="c_combinations_count" xml:space="preserve">
+        <value>combination(s) found</value>
+    </data>
+    <data name="c_combinations_empty" xml:space="preserve">
+        <value>No matching combinations found in your palette.</value>
+    </data>
+    <data name="button_retake" xml:space="preserve">
+        <value>Retake</value>
+    </data>
+    <data name="button_save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="c_scan_title" xml:space="preserve">
+        <value>Scanned Color</value>
+    </data>
+    <data name="c_scan_sampled_color" xml:space="preserve">
+        <value>Sampled Color</value>
+    </data>
+    <data name="c_scan_adjust" xml:space="preserve">
+        <value>Adjust</value>
+    </data>
+    <data name="value_brightness" xml:space="preserve">
+        <value>Brightness</value>
+    </data>
+    <data name="value_contrast" xml:space="preserve">
+        <value>Contrast</value>
+    </data>
+    <data name="value_saturation" xml:space="preserve">
+        <value>Saturation</value>
+    </data>
+    <data name="value_red" xml:space="preserve">
+        <value>Red</value>
+    </data>
+    <data name="value_green" xml:space="preserve">
+        <value>Green</value>
+    </data>
+    <data name="value_blue" xml:space="preserve">
+        <value>Blue</value>
+    </data>
+    <data name="button_cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="button_confirm" xml:space="preserve">
+        <value>Confirm</value>
+    </data>
+    <data name="m_color_pick_color_title" xml:space="preserve">
+        <value>Pick a Color</value>
+    </data>
+    <data name="m_color_edit_color_title" xml:space="preserve">
+        <value>Edit Color</value>
+    </data>
+    <data name="button_add" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="m_color_copy" xml:space="preserve">
+        <value>Tap to copy</value>
+    </data>
+    <data name="value_hue" xml:space="preserve">
+        <value>Hue</value>
+    </data>
+    <data name="value_value" xml:space="preserve">
+        <value>Value</value>
+    </data>
+    <data name="palettes_current" xml:space="preserve">
+        <value>Current palette</value>
+    </data>
+    <data name="palettes_select" xml:space="preserve">
+        <value>Select palette</value>
+    </data>
+    <data name="palettes_button_camera" xml:space="preserve">
+        <value>Camera</value>
+    </data>
+    <data name="palettes_button_manual" xml:space="preserve">
+        <value>Manual</value>
+    </data>
+    <data name="palettes_empty" xml:space="preserve">
+        <value>No colors yet.</value>
+    </data>
+    <data name="palettes_empty_subtext" xml:space="preserve">
+        <value>Add one manually or scan with the camera.</value>
+    </data>
+    <data name="palettes_none" xml:space="preserve">
+        <value>None</value>
+    </data>
+    <data name="palettes_prompt_confirm_delete" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="palettes_prompt_title_text" xml:space="preserve">
+        <value>Enter palette title</value>
+    </data>
+    <data name="palettes_prompt_title_subtext" xml:space="preserve">
+        <value>Name your palette so you can find it later</value>
+    </data>
+    <data name="palettes_prompt_title_hint" xml:space="preserve">
+        <value>Palette's name</value>
+    </data>
+    <data name="m_color_prompt_title" xml:space="preserve">
+        <value>Enter color title</value>
+    </data>
+    <data name="m_color_prompt_subtext" xml:space="preserve">
+        <value>Name your color so you can find it later</value>
+    </data>
+    <data name="m_color_prompt_hint" xml:space="preserve">
+        <value>Color's name</value>
+    </data>
+    <data name="m_color_prompt_change_title" xml:space="preserve">
+        <value>Rename color title</value>
+    </data>
+    <data name="m_color_prompt_change_subtext" xml:space="preserve">
+        <value>Change name of this color</value>
+    </data>
+    <data name="palettes_default_title" xml:space="preserve">
+        <value>Color Palette</value>
+    </data>
+    <data name="color_default_title" xml:space="preserve">
+        <value>Untitled</value>
+    </data>
+</root>

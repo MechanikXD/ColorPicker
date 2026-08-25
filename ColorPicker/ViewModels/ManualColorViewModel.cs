@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
+using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
@@ -11,7 +12,9 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     private const bool DEFAULT_SHOW_COMBINATIONS_PANEL = true;
     private const bool DEFAULT_IS_EDIT_MODE = false;
     private readonly IPaletteService _paletteService;
-    public string PageTitle => IsEditMode ? "Edit Color" : "Pick a Color";
+
+    public string? PageTitle =>
+        IsEditMode ? AppResources.m_color_edit_color_title : AppResources.m_color_pick_color_title;
 
     public bool ShowCombinationsPanel
     {
@@ -123,9 +126,9 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
     private void ShowAddToPalettePrompt()
     {
         Prompt.Show(
-            title: "Enter color title",
-            message: "Name your color so you can find it later",
-            inputHint: "Color's name",
+            title: AppResources.m_color_prompt_title,
+            message: AppResources.m_color_prompt_subtext,
+            inputHint: AppResources.m_color_prompt_hint,
             showInput: true,
             onConfirm: async void () =>
             {
@@ -149,9 +152,9 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
             if (color.HexEquals(InitialHex))
             {
                 Prompt.Show(
-                    title: "Rename color title",
-                    message: "Change name of this color",
-                    inputHint: "Color's name",
+                    title: AppResources.m_color_prompt_change_title,
+                    message: AppResources.m_color_prompt_change_subtext,
+                    inputHint: AppResources.m_color_prompt_hint,
                     showInput: true,
                     onConfirm: async void () =>
                     {

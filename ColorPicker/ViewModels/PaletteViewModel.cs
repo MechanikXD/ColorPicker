@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
+using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
@@ -13,7 +14,7 @@ public class PaletteViewModel : BaseViewModel
     
     public ObservableCollection<ColorPalette> AllPalettes => _paletteService.AllPalettes;
     public List<string> PaletteNames { get; private set; }
-    public string CurrentPaletteTitle => CurrentPalette?.Title ?? "None";
+    public string CurrentPaletteTitle => CurrentPalette?.Title ?? AppResources.palettes_none;
 
     public ColorPalette? CurrentPalette
     {
@@ -134,7 +135,7 @@ public class PaletteViewModel : BaseViewModel
     private void ConfirmDeletion(string targetName, Action confirmAction)
     {
         Prompt.Show(
-            title: $"Delete {targetName}?",
+            title: $"{AppResources.palettes_prompt_confirm_delete} {targetName}?",
             showMessage: false,
             isDestructive: true,
             onConfirm: confirmAction
@@ -144,9 +145,9 @@ public class PaletteViewModel : BaseViewModel
     private void AskTitle(Action confirmAction)
     {
         Prompt.Show(
-            title: "Enter palette title",
-            message: "Name your palette so you can find it later",
-            inputHint: "Palette's name",
+            title: AppResources.palettes_prompt_title_text,
+            message: AppResources.palettes_prompt_title_subtext,
+            inputHint: AppResources.palettes_prompt_title_hint,
             showInput: true,
             onConfirm: confirmAction
         );

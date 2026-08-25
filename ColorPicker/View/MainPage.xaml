@@ -4,8 +4,10 @@
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:m="clr-namespace:ColorPicker.Models.Suggestion"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              xmlns:selectors="clr-namespace:ColorPicker.Services.Selectors"
              xmlns:colorPicker="clr-namespace:ColorPicker"
+             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.MainPage"
              x:DataType="vm:MainViewModel"
              Shell.NavBarIsVisible="False">
@@ -162,11 +164,11 @@
             <VerticalStackLayout Padding="20,52,20,16" Spacing="0">
 
                 <!-- Title / greeting -->
-                <Label Text="{Binding WelcomeMessage}"
+                <Label Text="{localization:Translate main_welcome_message}"
                        Style="{StaticResource TitleLabelStyle}"
                        FontSize="26"
                        Margin="0,0,0,4" />
-                <Label Text="Pick a color to get started."
+                <Label Text="{localization:Translate main_pick_a_color}"
                        Style="{StaticResource BodyLabelStyle}"
                        Margin="0,0,0,28" />
 
@@ -175,11 +177,11 @@
                         Margin="0,0,0,28">
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="4">
-                            <Label Text="Try a Color Manually"
+                            <Label Text="{localization:Translate main_manual_color_selection}"
                                    FontAttributes="Bold" FontSize="15"
                                    TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                                Dark={StaticResource DarkTextPrimary}}" />
-                            <Label Text="A random starting color, ready to tune."
+                            <Label Text="{localization:Translate main_manual_color_selection_subtext}"
                                    Style="{StaticResource BodyLabelStyle}" FontSize="12" />
                         </VerticalStackLayout>
 
@@ -200,7 +202,7 @@
                 </Border>
 
                 <!-- Suggestions section header -->
-                <Label Text="Suggestions"
+                <Label Text="{localization:Translate main_suggestions}"
                        FontAttributes="Bold" FontSize="17"
                        TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                    Dark={StaticResource DarkTextPrimary}}"
@@ -222,10 +224,10 @@
                             <VerticalStackLayout Spacing="6" HorizontalOptions="Center" Padding="8">
                                 <Label Text="ℹ" FontSize="28" HorizontalOptions="Center"
                                        TextColor="{StaticResource Accent}" />
-                                <Label Text="No suggestions yet."
+                                <Label Text="{localization:Translate main_suggestions_empty}"
                                        Style="{StaticResource BodyLabelStyle}"
                                        HorizontalOptions="Center" />
-                                <Label Text="Try making a color manually or scan one with the camera."
+                                <Label Text="{localization:Translate main_suggestions_empty_subtext}"
                                        Style="{StaticResource BodyLabelStyle}"
                                        FontSize="11"
                                        HorizontalOptions="Center"
