@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:m="clr-namespace:ColorPicker.Models.Colors"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              x:Class="ColorPicker.View.ColorCombinationsPanel"
              x:DataType="vm:ColorCombinationsPanelViewModel"
              VerticalOptions="End">
@@ -38,7 +39,7 @@
                              Color="{AppThemeBinding Light={StaticResource LightBorder},
                                                       Dark={StaticResource DarkBorder}}"
                              HorizontalOptions="Start" />
-                    <Label Text="Color Combinations"
+                    <Label Text="{text:Translate c_combinations_title}"
                            FontSize="13" FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                        Dark={StaticResource DarkTextPrimary}}" />
@@ -66,14 +67,13 @@
                       Padding="20,8,20,8">
 
                     <Label Grid.Column="0"
-                           Text="{Binding Combinations.Count,
-                                  StringFormat='{0} combination(s) found'}"
+                           Text="{Binding CombinationsCountText}"
                            Style="{StaticResource BodyLabelStyle}"
                            FontSize="12"
                            VerticalOptions="Center" />
 
                     <Button Grid.Column="1"
-                            Text="Refresh"
+                            Text="{text:Translate c_combinations_refresh}"
                             Style="{StaticResource OutlineButtonStyle}"
                             HeightRequest="32" WidthRequest="80"
                             FontSize="12"
@@ -97,7 +97,7 @@
                                          BindableLayout.ItemsSource="{Binding Combinations}">
 
                         <BindableLayout.EmptyView>
-                            <Label Text="No matching combinations found in your palette."
+                            <Label Text="{text:Translate c_combinations_empty}"
                                    Style="{StaticResource BodyLabelStyle}"
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"
@@ -202,8 +202,7 @@
                                         </Border>
 
                                         <!-- Accuracy -->
-                                        <Label Text="{Binding Accuracy,
-                                                      StringFormat='Accuracy  {0:P1}'}"
+                                        <Label Text="{Binding AccuracyText}"
                                                FontSize="12" FontAttributes="Bold"
                                                TextColor="{StaticResource Accent}"
                                                HorizontalOptions="Center" />

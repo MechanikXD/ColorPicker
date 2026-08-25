@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              x:Class="ColorPicker.View.BottomNavBar"
              x:DataType="vm:BottomNavViewModel">
 
@@ -74,7 +75,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=main}" />
-                    <Label Text="Home"
+                    <Label Text="{text:Translate navbar_home}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=main}" />
@@ -97,7 +98,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=palettes}" />
-                    <Label Text="Palettes"
+                    <Label Text="{text:Translate navbar_palette}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=palettes}" />
@@ -120,7 +121,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=history}" />
-                    <Label Text="History"
+                    <Label Text="{text:Translate navbar_history}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=history}" />
@@ -140,7 +141,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=settings}" />
-                    <Label Text="Settings"
+                    <Label Text="{text:Translate navbar_settings}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=settings}" />

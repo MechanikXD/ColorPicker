@@ -45,9 +45,315 @@ namespace ColorPicker.Resources.Strings {
             }
         }
         
-        internal static string welcome_message {
+        internal static string main_welcome_message {
             get {
-                return ResourceManager.GetString("welcome_message", resourceCulture);
+                return ResourceManager.GetString("main_welcome_message", resourceCulture);
+            }
+        }
+        
+        internal static string main_pick_a_color {
+            get {
+                return ResourceManager.GetString("main_pick_a_color", resourceCulture);
+            }
+        }
+        
+        internal static string main_manual_color_selection {
+            get {
+                return ResourceManager.GetString("main_manual_color_selection", resourceCulture);
+            }
+        }
+        
+        internal static string main_manual_color_selection_subtext {
+            get {
+                return ResourceManager.GetString("main_manual_color_selection_subtext", resourceCulture);
+            }
+        }
+        
+        internal static string main_suggestions {
+            get {
+                return ResourceManager.GetString("main_suggestions", resourceCulture);
+            }
+        }
+        
+        internal static string main_suggestions_empty {
+            get {
+                return ResourceManager.GetString("main_suggestions_empty", resourceCulture);
+            }
+        }
+        
+        internal static string main_suggestions_empty_subtext {
+            get {
+                return ResourceManager.GetString("main_suggestions_empty_subtext", resourceCulture);
+            }
+        }
+        
+        internal static string navbar_home {
+            get {
+                return ResourceManager.GetString("navbar_home", resourceCulture);
+            }
+        }
+        
+        internal static string navbar_palette {
+            get {
+                return ResourceManager.GetString("navbar_palette", resourceCulture);
+            }
+        }
+        
+        internal static string navbar_camera {
+            get {
+                return ResourceManager.GetString("navbar_camera", resourceCulture);
+            }
+        }
+        
+        internal static string navbar_history {
+            get {
+                return ResourceManager.GetString("navbar_history", resourceCulture);
+            }
+        }
+        
+        internal static string navbar_settings {
+            get {
+                return ResourceManager.GetString("navbar_settings", resourceCulture);
+            }
+        }
+        
+        internal static string camera_processing {
+            get {
+                return ResourceManager.GetString("camera_processing", resourceCulture);
+            }
+        }
+        
+        internal static string c_combinations_title {
+            get {
+                return ResourceManager.GetString("c_combinations_title", resourceCulture);
+            }
+        }
+        
+        internal static string c_combinations_refresh {
+            get {
+                return ResourceManager.GetString("c_combinations_refresh", resourceCulture);
+            }
+        }
+        
+        internal static string c_combinations_count {
+            get {
+                return ResourceManager.GetString("c_combinations_count", resourceCulture);
+            }
+        }
+        
+        internal static string c_combinations_empty {
+            get {
+                return ResourceManager.GetString("c_combinations_empty", resourceCulture);
+            }
+        }
+        
+        internal static string button_retake {
+            get {
+                return ResourceManager.GetString("button_retake", resourceCulture);
+            }
+        }
+        
+        internal static string button_save {
+            get {
+                return ResourceManager.GetString("button_save", resourceCulture);
+            }
+        }
+        
+        internal static string c_scan_title {
+            get {
+                return ResourceManager.GetString("c_scan_title", resourceCulture);
+            }
+        }
+        
+        internal static string c_scan_sampled_color {
+            get {
+                return ResourceManager.GetString("c_scan_sampled_color", resourceCulture);
+            }
+        }
+        
+        internal static string c_scan_adjust {
+            get {
+                return ResourceManager.GetString("c_scan_adjust", resourceCulture);
+            }
+        }
+        
+        internal static string value_brightness {
+            get {
+                return ResourceManager.GetString("value_brightness", resourceCulture);
+            }
+        }
+        
+        internal static string value_contrast {
+            get {
+                return ResourceManager.GetString("value_contrast", resourceCulture);
+            }
+        }
+        
+        internal static string value_saturation {
+            get {
+                return ResourceManager.GetString("value_saturation", resourceCulture);
+            }
+        }
+        
+        internal static string value_red {
+            get {
+                return ResourceManager.GetString("value_red", resourceCulture);
+            }
+        }
+        
+        internal static string value_green {
+            get {
+                return ResourceManager.GetString("value_green", resourceCulture);
+            }
+        }
+        
+        internal static string value_blue {
+            get {
+                return ResourceManager.GetString("value_blue", resourceCulture);
+            }
+        }
+        
+        internal static string button_cancel {
+            get {
+                return ResourceManager.GetString("button_cancel", resourceCulture);
+            }
+        }
+        
+        internal static string button_confirm {
+            get {
+                return ResourceManager.GetString("button_confirm", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_pick_color_title {
+            get {
+                return ResourceManager.GetString("m_color_pick_color_title", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_edit_color_title {
+            get {
+                return ResourceManager.GetString("m_color_edit_color_title", resourceCulture);
+            }
+        }
+        
+        internal static string button_add {
+            get {
+                return ResourceManager.GetString("button_add", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_copy {
+            get {
+                return ResourceManager.GetString("m_color_copy", resourceCulture);
+            }
+        }
+        
+        internal static string value_hue {
+            get {
+                return ResourceManager.GetString("value_hue", resourceCulture);
+            }
+        }
+        
+        internal static string value_value {
+            get {
+                return ResourceManager.GetString("value_value", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_current {
+            get {
+                return ResourceManager.GetString("palettes_current", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_select {
+            get {
+                return ResourceManager.GetString("palettes_select", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_button_camera {
+            get {
+                return ResourceManager.GetString("palettes_button_camera", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_button_manual {
+            get {
+                return ResourceManager.GetString("palettes_button_manual", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_empty {
+            get {
+                return ResourceManager.GetString("palettes_empty", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_empty_subtext {
+            get {
+                return ResourceManager.GetString("palettes_empty_subtext", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_none {
+            get {
+                return ResourceManager.GetString("palettes_none", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_prompt_confirm_delete {
+            get {
+                return ResourceManager.GetString("palettes_prompt_confirm_delete", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_prompt_title_text {
+            get {
+                return ResourceManager.GetString("palettes_prompt_title_text", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_prompt_title_subtext {
+            get {
+                return ResourceManager.GetString("palettes_prompt_title_subtext", resourceCulture);
+            }
+        }
+        
+        internal static string palettes_prompt_title_hint {
+            get {
+                return ResourceManager.GetString("palettes_prompt_title_hint", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_prompt_title {
+            get {
+                return ResourceManager.GetString("m_color_prompt_title", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_prompt_subtext {
+            get {
+                return ResourceManager.GetString("m_color_prompt_subtext", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_prompt_hint {
+            get {
+                return ResourceManager.GetString("m_color_prompt_hint", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_prompt_change_title {
+            get {
+                return ResourceManager.GetString("m_color_prompt_change_title", resourceCulture);
+            }
+        }
+        
+        internal static string m_color_prompt_change_subtext {
+            get {
+                return ResourceManager.GetString("m_color_prompt_change_subtext", resourceCulture);
             }
         }
     }

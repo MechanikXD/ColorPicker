@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:colorPicker="clr-namespace:ColorPicker"
              x:Class="ColorPicker.View.ColorScanResultPage"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              x:DataType="vm:ColorScanResultViewModel"
              Shell.NavBarIsVisible="False">
 
@@ -26,20 +27,20 @@
                       Padding="16,52,16,8">
 
                     <Button Grid.Column="0"
-                            Text="← Retake"
+                            Text="{text:Translate button_retake}"
                             Style="{StaticResource OutlineButtonStyle}"
                             HeightRequest="38"
                             Command="{Binding RetakeCommand}" />
 
                     <Label Grid.Column="1"
-                           Text="Scanned Color"
+                           Text="{text:Translate c_scan_title}"
                            Style="{StaticResource TitleLabelStyle}"
                            FontSize="17"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
 
                     <Button Grid.Column="2"
-                            Text="Save"
+                            Text="{text:Translate button_save}"
                             Style="{StaticResource AccentButtonStyle}"
                             HeightRequest="38" WidthRequest="72"
                             Command="{Binding SaveToPaletteCommand}" />
@@ -109,7 +110,7 @@
                         <VerticalStackLayout Grid.Column="1"
                                              VerticalOptions="Center"
                                              Spacing="3">
-                            <Label Text="Sampled Color"
+                            <Label Text="{text:Translate c_scan_sampled_color}"
                                    Style="{StaticResource BodyLabelStyle}"
                                    FontSize="11" />
                             <Label Text="{Binding HexValue}"
@@ -143,7 +144,7 @@
                         Margin="16,12,16,0">
                     <VerticalStackLayout Spacing="18">
 
-                        <Label Text="Adjust"
+                        <Label Text="c_scan_adjust"
                                FontAttributes="Bold"
                                FontSize="15"
                                TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
@@ -152,7 +153,7 @@
                         <!-- Brightness -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Brightness"
+                                <Label Text="{text:Translate value_brightness}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Brightness, StringFormat='{0:F0}'}"
@@ -169,7 +170,7 @@
                         <!-- Contrast -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Contrast"
+                                <Label Text="{text:Translate value_contrast}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Contrast, StringFormat='{0:F0}'}"
@@ -186,7 +187,7 @@
                         <!-- Saturation -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Saturation"
+                                <Label Text="{text:Translate value_saturation}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Saturation, StringFormat='{0:F0}'}"
@@ -208,7 +209,7 @@
                         <!-- Red -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Red"
+                                <Label Text="{text:Translate value_red}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Red, StringFormat='{0:F0}'}"
@@ -225,7 +226,7 @@
                         <!-- Green -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Green"
+                                <Label Text="{text:Translate value_green}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Green, StringFormat='{0:F0}'}"
@@ -242,7 +243,7 @@
                         <!-- Blue -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*, Auto">
-                                <Label Text="Blue"
+                                <Label Text="{text:Translate value_blue}"
                                        Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Blue, StringFormat='{0:F0}'}"

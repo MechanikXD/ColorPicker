@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              x:Class="ColorPicker.View.PromptView"
              x:DataType="vm:PromptViewModel"
              IsVisible="{Binding IsVisible}">
@@ -76,7 +77,7 @@
                 <Grid ColumnDefinitions="*, 12, *" ColumnSpacing="0">
 
                     <Button Grid.Column="0"
-                            Text="Cancel"
+                            Text="{text:Translate button_cancel}"
                             Style="{StaticResource OutlineButtonStyle}"
                             Command="{Binding CancelCommand}" />
 

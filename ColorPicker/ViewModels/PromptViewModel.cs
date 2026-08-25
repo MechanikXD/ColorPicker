@@ -1,9 +1,12 @@
 using System.Windows.Input;
+using ColorPicker.Resources.Strings;
 
 namespace ColorPicker.ViewModels;
 
 public class PromptViewModel : BaseViewModel
 {
+    private const string LOCALIZATION_NOT_FOUND_TEXT = "LOCALIZATION_NOT_FOUND";
+    
     public bool IsVisible
     {
         get;
@@ -91,6 +94,22 @@ public class PromptViewModel : BaseViewModel
         bool showMessage = true,
         bool showInput = false,
         bool isDestructive = false,
+        Action? onConfirm = null,
+        bool useTranslate = true)
+    {
+        if (useTranslate) ShowTranslated(title, message, inputText, inputHint, showMessage, showInput, isDestructive, onConfirm);
+        else ShowText(title, message, confirmText, inputText, inputHint, showMessage, showInput, isDestructive, onConfirm);
+    }
+    
+    private void ShowText(
+        string title,
+        string message = "",
+        string confirmText = "Confirm",
+        string inputText = "",
+        string inputHint = "",
+        bool showMessage = true,
+        bool showInput = false,
+        bool isDestructive = false,
         Action? onConfirm = null)
     {
         Title = title;
@@ -98,6 +117,29 @@ public class PromptViewModel : BaseViewModel
         ConfirmText = confirmText;
         InputHint = inputHint;
         InputText = inputText;
+        ShowMessage = showMessage;
+        ShowInput = showInput;
+        IsDestructive = isDestructive;
+        _onConfirm = onConfirm;
+        IsVisible = true;
+    }
+    
+    private void ShowTranslated(
+        string title,
+        string message = "",
+        string inputText = "",
+        string inputHint = "",
+        bool showMessage = true,
+        bool showInput = false,
+        bool isDestructive = false,
+        Action? onConfirm = null)
+    {
+        var rm = AppResources.ResourceManager;
+        Title = rm.GetString(title) ?? LOCALIZATION_NOT_FOUND_TEXT;
+        if (showMessage) Message = rm.GetString(message) ?? LOCALIZATION_NOT_FOUND_TEXT;
+        ConfirmText = AppResources.button_confirm ?? LOCALIZATION_NOT_FOUND_TEXT;
+        if (showInput) InputHint = rm.GetString(inputHint) ?? LOCALIZATION_NOT_FOUND_TEXT;
+        if (showInput) InputText = rm.GetString(inputText) ?? LOCALIZATION_NOT_FOUND_TEXT;
         ShowMessage = showMessage;
         ShowInput = showInput;
         IsDestructive = isDestructive;

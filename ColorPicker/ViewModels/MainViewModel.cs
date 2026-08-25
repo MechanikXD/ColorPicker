@@ -9,19 +9,11 @@ namespace ColorPicker.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
-    private const string WELCOME_MESSAGE = "Welcome!";
-    
     public Color RandomPreviewColor
     {
         get;
         set => SetField(ref field, value);
     } = GetRandomColor();
-
-    public string WelcomeMessage
-    {
-        get;
-        set => SetField(ref field, value);
-    } = WELCOME_MESSAGE;
 
     public ObservableCollection<SuggestionMessage> Messages { get; } = [];
 

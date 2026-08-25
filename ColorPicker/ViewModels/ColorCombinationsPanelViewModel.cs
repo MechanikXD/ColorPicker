@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Color;
 using ColorPicker.Services.Palette;
 
@@ -15,6 +16,12 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         get;
         set => SetField(ref field, value);
     }
+
+    public string CombinationsCountText
+    {
+        get;
+        set => SetField(ref field, value);
+    } = "";
  
     public bool IsLoading
     {
@@ -24,6 +31,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
 
     public Color TargetColor { get; set; } = Colors.Transparent;
     private Color _combinationsLoadedForColor = Colors.Transparent;
+    private int _lastCombinationsCount = -1;
     public ObservableCollection<ColorCombination> Combinations { get; } = [];
 
     public ICommand ToggleExpandCommand { get; }
@@ -34,6 +42,14 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         _paletteService = paletteService;
         RefreshCommand = new Command(async void (_) => await LoadCombinations());
         ToggleExpandCommand = new Command(async void (_) => await ToggleIsExpanded());
+        UpdateCombinationsCount();
+    }
+
+    private void UpdateCombinationsCount()
+    {
+        if (_lastCombinationsCount == Combinations.Count) return;
+        _lastCombinationsCount = Combinations.Count;
+        CombinationsCountText = $"{_lastCombinationsCount} {AppResources.c_combinations_count}";
     }
 
     private async Task LoadCombinations()

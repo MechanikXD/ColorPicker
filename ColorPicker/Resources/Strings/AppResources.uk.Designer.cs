@@ -45,9 +45,9 @@ namespace ColorPicker.Resources.Strings {
             }
         }
         
-        internal static string welcome_message {
+        internal static string main_welcome_message {
             get {
-                return ResourceManager.GetString("welcome_message", resourceCulture);
+                return ResourceManager.GetString("main_welcome_message", resourceCulture);
             }
         }
     }

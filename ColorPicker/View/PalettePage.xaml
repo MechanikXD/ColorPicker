@@ -5,6 +5,7 @@
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:models="clr-namespace:ColorPicker.Models.Colors"
              xmlns:colorPicker="clr-namespace:ColorPicker"
+             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              x:Class="ColorPicker.View.PalettePage"
              x:DataType="vm:PaletteViewModel"
              x:Name="ThisPage"
@@ -35,7 +36,7 @@
                 <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto, Auto" ColumnSpacing="8">
 
                     <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="0">
-                        <Label Text="Current palette"
+                        <Label Text="{text:Translate palettes_current}"
                                FontSize="11"
                                Style="{StaticResource BodyLabelStyle}" />
                         <Label Text="{Binding CurrentPaletteTitle}"
@@ -110,7 +111,7 @@
                         BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
                                                            Dark={StaticResource DarkBackground}}"
                         Padding="12,0">
-                    <Picker Title="Select palette"
+                    <Picker Title="{text:Translate palettes_select}"
                             ItemsSource="{Binding PaletteNames}"
                             SelectedIndex="{Binding CurrentPaletteIndex}"
                             TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
@@ -135,12 +136,12 @@
             <Grid ColumnDefinitions="*, 12, *" ColumnSpacing="0">
 
                 <Button Grid.Column="0"
-                        Text="+ Manual"
+                        Text="{text:Translate palettes_button_manual}"
                         Style="{StaticResource OutlineButtonStyle}"
                         Command="{Binding AddColorManuallyCommand}" />
 
                 <Button Grid.Column="2"
-                        Text="⬤ Camera"
+                        Text="{text:Translate palettes_button_camera}"
                         Style="{StaticResource AccentButtonStyle}"
                         Command="{Binding AddColorFromCameraCommand}" />
 
@@ -156,11 +157,11 @@
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
                                      Spacing="8" Padding="32">
-                    <Label Text="No colors yet."
+                    <Label Text="{text:Translate palettes_empty}"
                            Style="{StaticResource TitleLabelStyle}"
                            FontSize="17"
                            HorizontalOptions="Center" />
-                    <Label Text="Add one manually or scan with the camera."
+                    <Label Text="{text:Translate palettes_empty_subtext}"
                            Style="{StaticResource BodyLabelStyle}"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center" />
