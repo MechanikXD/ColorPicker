@@ -21,4 +21,163 @@
     <data name="main_welcome_message" xml:space="preserve">
         <value>Привіт!</value>
     </data>
+    <data name="button_add" xml:space="preserve">
+        <value>Додати</value>
+    </data>
+    <data name="button_cancel" xml:space="preserve">
+        <value>Відміна</value>
+    </data>
+    <data name="button_confirm" xml:space="preserve">
+        <value>Підтвердити</value>
+    </data>
+    <data name="button_save" xml:space="preserve">
+        <value>Зберегти</value>
+    </data>
+    <data name="camera_processing" xml:space="preserve">
+        <value>Обробка...</value>
+    </data>
+    <data name="color_default_title" xml:space="preserve">
+        <value>Без назви</value>
+    </data>
+    <data name="c_combinations_count" xml:space="preserve">
+        <value>Комбінацій знайдено</value>
+    </data>
+    <data name="c_combinations_refresh" xml:space="preserve">
+        <value>Оновити</value>
+    </data>
+    <data name="c_combinations_title" xml:space="preserve">
+        <value>Комбінації кольорів</value>
+    </data>
+    <data name="c_scan_adjust" xml:space="preserve">
+        <value>Корегування</value>
+    </data>
+    <data name="main_manual_color_selection" xml:space="preserve">
+        <value>Обрати колір вручну</value>
+    </data>
+    <data name="main_manual_color_selection_subtext" xml:space="preserve">
+        <value>Випадковий колів, готовий для обробки!</value>
+    </data>
+    <data name="main_suggestions" xml:space="preserve">
+        <value>Рекомендації</value>
+    </data>
+    <data name="main_suggestions_empty" xml:space="preserve">
+        <value>Жодних рекомендацій.</value>
+    </data>
+    <data name="main_suggestions_empty_subtext" xml:space="preserve">
+        <value>Створи колів власноруч або відскануй за допомогою камери.</value>
+    </data>
+    <data name="m_color_copy" xml:space="preserve">
+        <value>Натисни, щоб копіювати</value>
+    </data>
+    <data name="m_color_edit_color_title" xml:space="preserve">
+        <value>Редагування кольору</value>
+    </data>
+    <data name="m_color_prompt_change_subtext" xml:space="preserve">
+        <value>Змінити назву цього кольору</value>
+    </data>
+    <data name="m_color_prompt_change_title" xml:space="preserve">
+        <value>Змінити назву</value>
+    </data>
+    <data name="m_color_prompt_hint" xml:space="preserve">
+        <value>Ім'я кольору</value>
+    </data>
+    <data name="m_color_prompt_subtext" xml:space="preserve">
+        <value>Назви колір, щоб відрізнити від інших.</value>
+    </data>
+    <data name="m_color_prompt_title" xml:space="preserve">
+        <value>Назва кольору</value>
+    </data>
+    <data name="navbar_camera" xml:space="preserve">
+        <value>Камера</value>
+    </data>
+    <data name="navbar_history" xml:space="preserve">
+        <value>Історія</value>
+    </data>
+    <data name="navbar_home" xml:space="preserve">
+        <value>Головна</value>
+    </data>
+    <data name="navbar_palette" xml:space="preserve">
+        <value>Палітри</value>
+    </data>
+    <data name="navbar_settings" xml:space="preserve">
+        <value>Налаштування</value>
+    </data>
+    <data name="palettes_button_camera" xml:space="preserve">
+        <value>Камера</value>
+    </data>
+    <data name="palettes_button_manual" xml:space="preserve">
+        <value>Власноруч</value>
+    </data>
+    <data name="palettes_current" xml:space="preserve">
+        <value>Поточна палітра</value>
+    </data>
+    <data name="palettes_default_title" xml:space="preserve">
+        <value>Палітра</value>
+    </data>
+    <data name="palettes_empty" xml:space="preserve">
+        <value>Жодного кольору.</value>
+    </data>
+    <data name="palettes_empty_subtext" xml:space="preserve">
+        <value>Додай власноруч або відскануй за допомогою камери.</value>
+    </data>
+    <data name="palettes_none" xml:space="preserve">
+        <value>-</value>
+    </data>
+    <data name="palettes_prompt_confirm_delete" xml:space="preserve">
+        <value>Видалити</value>
+    </data>
+    <data name="palettes_prompt_title_hint" xml:space="preserve">
+        <value>Ім'я палітри</value>
+    </data>
+    <data name="palettes_prompt_title_subtext" xml:space="preserve">
+        <value>Назви палітру, щоб відрізнити від інших.</value>
+    </data>
+    <data name="palettes_prompt_title_text" xml:space="preserve">
+        <value>Назва палітри</value>
+    </data>
+    <data name="palettes_select" xml:space="preserve">
+        <value>Обрати палітру</value>
+    </data>
+    <data name="value_blue" xml:space="preserve">
+        <value>Синій</value>
+    </data>
+    <data name="value_brightness" xml:space="preserve">
+        <value>Яскравість</value>
+    </data>
+    <data name="value_contrast" xml:space="preserve">
+        <value>Контраст</value>
+    </data>
+    <data name="value_green" xml:space="preserve">
+        <value>Зелений</value>
+    </data>
+    <data name="value_red" xml:space="preserve">
+        <value>Червоний</value>
+    </data>
+    <data name="value_saturation" xml:space="preserve">
+        <value>Насиченість</value>
+    </data>
+    <data name="value_hue" xml:space="preserve">
+        <value>Відтінок</value>
+    </data>
+    <data name="value_value" xml:space="preserve">
+        <value>Значення</value>
+    </data>
+    <data name="button_retake" xml:space="preserve">
+        <value>Перезняти</value>
+    </data>
+    <data name="c_combinations_empty" xml:space="preserve">
+        <value>Не вдалося знайти комбінації для поточної палітри.</value>
+    </data>
+    <data name="c_scan_title" xml:space="preserve">
+        <value>Сканований колір</value>
+    </data>
+    <data name="c_scan_sampled_color" xml:space="preserve">
+        <value>Вибраний колір</value>
+    </data>
+    <data name="main_pick_a_color" xml:space="preserve">
+        <value>Обери колір, щоб почати.</value>
+    </data>
+    <data name="m_color_pick_color_title" xml:space="preserve">
+        <value>Обрати колір</value>
+    </data>
 </root>
