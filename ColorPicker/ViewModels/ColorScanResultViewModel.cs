@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
+using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 using SkiaSharp;
@@ -89,9 +90,9 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     private void ShowSaveToPalettePrompt()
     {
         Prompt.Show(
-            title: "Enter color title",
-            message: "Name your color so you can find it later",
-            inputHint: "Color's name",
+            title: AppResources.m_color_prompt_title,
+            message: AppResources.m_color_prompt_subtext,
+            inputHint: AppResources.m_color_prompt_hint,
             showInput: true,
             onConfirm: async void () =>
             {
