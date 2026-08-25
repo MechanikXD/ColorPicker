@@ -356,5 +356,17 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("m_color_prompt_change_subtext", resourceCulture);
             }
         }
+        
+        internal static string palettes_default_title {
+            get {
+                return ResourceManager.GetString("palettes_default_title", resourceCulture);
+            }
+        }
+        
+        internal static string color_default_title {
+            get {
+                return ResourceManager.GetString("color_default_title", resourceCulture);
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using ColorPicker.Models.StaticData;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Theme;
@@ -7,11 +8,14 @@ namespace ColorPicker;
 
 public partial class App : Application
 {
-    public App(AppShell appShell, IThemeService themeService, ISaveLoadService paletteLoadService)
+    public App(AppShell appShell, IThemeService themeService, 
+        [FromKeyedServices(KeyedServices.PALETTE_SAVE_LOAD)] ISaveLoadService paletteLoadService,
+        [FromKeyedServices(KeyedServices.LOCALIZATION_SAVE_LOAD)] ISaveLoadService localizationLoadService)
     {
         InitializeComponent();
         themeService.ApplySavedTheme();
         paletteLoadService.Load();
+        localizationLoadService.Load();
         MainPage = appShell;
     }
     

@@ -1,7 +1,7 @@
 using System.Globalization;
 using ColorPicker.Resources.Strings;
 
-namespace ColorPicker.Services.Theme;
+namespace ColorPicker.Services.Localization;
 
 [ContentProperty(nameof(Text))]
 public class TranslateExtension : IMarkupExtension

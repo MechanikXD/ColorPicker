@@ -174,4 +174,10 @@
     <data name="m_color_prompt_change_subtext" xml:space="preserve">
         <value>Change name of this color</value>
     </data>
+    <data name="palettes_default_title" xml:space="preserve">
+        <value>Color Palette</value>
+    </data>
+    <data name="color_default_title" xml:space="preserve">
+        <value>Untitled</value>
+    </data>
 </root>

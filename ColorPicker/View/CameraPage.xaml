@@ -6,6 +6,7 @@
              xmlns:camera="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui.Camera"
              xmlns:colorPicker="clr-namespace:ColorPicker"
              xmlns:text="clr-namespace:ColorPicker.Services.Theme"
+             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.CameraPage"
              x:DataType="vm:CameraViewModel"
              Shell.NavBarIsVisible="False"
@@ -47,7 +48,7 @@
                                    Color="White"
                                    HeightRequest="48"
                                    WidthRequest="48" />
-                <Label Text="{text:Translate camera_processing}"
+                <Label Text="{localization:Translate camera_processing}"
                        TextColor="White"
                        FontSize="14"
                        HorizontalOptions="Center" />

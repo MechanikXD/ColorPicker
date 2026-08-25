@@ -1,14 +1,14 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ColorPicker.Services.Palette;
+using ColorPicker.Models.StaticData;
+using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.SaveLoad.Defaults;
 using ColorPicker.Services.SaveLoad.Serializable;
 
-namespace ColorPicker.Services.SaveLoad;
+namespace ColorPicker.Services.Palette;
 
 public class PaletteSaveLoadService : ISaveLoadService
 {
-    private const string STORAGE_KEY = "user_palette";
     private readonly IPaletteService _paletteService;
 
     public PaletteSaveLoadService(IPaletteService paletteService)
@@ -18,7 +18,7 @@ public class PaletteSaveLoadService : ISaveLoadService
     
     public void Load()
     {
-        var json = Preferences.Get(STORAGE_KEY, null);
+        var json = Preferences.Get(UserStorageKeys.PALETTES_STORAGE_KEY, null);
         if (json == null)
         {
             LoadDefault();
@@ -34,7 +34,7 @@ public class PaletteSaveLoadService : ISaveLoadService
     {
         var serializable = SerializableUserData.FromService(_paletteService);
         var json = JsonSerializer.Serialize(serializable, AppJsonContext.Default.SerializableUserData);
-        Preferences.Set(STORAGE_KEY, json);
+        Preferences.Set(UserStorageKeys.PALETTES_STORAGE_KEY, json);
     }
 
     public void LoadDefault() => LoadPalettes(DefaultUserPalette.UserData);
@@ -51,7 +51,7 @@ public class PaletteSaveLoadService : ISaveLoadService
 
     public void Clear(bool loadDefault=true)
     {
-        Preferences.Remove(STORAGE_KEY);
+        Preferences.Remove(UserStorageKeys.PALETTES_STORAGE_KEY);
         if (loadDefault) LoadDefault();
     }
 }
