@@ -11,8 +11,8 @@
     <ShellContent Route="main" ContentTemplate="{DataTemplate v:MainPage}" />
     <ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />
     <ShellContent Route="camera" ContentTemplate="{DataTemplate v:CameraPage}" />
-    <!--<ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
-    <ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
+    <ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
+    <!--<ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
 
     <Shell.Resources>
         <ShellContent x:Key="ManualColorRoute" Route="manualcolor"

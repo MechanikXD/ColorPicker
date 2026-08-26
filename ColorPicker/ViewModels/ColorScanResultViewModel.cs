@@ -1,7 +1,9 @@
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.History;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Resources.Strings;
+using ColorPicker.Services.History;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 using SkiaSharp;
@@ -14,6 +16,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     private const double DEFAULT_COLOR_FILTER_VALUE = 128;
     private const int DEBOUNCE_DELAY_MILLISECONDS = 100;
     private readonly IPaletteService _paletteService;
+    private readonly IHistoryService _historyService;
     private SKBitmap? _imageBitmap;
     private CancellationTokenSource? _sliderDebounceCancellationTokenSource;
     
@@ -77,15 +80,21 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
     public ICommand RetakeCommand { get; }
     public ICommand SaveToPaletteCommand { get; }
 
-    public ColorScanResultViewModel(IPaletteService paletteService, ColorCombinationsPanelViewModel colorCombinationsPanel, PromptViewModel prompt)
+    public ColorScanResultViewModel(IPaletteService paletteService, 
+        IHistoryService historyService,
+        ColorCombinationsPanelViewModel colorCombinationsPanel, 
+        PromptViewModel prompt)
     {
         _paletteService = paletteService;
+        _historyService = historyService;
         CombinationsPanel = colorCombinationsPanel;
         Prompt = prompt;
         
         RetakeCommand = new Command( async void (_) => { await ShellNavigationService.GoToPageAsync(Pages.Main.Camera); });
         SaveToPaletteCommand = new Command(_ => { ShowSaveToPalettePrompt(); });
     }
+
+    public void SaveScannedColorToHistory() => _historyService.CreateNewEntry(SampledColor, HistoryEntrySource.Scan);
 
     private void ShowSaveToPalettePrompt()
     {
@@ -115,6 +124,7 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
 
         if (_imageBitmap == null) return;
         UpdateSampledColor(_imageBitmap);
+        CombinationsPanel?.IsExpanded = false;
 
         Brightness = DEFAULT_FILTER_VALUE;
         Contrast = DEFAULT_FILTER_VALUE;
