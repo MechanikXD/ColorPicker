@@ -145,7 +145,7 @@
                         Margin="16,12,16,0">
                     <VerticalStackLayout Spacing="18">
 
-                        <Label Text="c_scan_adjust"
+                        <Label Text="{localization:Translate c_scan_adjust}"
                                FontAttributes="Bold"
                                FontSize="15"
                                TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
