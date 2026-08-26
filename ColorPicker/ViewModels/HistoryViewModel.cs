@@ -11,8 +11,8 @@ public class HistoryViewModel : BaseViewModel
     private readonly IHistoryService _historyService;
 
     public ObservableCollection<HistoryEntry> Entries => _historyService.Entries;
-    public bool IsEmpty { get; private set; } = true;
-    public string EntriesCountString { get; private set; } = string.Empty;
+    public bool IsNotEmpty { get; private set => SetField(ref field, value); } = true;
+    public string EntriesCountString { get; private set => SetField(ref field, value); } = "";
 
     public ICommand RemoveEntryCommand { get; }
     public ICommand ClearAllCommand   { get; }
@@ -28,7 +28,7 @@ public class HistoryViewModel : BaseViewModel
 
     private void UpdateEntryFields()
     {
-        IsEmpty = Entries.Count == 0;
+        IsNotEmpty = Entries.Count > 0;
         EntriesCountString = $"{Entries.Count} {AppResources.history_entries_count_suffix}";
     }
 

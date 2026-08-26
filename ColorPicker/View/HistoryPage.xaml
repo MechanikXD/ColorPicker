@@ -43,8 +43,7 @@
                         FontAttributes="Bold"
                         HeightRequest="38"
                         VerticalOptions="Center"
-                        IsVisible="{Binding IsEmpty, 
-                            Converter={StaticResource InverseBoolConverter}}"
+                        IsVisible="{Binding IsNotEmpty}"
                         Command="{Binding ClearAllCommand}" />
             </Grid>
         </Border>
@@ -152,8 +151,7 @@
                                     VerticalOptions="Center">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding BindingContext.RemoveEntryCommand,
-                                                  Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveEntryCommand, x:DataType={x:Type ContentPage}}"
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Label Text="✕"
