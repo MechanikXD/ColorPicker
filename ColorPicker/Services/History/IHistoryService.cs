@@ -8,7 +8,7 @@ public interface IHistoryService
     ObservableCollection<HistoryEntry> Entries { get; }
  
     void CreateNewEntry(Microsoft.Maui.Graphics.Color color, HistoryEntrySource source);
-    void AddEntry(Microsoft.Maui.Graphics.Color color, HistoryEntrySource source, DateTimeOffset date, int index=-1);
+    void PushBackEntry(HistoryEntry entry);
     void RemoveEntry(HistoryEntry entry);
     void Clear();
 }

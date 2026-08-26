@@ -1,4 +1,3 @@
-using ColorPicker.Models.StaticData;
 using ColorPicker.Services.History;
 using ColorPicker.Services.Localization;
 using ColorPicker.Services.Palette;
@@ -34,8 +33,9 @@ public static class MauiProgram
             builder.Services.AddSingleton<IThemeService, ThemeService>();
             builder.Services.AddSingleton<IPaletteService, PaletteService>();
             builder.Services.AddSingleton<IHistoryService, HistoryService>();
-            builder.Services.AddKeyedSingleton<ISaveLoadService, PaletteSaveLoadService>(KeyedServices.PALETTE_SAVE_LOAD);
-            builder.Services.AddKeyedSingleton<ISaveLoadService, LocalizationSaveLoadService>(KeyedServices.LOCALIZATION_SAVE_LOAD);
+            builder.Services.AddSingleton<ISaveLoadService, PaletteSaveLoadService>();
+            builder.Services.AddSingleton<ISaveLoadService, LocalizationSaveLoadService>();
+            builder.Services.AddSingleton<ISaveLoadService, HistorySaveLoadService>();
 
             // Register ViewModels
             builder.Services.AddSingleton<MainViewModel>();
