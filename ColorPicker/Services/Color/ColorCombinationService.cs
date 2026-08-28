@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Globalization;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.Settings;
 
@@ -10,9 +11,9 @@ public static class ColorCombinationService
         ColorPalette palette, CancellationToken ct = default)
     {
         if (palette.Palette.Count <= 1) return [];
-        var combinationRatioStep = double.Parse(SettingsModels.ColorSettings.CombinationRatioStep.GetCurrentOption());
+        var combinationRatioStep = double.Parse(SettingsModels.ColorSettings.CombinationRatioStep.GetCurrentOption(), NumberStyles.Any, CultureInfo.InvariantCulture);
         var maxCombinationCount = int.Parse(SettingsModels.ColorSettings.MaxCombinationCount.GetCurrentOption());
-
+        
         return await Task.Run(() =>
         {
             var targetLab = CieColorTransformService.RgbToLab(source);
