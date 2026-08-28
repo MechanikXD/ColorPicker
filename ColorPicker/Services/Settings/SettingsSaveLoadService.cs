@@ -19,7 +19,6 @@ public class SettingsSaveLoadService : ISaveLoadService
             else if (node is ActiveSetting setting)
             {
                 SettingNodes.Add(setting.Title, setting);
-                setting.OnSettingChanged += _ => Save();
             }
         }
     }
@@ -45,6 +44,8 @@ public class SettingsSaveLoadService : ISaveLoadService
         {
             if (data.TryGetValue(kvp.Key, out var value) && value != null) kvp.Value.SetValue(value);
             else kvp.Value.SetDefaultValue();
+            
+            kvp.Value.OnSettingChanged += _ => Save();
         }
     }
 

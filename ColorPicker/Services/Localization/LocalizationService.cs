@@ -4,29 +4,29 @@ using ColorPicker.Resources.Strings;
 
 namespace ColorPicker.Services.Localization;
 
-public class LocalizationService : ILocalizationService
+public static class LocalizationService
 {
-    public string CurrentCulture { get; private set; } = "";
+    public static string CurrentCulture { get; private set; } = "";
 
-    private readonly Dictionary<string, string> _cultureCodeProxy = new()
+    private static readonly Dictionary<string, string> CultureCodeProxy = new()
     {
         ["System"] = "",
         ["English"] = "en",
         ["Ukrainian"] = "uk"
     };
 
-    public LocalizationService()
+    public static void Initialize()
     {
         SettingsModels.ApplicationLanguage.OnSettingChanged += UpdateCurrentCulture;
     }
 
-    private void UpdateCurrentCulture(object newIndex)
+    private static void UpdateCurrentCulture(object newIndex)
     {
-        CurrentCulture = _cultureCodeProxy[SettingsModels.ApplicationLanguage.GetCurrentOption()];
+        CurrentCulture = CultureCodeProxy[SettingsModels.ApplicationLanguage.GetCurrentOption()];
         SetCulture(CurrentCulture);
     }
     
-    public void SetCulture(string cultureCode)
+    public static void SetCulture(string cultureCode)
     {
         var newCulture = new CultureInfo(cultureCode);
         CultureInfo.CurrentCulture = newCulture;

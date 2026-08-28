@@ -1,5 +1,7 @@
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
+using ColorPicker.Services.Theme;
 using ColorPicker.View;
 
 namespace ColorPicker;
@@ -9,6 +11,8 @@ public partial class App : Application
     public App(AppShell appShell, IEnumerable<ISaveLoadService> saveLoadServices)
     {
         InitializeComponent();
+        ThemeService.Initialize();
+        LocalizationService.Initialize();
         foreach (var service in saveLoadServices) service.Load();
         MainPage = appShell;
     }
