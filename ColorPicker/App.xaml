@@ -15,6 +15,7 @@
             <converters:RouteToColorConverter x:Key="RouteToColorConverter" />
             <converters:BoolToChevronConverter x:Key="BoolToChevronConverter" />
             <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+            <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

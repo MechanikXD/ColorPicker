@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<colorPicker:AnimatedPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:v="clr-namespace:ColorPicker.View"
+    xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+    xmlns:settings="clr-namespace:ColorPicker.Models.Settings.Nodes"
+    xmlns:colorPicker="clr-namespace:ColorPicker"
+    xmlns:selectors="clr-namespace:ColorPicker.Services.Selectors"
+    x:Class="ColorPicker.View.SettingsPage"
+    x:DataType="vm:SettingsViewModel"
+    x:Name="ThisPage"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <!-- TITLE template — visual separator, accent-colored small label -->
+        <DataTemplate x:Key="TitleNodeTemplate"
+                      x:DataType="settings:TitleSetting">
+            <VerticalStackLayout Padding="20,20,20,6" Spacing="6">
+                <Label Text="{Binding Title}"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       CharacterSpacing="1.2"
+                       TextTransform="Uppercase"
+                       TextColor="{StaticResource Accent}" />
+                <BoxView HeightRequest="1"
+                         Color="{AppThemeBinding Light={StaticResource LightBorder},
+                                                  Dark={StaticResource DarkBorder}}" />
+            </VerticalStackLayout>
+        </DataTemplate>
+
+        <!-- GROUP template — tappable row, navigates into children -->
+        <DataTemplate x:Key="GroupNodeTemplate"
+                      x:DataType="settings:GroupSetting">
+            <Border Style="{StaticResource CardStyle}"
+                    Margin="16,0,16,6"
+                    Opacity="{Binding IsEnabled, Converter={StaticResource BoolToOpacityConverter}}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToGroupCommand, x:DataType={x:Type ContentPage}}"
+                        CommandParameter="{Binding .}" />
+                </Border.GestureRecognizers>
+
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="3">
+                        <Label Text="{Binding Title}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding
+                                   Light={StaticResource LightTextPrimary},
+                                   Dark={StaticResource DarkTextPrimary}}" />
+                        <Label Text="{Binding Subtitle}"
+                               Style="{StaticResource BodyLabelStyle}"
+                               FontSize="12"
+                               IsVisible="{Binding Subtitle,
+                                           Converter={StaticResource StringNotEmptyConverter}}" />
+                    </VerticalStackLayout>
+
+                    <!-- Chevron -->
+                    <Label Grid.Column="1"
+                           Text="›"
+                           FontSize="22"
+                           TextColor="{AppThemeBinding
+                               Light={StaticResource LightTextSecondary},
+                               Dark={StaticResource DarkTextSecondary}}"
+                           VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!-- TOGGLE template — Switch on the right -->
+        <DataTemplate x:Key="ToggleNodeTemplate"
+                      x:DataType="settings:ToggleSetting">
+            <Border Style="{StaticResource CardStyle}"
+                    Margin="16,0,16,6"
+                    Opacity="{Binding IsEnabled,
+                              Converter={StaticResource BoolToOpacityConverter}}">
+
+                <Grid ColumnDefinitions="*, Auto" ColumnSpacing="16">
+                    <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="3">
+                        <Label Text="{Binding Title}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding
+                                   Light={StaticResource LightTextPrimary},
+                                   Dark={StaticResource DarkTextPrimary}}" />
+                        <Label Text="{Binding Subtitle}"
+                               Style="{StaticResource BodyLabelStyle}"
+                               FontSize="12"
+                               IsVisible="{Binding Subtitle,
+                                           Converter={StaticResource StringNotEmptyConverter}}" />
+                    </VerticalStackLayout>
+
+                    <Switch Grid.Column="1"
+                            IsToggled="{Binding Value, Mode=TwoWay}"
+                            IsEnabled="{Binding IsEnabled}"
+                            OnColor="{StaticResource Accent}"
+                            ThumbColor="White"
+                            VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <!-- DROPDOWN template — Picker on the right -->
+        <DataTemplate x:Key="DropdownNodeTemplate"
+                      x:DataType="settings:DropDownSetting">
+            <Border Style="{StaticResource CardStyle}"
+                    Margin="16,0,16,6"
+                    Opacity="{Binding IsEnabled,
+                              Converter={StaticResource BoolToOpacityConverter}}">
+
+                <Grid RowDefinitions="Auto, Auto" RowSpacing="6">
+
+                    <!-- Title + subtitle -->
+                    <VerticalStackLayout Grid.Row="0" Spacing="3">
+                        <Label Text="{Binding Title}"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding
+                                   Light={StaticResource LightTextPrimary},
+                                   Dark={StaticResource DarkTextPrimary}}" />
+                        <Label Text="{Binding Subtitle}"
+                               Style="{StaticResource BodyLabelStyle}"
+                               FontSize="12"
+                               IsVisible="{Binding Subtitle,
+                                           Converter={StaticResource StringNotEmptyConverter}}" />
+                    </VerticalStackLayout>
+
+                    <!-- Picker on its own row so it gets full width for touch target -->
+                    <Border Grid.Row="1"
+                            StrokeShape="RoundRectangle 10"
+                            StrokeThickness="1"
+                            Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                      Dark={StaticResource DarkBorder}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground},
+                                                               Dark={StaticResource DarkBackground}}"
+                            Padding="10,0">
+                        <Picker ItemsSource="{Binding Options}"
+                                SelectedIndex="{Binding CurrentIndex, Mode=TwoWay}"
+                                IsEnabled="{Binding IsEnabled}"
+                                TextColor="{AppThemeBinding
+                                    Light={StaticResource LightTextPrimary},
+                                    Dark={StaticResource DarkTextPrimary}}"
+                                HeightRequest="40" />
+                    </Border>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        
+        <!-- Template selector -->
+        <selectors:SettingTemplateSelector x:Key="SettingSelector"
+                                           TitleTemplate="{StaticResource TitleNodeTemplate}"
+                                           GroupTemplate="{StaticResource GroupNodeTemplate}"
+                                           ToggleTemplate="{StaticResource ToggleNodeTemplate}"
+                                           DropdownTemplate="{StaticResource DropdownNodeTemplate}" />
+
+    </ContentPage.Resources>
+
+    <!-- Page layout -->
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- ROW 0: Sticky header -->
+        <Border Grid.Row="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
+                                                   Dark={StaticResource DarkCard}}"
+                StrokeThickness="0"
+                Padding="16,52,16,16">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.06" Radius="8" Offset="0,4" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="Auto, *, Auto">
+
+                <!-- Back button — visible when inside a subgroup -->
+                <Border Grid.Column="0"
+                        WidthRequest="36" HeightRequest="36"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="1"
+                        Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                  Dark={StaticResource DarkBorder}}"
+                        BackgroundColor="Transparent"
+                        IsVisible="{Binding CanGoBack}"
+                        Margin="0,0,8,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoBackCommand}" />
+                    </Border.GestureRecognizers>
+                    <Label Text="‹"
+                           FontSize="22"
+                           TextColor="{StaticResource Accent}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <!-- Title — changes when navigating into subgroups -->
+                <Label Grid.Column="1"
+                       Text="{Binding CurrentTitle}"
+                       Style="{StaticResource TitleLabelStyle}"
+                       FontSize="22"
+                       VerticalOptions="Center" />
+
+            </Grid>
+        </Border>
+
+        <!-- ROW 1: Settings list -->
+        <!--
+            ItemTemplate uses SettingTemplateSelector — no x:DataType here since
+            the CollectionView holds mixed SettingNode subtypes. Each DataTemplate
+            declares its own x:DataType for compiled bindings within its scope.
+        -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding CurrentNodes}"
+                        ItemTemplate="{StaticResource SettingSelector}"
+                        SelectionMode="None"
+                        Margin="0,8,0,0" />
+
+        <!-- ROW 2: Persistent nav bar -->
+        <v:BottomNavBar Grid.Row="2" />
+
+    </Grid>
+</colorPicker:AnimatedPage>

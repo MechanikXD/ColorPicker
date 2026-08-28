@@ -31,6 +31,7 @@ public partial class App : Application
         _ = s.GetService<PalettePage>();
         _ = s.GetService<CameraPage>();
         _ = s.GetService<HistoryPage>();
+        _ = s.GetService<SettingsPage>();
 
         _ = s.GetService<ManualColorPage>();
         _ = s.GetService<ColorScanResultPage>();

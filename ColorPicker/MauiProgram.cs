@@ -42,6 +42,7 @@ public static class MauiProgram
             builder.Services.AddSingleton<CameraPage>();
             builder.Services.AddSingleton<PalettePage>();
             builder.Services.AddSingleton<HistoryPage>();
+            builder.Services.AddSingleton<SettingsPage>();
             
             builder.Services.AddSingleton<ManualColorViewModel>();
             builder.Services.AddSingleton<ColorScanResultPage>();
@@ -54,6 +55,7 @@ public static class MauiProgram
             builder.Services.AddSingleton<PaletteViewModel>();
             builder.Services.AddSingleton<CameraViewModel>();
             builder.Services.AddSingleton<HistoryViewModel>();
+            builder.Services.AddSingleton<SettingsViewModel>();
             
             builder.Services.AddSingleton<ManualColorPage>();
             builder.Services.AddSingleton<ColorScanResultViewModel>();
