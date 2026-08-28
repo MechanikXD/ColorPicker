@@ -4,5 +4,4 @@ public interface IThemeService
 {
     ApplicationTheme CurrentTheme { get; }
     void SetTheme(ApplicationTheme newTheme);
-    void ApplySavedTheme();
 }

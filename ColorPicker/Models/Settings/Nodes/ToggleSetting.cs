@@ -1,9 +1,10 @@
 namespace ColorPicker.Models.Settings.Nodes;
 
-public class ToggleSetting : SettingNode
+public class ToggleSetting : ActiveSetting
 {
     public string Subtitle { get; init; } = "";
     
+    public required bool DefaultValue { get; init; }
     public bool Value
     {
         get;
@@ -15,5 +16,10 @@ public class ToggleSetting : SettingNode
         }
     }
 
-    public Action<bool>? OnSettingChanged { get; set; }
+    public override void SetDefaultValue() => Value = DefaultValue;
+
+    public override void SetValue(object newValue)
+    {
+        if (newValue is bool newToggleValue) Value = newToggleValue;
+    }
 }

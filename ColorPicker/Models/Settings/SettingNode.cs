@@ -6,8 +6,6 @@ namespace ColorPicker.Models.Settings;
 public abstract class SettingNode : INotifyPropertyChanged
 {
     public required string Title { get; init; }
-    public bool IsEnabled { get; set => SetField(ref field, value); } = true;
-    public virtual bool HasChangeableState => true;
     
     public event PropertyChangedEventHandler? PropertyChanged;
 

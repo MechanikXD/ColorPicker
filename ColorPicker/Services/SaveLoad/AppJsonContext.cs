@@ -10,4 +10,5 @@ namespace ColorPicker.Services.SaveLoad;
 )]
 [JsonSerializable(typeof(SerializableUserData))]
 [JsonSerializable(typeof(List<SerializableHistoryEntry>))]
+[JsonSerializable(typeof(SerializableSettings))]
 public partial class AppJsonContext : JsonSerializerContext;

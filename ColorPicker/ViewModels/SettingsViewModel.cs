@@ -1,12 +1,15 @@
 using System.Windows.Input;
 using ColorPicker.Models.Settings;
 using ColorPicker.Models.Settings.Nodes;
+using ColorPicker.Services.SaveLoad;
+using ColorPicker.Services.Settings;
 
 namespace ColorPicker.ViewModels;
 
 public class SettingsViewModel : BaseViewModel
 {
-    public static Dictionary<string, SettingNode> Settings { get; private set; } = [];
+    public const string SETTING_SAVE_LOAD_SERVICE_KEY = "settings_save_load_service_key";
+    
     private readonly Stack<(string Title, IReadOnlyList<SettingNode> Nodes)> _stack = new();
 
     public IReadOnlyList<SettingNode> CurrentNodes
@@ -19,14 +22,14 @@ public class SettingsViewModel : BaseViewModel
     {
         get;
         private set => SetField(ref field, value);
-    } = "Settings";
+    } = "settings_title";
 
     public bool CanGoBack => _stack.Count > 0;
 
     public ICommand NavigateToGroupCommand { get; }
     public ICommand GoBackCommand          { get; }
     
-    public SettingsViewModel()
+    public SettingsViewModel([FromKeyedServices(SETTING_SAVE_LOAD_SERVICE_KEY)] ISaveLoadService settingsSaveLoadService)
     {
         NavigateToGroupCommand = new Command<GroupSetting>(group =>
         {
@@ -46,22 +49,14 @@ public class SettingsViewModel : BaseViewModel
             OnPropertyChanged(nameof(CanGoBack));
         });
         
-        LoadSettings();
+        if (settingsSaveLoadService is SettingsSaveLoadService saveLoadService) LoadSettings(saveLoadService);
     }
 
-    private void LoadSettings()
+    private void LoadSettings(SettingsSaveLoadService saveLoadService)
     {
         CurrentNodes = SettingsLayout.GetLayout();
-        ParseSettingGroup(CurrentNodes, []);
-    }
-
-    private void ParseSettingGroup(IReadOnlyList<SettingNode> nodes, HashSet<GroupSetting> navigatedSet)
-    {
-        foreach (var node in nodes)
-        {
-            if (node is GroupSetting group && navigatedSet.Add(group)) ParseSettingGroup(group.Children, navigatedSet);
-            else if (node.HasChangeableState) Settings.Add(node.Title, node);
-        }
+        saveLoadService.ParseSettingGroup(CurrentNodes, []);
+        saveLoadService.Load();
     }
 
     public bool TryGoBack()

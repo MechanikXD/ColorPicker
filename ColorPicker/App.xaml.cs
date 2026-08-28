@@ -1,16 +1,14 @@
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
-using ColorPicker.Services.Theme;
 using ColorPicker.View;
 
 namespace ColorPicker;
 
 public partial class App : Application
 {
-    public App(AppShell appShell, IThemeService themeService, IEnumerable<ISaveLoadService> saveLoadServices)
+    public App(AppShell appShell, IEnumerable<ISaveLoadService> saveLoadServices)
     {
         InitializeComponent();
-        themeService.ApplySavedTheme();
         foreach (var service in saveLoadServices) service.Load();
         MainPage = appShell;
     }

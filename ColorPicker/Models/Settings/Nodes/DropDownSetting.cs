@@ -1,10 +1,12 @@
 namespace ColorPicker.Models.Settings.Nodes;
 
-public class DropDownSetting : SettingNode
+public class DropDownSetting : ActiveSetting
 {
     public string Subtitle { get; init; } = "";
     public required IReadOnlyList<string> Options { get; init; }
     
+    public required int DefaultOption { get; init; }
+
     public int CurrentIndex
     {
         get;
@@ -15,6 +17,13 @@ public class DropDownSetting : SettingNode
             OnSettingChanged?.Invoke(value);
         }
     }
+
+    public string GetCurrentOption() => Options[CurrentIndex];
     
-    public Action<int>? OnSettingChanged { get; set; }
+    public override void SetDefaultValue() => CurrentIndex = DefaultOption;
+
+    public override void SetValue(object newValue)
+    {
+        if (newValue is int newIndex) CurrentIndex = newIndex;
+    }
 }
