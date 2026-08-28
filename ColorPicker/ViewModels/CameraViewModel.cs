@@ -60,16 +60,24 @@ public class CameraViewModel : BaseViewModel
         }
         
         OnCaptureStarted?.Invoke(this, EventArgs.Empty);
-        
-        await using var imageStream = await view.CaptureImage(CancellationToken.None);
-        
-        using MemoryStream memoryStream = new();
-        await imageStream.CopyToAsync(memoryStream);
-        var imageBytes = memoryStream.ToArray();
-        
-        OnCaptureFinished?.Invoke(this, EventArgs.Empty);
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
-        await NavigateToColorScanResult(imageBytes);
+        try
+        {
+            var imageStream = await view.CaptureImage(cts.Token);
+            using MemoryStream memoryStream = new();
+            await imageStream.CopyToAsync(memoryStream, cts.Token);
+            var imageBytes = memoryStream.ToArray();
+
+            OnCaptureFinished?.Invoke(this, EventArgs.Empty);
+            await NavigateToColorScanResult(imageBytes);
+        }
+        catch (OperationCanceledException)
+        {
+            // TODO: Notify user of operation timeout.
+        }
+        
+        
         _isCapturing = false;
     }
 
