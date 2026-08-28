@@ -201,4 +201,7 @@
     <data name="history_empty_history_subtext" xml:space="preserve">
         <value>Бідь-які відскановані або комбіновані кольори з'являться тут.</value>
     </data>
+    <data name="c_combinations_accuracy" xml:space="preserve">
+        <value>Точність</value>
+    </data>
 </root>

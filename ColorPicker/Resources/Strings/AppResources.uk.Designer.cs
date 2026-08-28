@@ -410,5 +410,11 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("history_empty_history_subtext", resourceCulture);
             }
         }
+        
+        internal static string c_combinations_accuracy {
+            get {
+                return ResourceManager.GetString("c_combinations_accuracy", resourceCulture);
+            }
+        }
     }
 }
