@@ -368,5 +368,47 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("m_color_pick_color_title", resourceCulture);
             }
         }
+        
+        internal static string history_title {
+            get {
+                return ResourceManager.GetString("history_title", resourceCulture);
+            }
+        }
+        
+        internal static string history_source_scan {
+            get {
+                return ResourceManager.GetString("history_source_scan", resourceCulture);
+            }
+        }
+        
+        internal static string history_source_combination {
+            get {
+                return ResourceManager.GetString("history_source_combination", resourceCulture);
+            }
+        }
+        
+        internal static string history_entries_count_suffix {
+            get {
+                return ResourceManager.GetString("history_entries_count_suffix", resourceCulture);
+            }
+        }
+        
+        internal static string history_clear_all {
+            get {
+                return ResourceManager.GetString("history_clear_all", resourceCulture);
+            }
+        }
+        
+        internal static string history_empty_history {
+            get {
+                return ResourceManager.GetString("history_empty_history", resourceCulture);
+            }
+        }
+        
+        internal static string history_empty_history_subtext {
+            get {
+                return ResourceManager.GetString("history_empty_history_subtext", resourceCulture);
+            }
+        }
     }
 }

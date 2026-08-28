@@ -180,4 +180,25 @@
     <data name="color_default_title" xml:space="preserve">
         <value>Untitled</value>
     </data>
+    <data name="history_title" xml:space="preserve">
+        <value>History</value>
+    </data>
+    <data name="history_source_scan" xml:space="preserve">
+        <value>Scanned with camera</value>
+    </data>
+    <data name="history_source_combination" xml:space="preserve">
+        <value>Saved from combinations</value>
+    </data>
+    <data name="history_entries_count_suffix" xml:space="preserve">
+        <value>entries</value>
+    </data>
+    <data name="history_clear_all" xml:space="preserve">
+        <value>Clear all</value>
+    </data>
+    <data name="history_empty_history" xml:space="preserve">
+        <value>No history yet.</value>
+    </data>
+    <data name="history_empty_history_subtext" xml:space="preserve">
+        <value>Colors you scan or pick manually will appear here.</value>
+    </data>
 </root>

@@ -1,4 +1,4 @@
-using ColorPicker.Models.StaticData;
+using ColorPicker.Services.History;
 using ColorPicker.Services.Localization;
 using ColorPicker.Services.Palette;
 using ColorPicker.Services.SaveLoad;
@@ -32,13 +32,16 @@ public static class MauiProgram
             // Register Services
             builder.Services.AddSingleton<IThemeService, ThemeService>();
             builder.Services.AddSingleton<IPaletteService, PaletteService>();
-            builder.Services.AddKeyedSingleton<ISaveLoadService, PaletteSaveLoadService>(KeyedServices.PALETTE_SAVE_LOAD);
-            builder.Services.AddKeyedSingleton<ISaveLoadService, LocalizationSaveLoadService>(KeyedServices.LOCALIZATION_SAVE_LOAD);
+            builder.Services.AddSingleton<IHistoryService, HistoryService>();
+            builder.Services.AddSingleton<ISaveLoadService, PaletteSaveLoadService>();
+            builder.Services.AddSingleton<ISaveLoadService, LocalizationSaveLoadService>();
+            builder.Services.AddSingleton<ISaveLoadService, HistorySaveLoadService>();
 
             // Register ViewModels
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<CameraPage>();
             builder.Services.AddSingleton<PalettePage>();
+            builder.Services.AddSingleton<HistoryPage>();
             
             builder.Services.AddSingleton<ManualColorViewModel>();
             builder.Services.AddSingleton<ColorScanResultPage>();
@@ -50,10 +53,12 @@ public static class MauiProgram
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<PaletteViewModel>();
             builder.Services.AddSingleton<CameraViewModel>();
-            builder.Services.AddSingleton<ColorCombinationsPanel>();
+            builder.Services.AddSingleton<HistoryViewModel>();
+            
             builder.Services.AddSingleton<ManualColorPage>();
             builder.Services.AddSingleton<ColorScanResultViewModel>();
             builder.Services.AddSingleton<BottomNavBar>();
+            builder.Services.AddSingleton<ColorCombinationsPanel>();
             builder.Services.AddSingleton<PromptViewModel>();
             
 #if DEBUG

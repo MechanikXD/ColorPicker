@@ -2,6 +2,7 @@ using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Resources.Strings;
+using ColorPicker.Services.Color;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
 
@@ -189,10 +190,11 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
 
         CurrentColor = color;
         HexInput = color.ToHex();
-            
-        _hue = color.GetHue() * 360.0; // Normalized to 0-360 range for display/sliders
-        _saturation = GetHsvSaturation(color);
-        _value = GetValue(color); // Correctly returns 0.0 - 1.0
+
+        var (h, s, v) = color.ToHsv();
+        _hue = h;
+        _saturation = s;
+        _value = v;
 
         UpdateAllProperties(notifyHsv: true, notifyRgb: false);
     }
@@ -222,14 +224,15 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         HexInput = color.ToHex();
             
         _hue = color.GetHue() * 360.0;
-        _saturation = GetHsvSaturation(color);
-        _value = GetValue(color);
+        _saturation = color.GetHsvSaturation();
+        _value = color.GetHsvValue();
                 
         // Set initial scale to 0-255
         _red = Math.Round(color.Red * 255.0);
         _green = Math.Round(color.Green * 255.0);
         _blue = Math.Round(color.Blue * 255.0);
         UpdateAllProperties(notifyHsv: true, notifyRgb: true);
+        CombinationsPanel?.IsExpanded = false;
     }
 
     private void UpdateAllProperties(bool notifyHsv, bool notifyRgb)
@@ -252,17 +255,5 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         }
 
         if (ShowCombinationsPanel) CombinationsPanel?.TargetColor = CurrentColor;
-    }
-
-    private static double GetValue(Color color) => Math.Max(color.Red, Math.Max(color.Green, color.Blue));
-    
-    private static double GetHsvSaturation(Color color)
-    {
-        double max = Math.Max(color.Red, Math.Max(color.Green, color.Blue));
-        double min = Math.Min(color.Red, Math.Min(color.Green, color.Blue));
-    
-        if (max == 0) return 0;
-    
-        return (max - min) / max;
     }
 }

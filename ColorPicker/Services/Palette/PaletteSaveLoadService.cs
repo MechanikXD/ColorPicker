@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.SaveLoad.Defaults;
@@ -55,11 +54,3 @@ public class PaletteSaveLoadService : ISaveLoadService
         if (loadDefault) LoadDefault();
     }
 }
-
-[JsonSourceGenerationOptions(
-    WriteIndented = false,
-    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase
-)]
-[JsonSerializable(typeof(SerializableUserData))]
-public partial class AppJsonContext : JsonSerializerContext;

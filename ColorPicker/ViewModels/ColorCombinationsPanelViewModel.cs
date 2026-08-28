@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.History;
 using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Color;
+using ColorPicker.Services.History;
 using ColorPicker.Services.Palette;
 
 namespace ColorPicker.ViewModels;
@@ -10,6 +12,7 @@ namespace ColorPicker.ViewModels;
 public class ColorCombinationsPanelViewModel : BaseViewModel
 {
     private readonly IPaletteService _paletteService;
+    private readonly IHistoryService _historyService;
     
     public bool IsExpanded
     {
@@ -37,9 +40,10 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
     public ICommand ToggleExpandCommand { get; }
     public ICommand RefreshCommand { get; }
 
-    public ColorCombinationsPanelViewModel(IPaletteService paletteService)
+    public ColorCombinationsPanelViewModel(IPaletteService paletteService, IHistoryService historyService)
     {
         _paletteService = paletteService;
+        _historyService = historyService;
         RefreshCommand = new Command(async void (_) => await LoadCombinations());
         ToggleExpandCommand = new Command(async void (_) => await ToggleIsExpanded());
         UpdateCombinationsCount();
@@ -61,6 +65,7 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         var combinations = await ColorCombinationService.GetCombinationsAsync(TargetColor, _paletteService.CurrentPalette);
         foreach (var combination in combinations) Combinations.Add(combination);
         _combinationsLoadedForColor = TargetColor;
+        _historyService.CreateNewEntry(TargetColor, HistoryEntrySource.Combination);
         IsLoading = false;
     }
 

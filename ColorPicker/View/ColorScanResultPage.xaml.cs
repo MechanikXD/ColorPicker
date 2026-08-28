@@ -9,4 +9,10 @@ public partial class ColorScanResultPage : AnimatedPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+    {
+        if (BindingContext is ColorScanResultViewModel vm) vm.SaveScannedColorToHistory();
+        base.OnNavigatedFrom(args);
+    }
 }

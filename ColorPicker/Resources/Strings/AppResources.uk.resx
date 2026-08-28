@@ -180,4 +180,25 @@
     <data name="m_color_pick_color_title" xml:space="preserve">
         <value>Обрати колір</value>
     </data>
+    <data name="history_title" xml:space="preserve">
+        <value>Історія</value>
+    </data>
+    <data name="history_source_scan" xml:space="preserve">
+        <value>Відскановано камерою</value>
+    </data>
+    <data name="history_source_combination" xml:space="preserve">
+        <value>Збережено з комбінацій</value>
+    </data>
+    <data name="history_entries_count_suffix" xml:space="preserve">
+        <value>записів</value>
+    </data>
+    <data name="history_clear_all" xml:space="preserve">
+        <value>Очистити</value>
+    </data>
+    <data name="history_empty_history" xml:space="preserve">
+        <value>Історія вудсутня</value>
+    </data>
+    <data name="history_empty_history_subtext" xml:space="preserve">
+        <value>Бідь-які відскановані або комбіновані кольори з'являться тут.</value>
+    </data>
 </root>

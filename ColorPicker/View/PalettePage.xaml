@@ -5,7 +5,6 @@
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:models="clr-namespace:ColorPicker.Models.Colors"
              xmlns:colorPicker="clr-namespace:ColorPicker"
-             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.PalettePage"
              x:DataType="vm:PaletteViewModel"
@@ -212,12 +211,6 @@
                                         </MultiBinding>
                                     </Label.Text>
                                 </Label>
-                                <!-- HSV via converter — placeholder label until converter exists -->
-                                <Label Text="{Binding Name}"
-                                       FontSize="11"
-                                       Style="{StaticResource BodyLabelStyle}"
-                                       IsVisible="{Binding Name,
-                                                   Converter={StaticResource StringNotEmptyConverter}}" />
                             </VerticalStackLayout>
 
                             <!-- Edit button -->
