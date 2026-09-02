@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:m="clr-namespace:ColorPicker.Models.Colors"
-             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
-             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.ColorCombinationsPanel"
              x:DataType="vm:ColorCombinationsPanelViewModel"
              VerticalOptions="End">
@@ -40,7 +38,7 @@
                              Color="{AppThemeBinding Light={StaticResource LightBorder},
                                                       Dark={StaticResource DarkBorder}}"
                              HorizontalOptions="Start" />
-                    <Label Text="{localization:Translate c_combinations_title}"
+                    <Label Text="{Binding LocalizedTitle}"
                            FontSize="13" FontAttributes="Bold"
                            TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                        Dark={StaticResource DarkTextPrimary}}" />
@@ -74,7 +72,7 @@
                            VerticalOptions="Center" />
 
                     <Button Grid.Column="1"
-                            Text="{localization:Translate c_combinations_refresh}"
+                            Text="{Binding LocalizedRefresh}"
                             Style="{StaticResource OutlineButtonStyle}"
                             HeightRequest="32" WidthRequest="80"
                             FontSize="12"
@@ -98,7 +96,7 @@
                                          BindableLayout.ItemsSource="{Binding Combinations}">
 
                         <BindableLayout.EmptyView>
-                            <Label Text="{localization:Translate c_combinations_empty}"
+                            <Label Text="{Binding LocalizedEmpty}"
                                    Style="{StaticResource BodyLabelStyle}"
                                    HorizontalOptions="Center"
                                    HorizontalTextAlignment="Center"

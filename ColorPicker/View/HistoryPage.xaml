@@ -6,7 +6,6 @@
     xmlns:vm="clr-namespace:ColorPicker.ViewModels"
     xmlns:m="clr-namespace:ColorPicker.Models.History"
     xmlns:colorPicker="clr-namespace:ColorPicker"
-    xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
     x:Class="ColorPicker.View.HistoryPage"
     x:DataType="vm:HistoryViewModel"
     Shell.NavBarIsVisible="False">
@@ -26,7 +25,7 @@
             <Grid ColumnDefinitions="*, Auto">
 
                 <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="1">
-                    <Label Text="{localization:Translate history_title}"
+                    <Label Text="{Binding LocalizedTitle}"
                            Style="{StaticResource TitleLabelStyle}"
                            FontSize="26" />
                     <Label Text="{Binding EntriesCountString}"
@@ -36,7 +35,7 @@
 
                 <!-- Clear all — visible only when list has entries -->
                 <Button Grid.Column="1"
-                        Text="{localization:Translate history_clear_all}"
+                        Text="{Binding LocalizedClearAll}"
                         BackgroundColor="Transparent"
                         TextColor="#EF4444"
                         FontSize="13"
@@ -59,11 +58,11 @@
                                      HorizontalOptions="Center"
                                      Spacing="10"
                                      Padding="32">
-                    <Label Text="{localization:Translate history_empty_history}"
+                    <Label Text="{Binding LocalizedEmpty}"
                            Style="{StaticResource TitleLabelStyle}"
                            FontSize="17"
                            HorizontalOptions="Center" />
-                    <Label Text="{localization:Translate history_empty_history_subtext}"
+                    <Label Text="{Binding LocalizedEmptySubtext}"
                            Style="{StaticResource BodyLabelStyle}"
                            HorizontalOptions="Center"
                            HorizontalTextAlignment="Center" />

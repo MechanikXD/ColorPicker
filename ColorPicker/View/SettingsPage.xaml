@@ -33,8 +33,7 @@
         <DataTemplate x:Key="GroupNodeTemplate"
                       x:DataType="settings:GroupSetting">
             <Border Style="{StaticResource CardStyle}"
-                    Margin="16,0,16,6"
-                    Opacity="{Binding IsEnabled, Converter={StaticResource BoolToOpacityConverter}}">
+                    Margin="16,0,16,6">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer
                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.NavigateToGroupCommand, x:DataType={x:Type ContentPage}}"

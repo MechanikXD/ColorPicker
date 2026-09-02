@@ -5,7 +5,9 @@ using ColorPicker.Models.History;
 using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Color;
 using ColorPicker.Services.History;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Palette;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -47,13 +49,15 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         RefreshCommand = new Command(async void (_) => await LoadCombinations());
         ToggleExpandCommand = new Command(async void (_) => await ToggleIsExpanded());
         UpdateCombinationsCount();
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     private void UpdateCombinationsCount()
     {
         if (_lastCombinationsCount == Combinations.Count) return;
         _lastCombinationsCount = Combinations.Count;
-        CombinationsCountText = $"{_lastCombinationsCount} {AppResources.c_combinations_count}";
+        CombinationsCountText = $"{Combinations.Count} {AppResources.c_combinations_count}";
     }
 
     private async Task LoadCombinations()
@@ -74,5 +78,16 @@ public class ColorCombinationsPanelViewModel : BaseViewModel
         var opening = !IsExpanded;
         IsExpanded = opening;
         if (opening && !Equals(_combinationsLoadedForColor, TargetColor)) await LoadCombinations();
+    }
+
+    public string LocalizedTitle => AppResources.c_combinations_title;
+    public string LocalizedRefresh => AppResources.c_combinations_refresh;
+    public string LocalizedEmpty => AppResources.c_combinations_empty;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedTitle));
+        OnPropertyChanged(nameof(LocalizedRefresh));
+        OnPropertyChanged(nameof(LocalizedEmpty));
     }
 }

@@ -4,8 +4,10 @@ using ColorPicker.Models.History;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Resources.Strings;
 using ColorPicker.Services.History;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
+using CommunityToolkit.Mvvm.Messaging;
 using SkiaSharp;
 
 namespace ColorPicker.ViewModels;
@@ -92,6 +94,8 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
         
         RetakeCommand = new Command( async void (_) => { await ShellNavigationService.GoToPageAsync(Pages.Main.Camera); });
         SaveToPaletteCommand = new Command(_ => { ShowSaveToPalettePrompt(); });
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     public void SaveScannedColorToHistory() => _historyService.CreateNewEntry(SampledColor, HistoryEntrySource.Scan);
@@ -282,5 +286,32 @@ public class ColorScanResultViewModel : BaseViewModel, IQueryAttributable
             rInv * R_WEIGHT, rInv * G_WEIGHT, rInv * B_WEIGHT + s, 0, 0,
             0, 0, 0, 1, 0
         ];
+    }
+
+    public string LocalizedRetake => AppResources.button_retake;
+    public string LocalizedTitle => AppResources.c_scan_title;
+    public string LocalizedSave => AppResources.button_save;
+    public string LocalizedSampledColor => AppResources.c_scan_sampled_color;
+    public string LocalizedAdjust => AppResources.c_scan_adjust;
+    public string LocalizedBrightness => AppResources.value_brightness;
+    public string LocalizedContrast => AppResources.value_contrast;
+    public string LocalizedSaturation => AppResources.value_saturation;
+    public string LocalizedRed => AppResources.value_red;
+    public string LocalizedGreen => AppResources.value_green;
+    public string LocalizedBlue => AppResources.value_blue;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedRetake));
+        OnPropertyChanged(nameof(LocalizedTitle));
+        OnPropertyChanged(nameof(LocalizedSave));
+        OnPropertyChanged(nameof(LocalizedSampledColor));
+        OnPropertyChanged(nameof(LocalizedAdjust));
+        OnPropertyChanged(nameof(LocalizedBrightness));
+        OnPropertyChanged(nameof(LocalizedContrast));
+        OnPropertyChanged(nameof(LocalizedSaturation));
+        OnPropertyChanged(nameof(LocalizedRed));
+        OnPropertyChanged(nameof(LocalizedGreen));
+        OnPropertyChanged(nameof(LocalizedBlue));
     }
 }

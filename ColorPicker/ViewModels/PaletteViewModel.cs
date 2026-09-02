@@ -3,8 +3,10 @@ using System.Windows.Input;
 using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Resources.Strings;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -62,6 +64,8 @@ public class PaletteViewModel : BaseViewModel
         AddColorFromCameraCommand = new Command(GoToCamera);
         EditColorCommand = new Command<ColorSwatch>(EditColor);
         DeleteColorCommand = new Command<ColorSwatch>(DeleteColor);
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     private void AddPalette()
@@ -159,5 +163,22 @@ public class PaletteViewModel : BaseViewModel
         PaletteNames = AllPalettes.Select(p => p.Title).ToList();
         OnPropertyChanged(nameof(PaletteNames));
         CurrentPaletteIndex = _paletteService.CurrentPaletteIndex;
+    }
+
+    public string LocalizedSelect => AppResources.palettes_select;
+    public string LocalizedCurrent => AppResources.palettes_current;
+    public string LocalizedManual => AppResources.palettes_button_manual;
+    public string LocalizedCamera => AppResources.palettes_button_camera;
+    public string LocalizedEmpty => AppResources.palettes_empty;
+    public string LocalizedEmptySubtext => AppResources.palettes_empty_subtext;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedSelect));
+        OnPropertyChanged(nameof(LocalizedCurrent));
+        OnPropertyChanged(nameof(LocalizedManual));
+        OnPropertyChanged(nameof(LocalizedCamera));
+        OnPropertyChanged(nameof(LocalizedEmpty));
+        OnPropertyChanged(nameof(LocalizedEmptySubtext));
     }
 }

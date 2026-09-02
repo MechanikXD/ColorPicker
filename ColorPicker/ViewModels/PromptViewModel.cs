@@ -1,5 +1,7 @@
 using System.Windows.Input;
 using ColorPicker.Resources.Strings;
+using ColorPicker.Services.Localization;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -68,6 +70,8 @@ public class PromptViewModel : BaseViewModel
     {
         ConfirmCommand = new Command(Confirm);
         CancelCommand = new Command(Dismiss);
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     private void Confirm()
@@ -104,5 +108,12 @@ public class PromptViewModel : BaseViewModel
         IsDestructive = isDestructive;
         _onConfirm = onConfirm;
         IsVisible = true;
+    }
+
+    public string LocalizedCancel => AppResources.button_cancel;
+
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedCancel));
     }
 }

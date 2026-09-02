@@ -1,7 +1,10 @@
 using System.Windows.Input;
 using ColorPicker.Models.StaticData;
+using ColorPicker.Resources.Strings;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -25,6 +28,8 @@ public class CameraViewModel : BaseViewModel
     {
         CaptureCommand = new Command<CameraView>(async void (view) => { await PassImage(view); });
         FlipCameraCommand = new Command<CameraView>(async void (view) => { await FlipCamera(view); });
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     private async Task FlipCamera(CameraView? view)
@@ -85,5 +90,12 @@ public class CameraViewModel : BaseViewModel
     {
         var navigationParameters = new Dictionary<string, object> { [QueryAttributes.IMAGE_BYTES] = image };
         await ShellNavigationService.GoToSubPageAsync(Pages.Sub.ColorScanResult, navigationParameters);
+    }
+
+    public string LocalizedCameraProcessing => AppResources.camera_processing;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedCameraProcessing));
     }
 }

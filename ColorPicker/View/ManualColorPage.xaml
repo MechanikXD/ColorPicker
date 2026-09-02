@@ -5,8 +5,6 @@
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:c="clr-namespace:ColorPicker.Services.Converters"
              xmlns:colorPicker="clr-namespace:ColorPicker"
-             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
-             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.ManualColorPage"
              x:DataType="vm:ManualColorViewModel"
              x:Name="ThisPage"
@@ -45,7 +43,7 @@
         <!-- Top action bar -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,8">
             <Button Grid.Column="0"
-                    Text="{localization:Translate button_cancel}"
+                    Text="{Binding LocalizedCancel}"
                     Style="{StaticResource OutlineButtonStyle}"
                     HeightRequest="38"
                     Command="{Binding CancelCommand}" />
@@ -59,7 +57,7 @@
 
             <!-- Add mode: "Add" button saves to palette -->
             <Button Grid.Column="2"
-                    Text="{localization:Translate button_add}"
+                    Text="{Binding LocalizedAdd}"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
                     IsVisible="{Binding IsEditMode,
@@ -68,7 +66,7 @@
 
             <!-- Edit mode: "Save" button confirms the change -->
             <Button Grid.Column="2"
-                    Text="{localization:Translate button_save}"
+                    Text="{Binding LocalizedSave}"
                     Style="{StaticResource AccentButtonStyle}"
                     HeightRequest="38" WidthRequest="80"
                     IsVisible="{Binding IsEditMode}"
@@ -103,7 +101,7 @@
                            TextColor="White"
                            HorizontalOptions="Center"
                            Opacity="0.9" />
-                    <Label Text="{localization:Translate m_color_copy}"
+                    <Label Text="{Binding LocalizedCopy}"
                            FontSize="11"
                            TextColor="White"
                            HorizontalOptions="Center"
@@ -190,7 +188,7 @@
                         <!-- Hue -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_hue}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedHue}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Hue, StringFormat='{0:F0}°'}"
                                        Style="{StaticResource BodyLabelStyle}" />
@@ -206,7 +204,7 @@
                         <!-- Saturation -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_saturation}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedSaturation}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Saturation, StringFormat='{0:P0}'}"
                                        Style="{StaticResource BodyLabelStyle}" />
@@ -222,7 +220,7 @@
                         <!-- Value (brightness in HSV) -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_value}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedValue}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Value, StringFormat='{0:P0}'}"
                                        Style="{StaticResource BodyLabelStyle}" />
@@ -248,7 +246,7 @@
                         <!-- Red -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_red}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedRed}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Red, StringFormat='{0:F0}'}"
                                        Style="{StaticResource BodyLabelStyle}" />
@@ -261,7 +259,7 @@
                         <!-- Green -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_green}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedGreen}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Green, StringFormat='{0:F0}'}"
                                        Style="{StaticResource BodyLabelStyle}" />
@@ -274,7 +272,7 @@
                         <!-- Blue -->
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="{localization:Translate value_blue}" Style="{StaticResource BodyLabelStyle}" />
+                                <Label Text="{Binding LocalizedBlue}" Style="{StaticResource BodyLabelStyle}" />
                                 <Label Grid.Column="1"
                                        Text="{Binding Blue, StringFormat='{0:F0}'}"
                                        Style="{StaticResource BodyLabelStyle}" />

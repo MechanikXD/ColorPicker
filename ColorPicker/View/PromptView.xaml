@@ -78,7 +78,7 @@
                 <Grid ColumnDefinitions="*, 12, *" ColumnSpacing="0">
 
                     <Button Grid.Column="0"
-                            Text="{localization:Translate button_cancel}"
+                            Text="{Binding LocalizedCancel}"
                             Style="{StaticResource OutlineButtonStyle}"
                             Command="{Binding CancelCommand}" />
 
