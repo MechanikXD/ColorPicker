@@ -12,6 +12,8 @@ namespace ColorPicker.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
+    private ISuggestionService _suggestionService; 
+        
     public Color RandomPreviewColor
     {
         get;
@@ -23,8 +25,9 @@ public class MainViewModel : BaseViewModel
     public ICommand OpenManualColorCommand { get; }
     public ICommand DismissMessageCommand { get; }
 
-    public MainViewModel()
+    public MainViewModel(ISuggestionService suggestionService)
     {
+        _suggestionService = suggestionService;
         OpenManualColorCommand = new Command(NavigateToManualColorSelection);
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
         
@@ -41,10 +44,10 @@ public class MainViewModel : BaseViewModel
         });
     }
     
-    private void LoadMessages()
+    private async void LoadMessages()
     {
         Messages.Clear();
-        foreach (var suggestion in SuggestionService.GetSuggestions()) Messages.Add(suggestion);
+        foreach (var suggestion in await _suggestionService.GetSuggestions()) Messages.Add(suggestion);
     }
 
     private void DismissMessage(SuggestionMessage target) => Messages.Remove(target);
@@ -72,5 +75,6 @@ public class MainViewModel : BaseViewModel
         OnPropertyChanged(nameof(LocalizedSuggestions));
         OnPropertyChanged(nameof(LocalizedSuggestionsEmpty));
         OnPropertyChanged(nameof(LocalizedSuggestionsEmptySubtext));
+        LoadMessages();
     }
 }

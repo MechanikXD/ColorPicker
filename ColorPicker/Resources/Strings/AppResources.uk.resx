@@ -243,4 +243,46 @@
     <data name="settings_title" xml:space="preserve">
         <value>Налаштування</value>
     </data>
+    <data name="suggestions_few_colors_body" xml:space="preserve">
+        <value>Одна з палітр має дуже мало кольорів.</value>
+    </data>
+    <data name="suggestions_few_colors_title" xml:space="preserve">
+        <value>Замало Кольорів у Палітрі</value>
+    </data>
+    <data name="suggestions_few_palettes_body" xml:space="preserve">
+        <value>Знайдено лишу одну палітру. Але може бути більше!</value>
+    </data>
+    <data name="suggestions_few_palettes_title" xml:space="preserve">
+        <value>Лише одна Палітра</value>
+    </data>
+    <data name="suggestions_long_history_body" xml:space="preserve">
+        <value>Історія має дуже багато записів. Рекомендовано іноді чистити історію.</value>
+    </data>
+    <data name="suggestions_long_history_title" xml:space="preserve">
+        <value>Завелика Історія Кольорів</value>
+    </data>
+    <data name="suggestions_low_combination_step_body" xml:space="preserve">
+        <value>Малий крок змішування кольорів можу зменшити швидкість обробки комбінацій.</value>
+    </data>
+    <data name="suggestions_low_combination_step_title" xml:space="preserve">
+        <value>Малий Крок Змішування Кольорів</value>
+    </data>
+    <data name="suggestions_no_camera_permission_body" xml:space="preserve">
+        <value>Додаток не має дозволу на користування камерою!</value>
+    </data>
+    <data name="suggestions_no_camera_permission_title" xml:space="preserve">
+        <value>Відсутній доступ до камери.</value>
+    </data>
+    <data name="suggestions_no_colors_body" xml:space="preserve">
+        <value>Одна з палітр не має жодного кольору.</value>
+    </data>
+    <data name="suggestions_no_colors_title" xml:space="preserve">
+        <value>Відсутні кольори у Палітрі.</value>
+    </data>
+    <data name="suggestions_no_palettes_body" xml:space="preserve">
+        <value>Не знайдено жодної палітри. Комбінування та додавання кольорів буде недоступним.</value>
+    </data>
+    <data name="suggestions_no_palettes_title" xml:space="preserve">
+        <value>Відсутні палітри.</value>
+    </data>
 </root>

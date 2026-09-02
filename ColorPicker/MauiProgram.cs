@@ -1,9 +1,9 @@
 using ColorPicker.Services.History;
-using ColorPicker.Services.Localization;
 using ColorPicker.Services.Palette;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Settings;
-using ColorPicker.Services.Theme;
+using ColorPicker.Services.Suggestions;
+using ColorPicker.Services.Suggestions.SuggestionProviders;
 using ColorPicker.View;
 using ColorPicker.ViewModels;
 using CommunityToolkit.Maui;
@@ -31,6 +31,10 @@ public static class MauiProgram
             builder.Services.AddSingleton<AppShell>();
         
             // Register Services
+            builder.Services.AddSingleton<ISuggestionProvider, PaletteSuggestionProvider>();
+            builder.Services.AddSingleton<ISuggestionProvider, HistorySuggestionProvider>();
+            builder.Services.AddSingleton<ISuggestionProvider, SystemSuggestionProvider>();
+            builder.Services.AddSingleton<ISuggestionService, SuggestionService>();
             builder.Services.AddSingleton<IPaletteService, PaletteService>();
             builder.Services.AddSingleton<IHistoryService, HistoryService>();
             builder.Services.AddSingleton<ISaveLoadService, PaletteSaveLoadService>();

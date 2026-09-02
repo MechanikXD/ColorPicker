@@ -4,6 +4,8 @@ namespace ColorPicker.Services.SaveLoad.Defaults;
 
 public static class DefaultUserPalette
 {
+    public const string DEFAULT_PALETTE_TITLE = "Default";
+    
     public static SerializableUserData UserData { get; } = new()
     {
         ActivePaletteIndex = 0,
@@ -11,7 +13,7 @@ public static class DefaultUserPalette
         [
             new SerializablePalette
             {
-                Name = "Default",
+                Name = DEFAULT_PALETTE_TITLE,
                 Colors = [new SerializableColor
                 {
                     Hex = "#000000",
