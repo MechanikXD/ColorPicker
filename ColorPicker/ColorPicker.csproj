@@ -9,12 +9,20 @@
         <OutputType>Exe</OutputType>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <ApplicationTitle>Coloor</ApplicationTitle>
         <ApplicationId>com.companyname.ColorPicker</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 
         <TrimMode>full</TrimMode>
     </PropertyGroup>
+
+    <ItemGroup>
+      <MauiIcon Include="Resources\Images\appicon.svg"
+                ForegroundFile="Resources\Images\appicon.svg"
+                Color="#FFFFFF"
+                ForegroundScale="0.65" />
+    </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Resources\Styles\" />
