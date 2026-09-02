@@ -11,9 +11,9 @@ public static class LocalizationService
 
     private static readonly Dictionary<string, string> CultureCodeProxy = new()
     {
-        ["System"] = "",
+        [AppResources.setting_option_system] = "",
         ["English"] = "en",
-        ["Ukrainian"] = "uk"
+        ["Українська"] = "uk"
     };
 
     public static void Initialize()
