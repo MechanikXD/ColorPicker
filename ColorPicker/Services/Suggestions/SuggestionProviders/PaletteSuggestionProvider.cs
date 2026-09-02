@@ -1,4 +1,3 @@
-using ColorPicker.Models.Settings;
 using ColorPicker.Models.Suggestion;
 using ColorPicker.Services.Palette;
 
