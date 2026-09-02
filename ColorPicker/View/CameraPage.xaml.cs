@@ -32,7 +32,7 @@ public partial class CameraPage : AnimatedPage
         LiveCamera.StopCameraPreview();
     }
     
-    private async Task<bool> HasValidCameraPermission()
+    public async Task<bool> HasValidCameraPermission()
     {
         var permissionStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
         if (permissionStatus is PermissionStatus.Disabled or PermissionStatus.Restricted or PermissionStatus.Denied)

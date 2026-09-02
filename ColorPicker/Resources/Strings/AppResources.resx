@@ -243,4 +243,46 @@
     <data name="setting_color_settings_group" xml:space="preserve">
         <value>Color Settings</value>
     </data>
+    <data name="suggestions_no_palettes_title" xml:space="preserve">
+        <value>No Palette</value>
+    </data>
+    <data name="suggestions_no_palettes_body" xml:space="preserve">
+        <value>You have no palettes. Color combination will be unavailable. </value>
+    </data>
+    <data name="suggestions_few_palettes_title" xml:space="preserve">
+        <value>Only one Palette</value>
+    </data>
+    <data name="suggestions_few_palettes_body" xml:space="preserve">
+        <value>You have only one palette. You can have more!</value>
+    </data>
+    <data name="suggestions_no_colors_title" xml:space="preserve">
+        <value>Empty Colors in Palette</value>
+    </data>
+    <data name="suggestions_no_colors_body" xml:space="preserve">
+        <value>One of your palettes has no colors in it!</value>
+    </data>
+    <data name="suggestions_few_colors_title" xml:space="preserve">
+        <value>Few Colors in a Palette</value>
+    </data>
+    <data name="suggestions_few_colors_body" xml:space="preserve">
+        <value>One of your palettes has too few colors to work with</value>
+    </data>
+    <data name="suggestions_low_combination_step_title" xml:space="preserve">
+        <value>Small Color Combination Step</value>
+    </data>
+    <data name="suggestions_low_combination_step_body" xml:space="preserve">
+        <value>Small combination step will impact combination processing speed.</value>
+    </data>
+    <data name="suggestions_long_history_title" xml:space="preserve">
+        <value>Long History List</value>
+    </data>
+    <data name="suggestions_long_history_body" xml:space="preserve">
+        <value>History has a lange amount of records. It is recommended to sometimes clear history.</value>
+    </data>
+    <data name="suggestions_no_camera_permission_title" xml:space="preserve">
+        <value>No Camera Permission</value>
+    </data>
+    <data name="suggestions_no_camera_permission_body" xml:space="preserve">
+        <value>Application has no camera permission</value>
+    </data>
 </root>

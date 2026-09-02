@@ -4,5 +4,5 @@ namespace ColorPicker.Services.Suggestions;
 
 public interface ISuggestionService
 {
-    public IReadOnlyList<SuggestionMessage> GetSuggestions();
+    public Task<IReadOnlyList<SuggestionMessage>> GetSuggestions();
 }

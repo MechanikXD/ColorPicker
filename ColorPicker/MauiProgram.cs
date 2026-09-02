@@ -32,6 +32,8 @@ public static class MauiProgram
         
             // Register Services
             builder.Services.AddSingleton<ISuggestionProvider, PaletteSuggestionProvider>();
+            builder.Services.AddSingleton<ISuggestionProvider, HistorySuggestionProvider>();
+            builder.Services.AddSingleton<ISuggestionProvider, SystemSuggestionProvider>();
             builder.Services.AddSingleton<ISuggestionService, SuggestionService>();
             builder.Services.AddSingleton<IPaletteService, PaletteService>();
             builder.Services.AddSingleton<IHistoryService, HistoryService>();

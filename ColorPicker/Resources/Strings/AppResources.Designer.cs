@@ -494,5 +494,89 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("setting_color_settings_group", resourceCulture);
             }
         }
+        
+        internal static string suggestions_no_palettes_title {
+            get {
+                return ResourceManager.GetString("suggestions_no_palettes_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_no_palettes_body {
+            get {
+                return ResourceManager.GetString("suggestions_no_palettes_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_few_palettes_title {
+            get {
+                return ResourceManager.GetString("suggestions_few_palettes_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_few_palettes_body {
+            get {
+                return ResourceManager.GetString("suggestions_few_palettes_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_no_colors_title {
+            get {
+                return ResourceManager.GetString("suggestions_no_colors_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_no_colors_body {
+            get {
+                return ResourceManager.GetString("suggestions_no_colors_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_few_colors_title {
+            get {
+                return ResourceManager.GetString("suggestions_few_colors_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_few_colors_body {
+            get {
+                return ResourceManager.GetString("suggestions_few_colors_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_low_combination_step_title {
+            get {
+                return ResourceManager.GetString("suggestions_low_combination_step_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_low_combination_step_body {
+            get {
+                return ResourceManager.GetString("suggestions_low_combination_step_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_long_history_title {
+            get {
+                return ResourceManager.GetString("suggestions_long_history_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_long_history_body {
+            get {
+                return ResourceManager.GetString("suggestions_long_history_body", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_no_camera_permission_title {
+            get {
+                return ResourceManager.GetString("suggestions_no_camera_permission_title", resourceCulture);
+            }
+        }
+        
+        internal static string suggestions_no_camera_permission_body {
+            get {
+                return ResourceManager.GetString("suggestions_no_camera_permission_body", resourceCulture);
+            }
+        }
     }
 }

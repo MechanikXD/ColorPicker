@@ -41,10 +41,10 @@ public class MainViewModel : BaseViewModel
         });
     }
     
-    private void LoadMessages(IReadOnlyList<SuggestionMessage> suggestions)
+    private async void LoadMessages(Task<IReadOnlyList<SuggestionMessage>> suggestionsTask)
     {
         Messages.Clear();
-        foreach (var suggestion in suggestions) Messages.Add(suggestion);
+        foreach (var suggestion in await suggestionsTask) Messages.Add(suggestion);
     }
 
     private void DismissMessage(SuggestionMessage target) => Messages.Remove(target);

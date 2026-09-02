@@ -11,10 +11,10 @@ public class SuggestionService : ISuggestionService
         _providers = providers;
     }
     
-    public IReadOnlyList<SuggestionMessage> GetSuggestions()
+    public async Task<IReadOnlyList<SuggestionMessage>> GetSuggestions()
     {
         var result = new List<SuggestionMessage>();
-        foreach (var provider in _providers) result.AddRange(provider.GetSuggestions());
+        foreach (var provider in _providers) result.AddRange(await provider.GetSuggestions());
         return result;
     }
 }
