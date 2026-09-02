@@ -23,13 +23,13 @@ public class MainViewModel : BaseViewModel
     public ICommand OpenManualColorCommand { get; }
     public ICommand DismissMessageCommand { get; }
 
-    public MainViewModel()
+    public MainViewModel(ISuggestionService suggestionService)
     {
         OpenManualColorCommand = new Command(NavigateToManualColorSelection);
         DismissMessageCommand = new Command<SuggestionMessage>(DismissMessage);
         
         WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
-        LoadMessages();
+        LoadMessages(suggestionService.GetSuggestions());
     }
 
     private async void NavigateToManualColorSelection()
@@ -41,10 +41,10 @@ public class MainViewModel : BaseViewModel
         });
     }
     
-    private void LoadMessages()
+    private void LoadMessages(IReadOnlyList<SuggestionMessage> suggestions)
     {
         Messages.Clear();
-        foreach (var suggestion in SuggestionService.GetSuggestions()) Messages.Add(suggestion);
+        foreach (var suggestion in suggestions) Messages.Add(suggestion);
     }
 
     private void DismissMessage(SuggestionMessage target) => Messages.Remove(target);

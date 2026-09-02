@@ -2,10 +2,19 @@ using ColorPicker.Models.Suggestion;
 
 namespace ColorPicker.Services.Suggestions;
 
-public static class SuggestionService
+public class SuggestionService : ISuggestionService
 {
-    public static SuggestionMessage[] GetSuggestions()
+    private readonly IEnumerable<ISuggestionProvider> _providers;
+
+    public SuggestionService(IEnumerable<ISuggestionProvider> providers)
     {
-        return [SuggestionFactory.GetNotification("Testing stuff", "Hold on a moment")];
+        _providers = providers;
+    }
+    
+    public IReadOnlyList<SuggestionMessage> GetSuggestions()
+    {
+        var result = new List<SuggestionMessage>();
+        foreach (var provider in _providers) result.AddRange(provider.GetSuggestions());
+        return result;
     }
 }
