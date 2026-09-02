@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<colorPicker:AnimatedPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:v="clr-namespace:ColorPicker.View"
+    xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+    xmlns:m="clr-namespace:ColorPicker.Models.History"
+    xmlns:colorPicker="clr-namespace:ColorPicker"
+    x:Class="ColorPicker.View.HistoryPage"
+    x:DataType="vm:HistoryViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- ROW 0 — Sticky header-->
+        <Border Grid.Row="0"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightCard},
+                                                   Dark={StaticResource DarkCard}}"
+                StrokeThickness="0"
+                Padding="20,52,20,16">
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.06" Radius="8" Offset="0,4" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*, Auto">
+
+                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="1">
+                    <Label Text="{Binding LocalizedTitle}"
+                           Style="{StaticResource TitleLabelStyle}"
+                           FontSize="26" />
+                    <Label Text="{Binding EntriesCountString}"
+                           Style="{StaticResource BodyLabelStyle}"
+                           FontSize="12" />
+                </VerticalStackLayout>
+
+                <!-- Clear all — visible only when list has entries -->
+                <Button Grid.Column="1"
+                        Text="{Binding LocalizedClearAll}"
+                        BackgroundColor="Transparent"
+                        TextColor="#EF4444"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        HeightRequest="38"
+                        VerticalOptions="Center"
+                        IsVisible="{Binding IsNotEmpty}"
+                        Command="{Binding ClearAllCommand}" />
+            </Grid>
+        </Border>
+
+        <!-- ROW 1 — Entry list -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Entries}"
+                        SelectionMode="None"
+                        Margin="0,8,0,0">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Spacing="10"
+                                     Padding="32">
+                    <Label Text="{Binding LocalizedEmpty}"
+                           Style="{StaticResource TitleLabelStyle}"
+                           FontSize="17"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding LocalizedEmptySubtext}"
+                           Style="{StaticResource BodyLabelStyle}"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="m:HistoryEntry">
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="16,0,16,10">
+                        <Grid ColumnDefinitions="56, *, Auto"
+                              ColumnSpacing="12">
+
+                            <!-- Color swatch -->
+                            <Border Grid.Column="0"
+                                    WidthRequest="52" HeightRequest="52"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="2"
+                                    Stroke="{AppThemeBinding Light={StaticResource LightBorder},
+                                                              Dark={StaticResource DarkBorder}}"
+                                    BackgroundColor="{Binding Color}"
+                                    VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="{Binding Color}"
+                                            Opacity="0.3" Radius="8" Offset="0,3" />
+                                </Border.Shadow>
+                            </Border>
+
+                            <!-- Three info lines -->
+                            <VerticalStackLayout Grid.Column="1"
+                                                 VerticalOptions="Center"
+                                                 Spacing="3">
+
+                                <!-- Line 1: HEX title -->
+                                <Label Text="{Binding Hex}"
+                                       FontSize="15"
+                                       FontFamily="Monospace"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding
+                                           Light={StaticResource LightTextPrimary},
+                                           Dark={StaticResource DarkTextPrimary}}" />
+
+                                <!-- Line 2: RGB and HSV -->
+                                <Label Style="{StaticResource BodyLabelStyle}"
+                                       FontSize="11">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="RGB {0} {1} {2}   HSV {3}° {4} {5}">
+                                            <Binding Path="Red" />
+                                            <Binding Path="Green" />
+                                            <Binding Path="Blue" />
+                                            <Binding Path="Hue"        StringFormat="{}{0:F0}" />
+                                            <Binding Path="Saturation" StringFormat="{}{0:P0}" />
+                                            <Binding Path="Value"      StringFormat="{}{0:P0}" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+
+                                <!-- Line 3: Source + local display time -->
+                                <!--
+                                    RecordDate stored as DateTimeOffset.UtcNow.
+                                    LocalDateTimeConverter calls .ToLocalTime() so
+                                    time always reflects the device's current timezone,
+                                    not the timezone the entry was created in.
+                                    "g" = short locale-aware date + time (e.g. 12/25/24, 3:45 PM)
+                                -->
+                                <Label Style="{StaticResource BodyLabelStyle}"
+                                       FontSize="11">
+                                    <Label.Text>
+                                        <MultiBinding StringFormat="{}{0}  ·  {1}">
+                                            <Binding Path="HistoryEntryString" />
+                                            <Binding Path="DateTimeString" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+
+                            </VerticalStackLayout>
+
+                            <!-- Remove button -->
+                            <Border Grid.Column="2"
+                                    WidthRequest="36" HeightRequest="36"
+                                    StrokeShape="RoundRectangle 10"
+                                    StrokeThickness="1"
+                                    Stroke="#EF4444"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveEntryCommand, x:DataType={x:Type ContentPage}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Label Text="✕"
+                                       FontSize="15"
+                                       TextColor="#EF4444"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <!--  ROW 2 — Persistent nav bar -->
+        <v:BottomNavBar Grid.Row="2" />
+
+    </Grid>
+</colorPicker:AnimatedPage>

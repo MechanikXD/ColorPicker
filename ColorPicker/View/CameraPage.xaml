@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<colorPicker:AnimatedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ColorPicker.ViewModels"
+             xmlns:v="clr-namespace:ColorPicker.View"
+             xmlns:camera="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui.Camera"
+             xmlns:colorPicker="clr-namespace:ColorPicker"
+             x:Class="ColorPicker.View.CameraPage"
+             x:DataType="vm:CameraViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="Black">
+
+    <!--
+        Layout: two rows.
+          Row 0 (*) : camera feed + all overlays stacked on top of each other.
+          Row 1 (Auto): BottomNavBar, always visible.
+        Every overlay in Row 0 is placed in the same Grid cell so they layer
+        naturally via ZIndex / declaration order (later = on top).
+    -->
+    <Grid RowDefinitions="*, Auto">
+
+        <!-- Camera feed (bottom-most layer) -->
+        <camera:CameraView x:Name="LiveCamera"
+                           Grid.Row="0"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Fill"
+                           Loaded="OnCameraViewLoaded"
+                           Unloaded="OnCameraViewUnloaded">
+            <!--
+                Bind CameraPosition to IsFrontCamera via a converter:
+                true  → CameraPosition.Front
+                false → CameraPosition.Back
+                (IsFrontCameraToPositionConverter — to be implemented)
+            -->
+        </camera:CameraView>
+        
+        <!-- Loading overlay — appears after shutter tap, covers controls -->
+        <Grid x:Name="LoadingOverlay"
+              Grid.Row="0"
+              IsVisible="False"
+              BackgroundColor="#88000000">
+            <VerticalStackLayout HorizontalOptions="Center"
+                                 VerticalOptions="Center"
+                                 Spacing="16">
+                <ActivityIndicator IsRunning="True"
+                                   Color="White"
+                                   HeightRequest="48"
+                                   WidthRequest="48" />
+                <Label Text="{Binding LocalizedCameraProcessing}"
+                       TextColor="White"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+        
+        <!-- Flash overlay — invisible by default, top of the Z stack -->
+        <BoxView x:Name="FlashOverlay"
+                 Grid.Row="0"
+                 Color="White"
+                 Opacity="0"
+                 IsVisible="False"
+                 InputTransparent="True" />
+        
+        <!-- Reticle overlay (center of screen) -->
+        <!--
+            Two concentric shapes:
+            1. Outer ring  — 80×80 transparent circle, white stroke
+            2. Inner dot   — 8×8 solid white filled circle
+            Corner brackets give extra framing (four BoxViews at ±30px offset).
+        -->
+        <Grid Grid.Row="0"
+              HorizontalOptions="Center"
+              VerticalOptions="Center"
+              WidthRequest="80"
+              HeightRequest="80"
+              x:Name="CameraPointer">
+
+            <!-- Outer ring -->
+            <Border WidthRequest="80" HeightRequest="80"
+                    StrokeShape="Ellipse"
+                    Stroke="White"
+                    StrokeThickness="2"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.4" Radius="8" Offset="0,0" />
+                </Border.Shadow>
+            </Border>
+
+            <!-- Inner dot -->
+            <Border WidthRequest="8" HeightRequest="8"
+                    StrokeShape="Ellipse"
+                    StrokeThickness="0"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Flip camera button (top-right) -->
+        <Border Grid.Row="0"
+                WidthRequest="44" HeightRequest="44"
+                StrokeShape="Ellipse"
+                StrokeThickness="0"
+                BackgroundColor="#66000000"
+                HorizontalOptions="End"
+                VerticalOptions="Start"
+                Margin="0,52,20,0">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding FlipCameraCommand}" 
+                                      CommandParameter="{Binding Source={x:Reference LiveCamera}, x:DataType={x:Null}}"/>
+            </Border.GestureRecognizers>
+            <!--
+                Use an image asset for the flip icon.
+                Placeholder unicode character used here — replace with
+                an SVG/PNG icon asset in Resources/Images/.
+            -->
+            <Label Text="⇄"
+                   FontSize="20"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+        </Border>
+
+        <!-- Bottom camera controls -->
+        <!--
+            Pinned to the bottom of the camera area (above the nav bar).
+            Three-column layout:
+              Col 0: spacer (could hold gallery thumbnail later)
+              Col 1: shutter / capture button (center, large)
+              Col 2: spacer
+        -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*, Auto, *"
+              VerticalOptions="End"
+              Margin="0,0,0,24"
+              Padding="32,0">
+
+            <!-- Shutter button -->
+            <Grid Grid.Column="1"
+                  HorizontalOptions="Center">
+                <!-- Outer ring (white border) -->
+                <Border WidthRequest="76" HeightRequest="76"
+                        StrokeShape="Ellipse"
+                        Stroke="White"
+                        StrokeThickness="3"
+                        BackgroundColor="Transparent" />
+
+                <!-- Inner filled circle (white) — tapping this captures -->
+                <Border WidthRequest="60" HeightRequest="60"
+                        StrokeShape="Ellipse"
+                        StrokeThickness="0"
+                        BackgroundColor="White"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding  CaptureCommand}"
+                                              CommandParameter="{Binding Source={x:Reference LiveCamera}, x:DataType={x:Null}}"/>
+                    </Border.GestureRecognizers>
+                    <Border.Shadow>
+                        <Shadow Brush="{StaticResource Accent}"
+                                Opacity="0.5"
+                                Radius="16"
+                                Offset="0,4" />
+                    </Border.Shadow>
+                </Border>
+            </Grid>
+
+        </Grid>
+
+        <!-- BottomNavBar -->
+        <v:BottomNavBar Grid.Row="1" />
+
+    </Grid>
+</colorPicker:AnimatedPage>
