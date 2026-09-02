@@ -416,5 +416,59 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("c_combinations_accuracy", resourceCulture);
             }
         }
+        
+        internal static string setting_combination_ratio_step {
+            get {
+                return ResourceManager.GetString("setting_combination_ratio_step", resourceCulture);
+            }
+        }
+        
+        internal static string setting_max_combinations_count {
+            get {
+                return ResourceManager.GetString("setting_max_combinations_count", resourceCulture);
+            }
+        }
+        
+        internal static string setting_max_history_lenght {
+            get {
+                return ResourceManager.GetString("setting_max_history_lenght", resourceCulture);
+            }
+        }
+        
+        internal static string setting_restrict_history_lenght {
+            get {
+                return ResourceManager.GetString("setting_restrict_history_lenght", resourceCulture);
+            }
+        }
+        
+        internal static string setting_application_theme {
+            get {
+                return ResourceManager.GetString("setting_application_theme", resourceCulture);
+            }
+        }
+        
+        internal static string setting_application_language {
+            get {
+                return ResourceManager.GetString("setting_application_language", resourceCulture);
+            }
+        }
+        
+        internal static string setting_option_system {
+            get {
+                return ResourceManager.GetString("setting_option_system", resourceCulture);
+            }
+        }
+        
+        internal static string setting_option_theme_dark {
+            get {
+                return ResourceManager.GetString("setting_option_theme_dark", resourceCulture);
+            }
+        }
+        
+        internal static string setting_option_theme_light {
+            get {
+                return ResourceManager.GetString("setting_option_theme_light", resourceCulture);
+            }
+        }
     }
 }

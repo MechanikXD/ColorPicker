@@ -25,7 +25,7 @@
         <value>Додати</value>
     </data>
     <data name="button_cancel" xml:space="preserve">
-        <value>Відміна</value>
+        <value>Назад</value>
     </data>
     <data name="button_confirm" xml:space="preserve">
         <value>Підтвердити</value>
@@ -196,12 +196,39 @@
         <value>Очистити</value>
     </data>
     <data name="history_empty_history" xml:space="preserve">
-        <value>Історія вудсутня</value>
+        <value>Історія відсутня</value>
     </data>
     <data name="history_empty_history_subtext" xml:space="preserve">
-        <value>Бідь-які відскановані або комбіновані кольори з'являться тут.</value>
+        <value>Будь-які відскановані або комбіновані кольори з'являться тут.</value>
     </data>
     <data name="c_combinations_accuracy" xml:space="preserve">
         <value>Точність</value>
+    </data>
+    <data name="setting_application_language" xml:space="preserve">
+        <value>Мова Додатку</value>
+    </data>
+    <data name="setting_application_theme" xml:space="preserve">
+        <value>Тема Додатку</value>
+    </data>
+    <data name="setting_combination_ratio_step" xml:space="preserve">
+        <value>Крок змішування для кольорів</value>
+    </data>
+    <data name="setting_max_combinations_count" xml:space="preserve">
+        <value>Максимальна кількість комбінацій</value>
+    </data>
+    <data name="setting_max_history_lenght" xml:space="preserve">
+        <value>Максимальна довжина історії</value>
+    </data>
+    <data name="setting_restrict_history_lenght" xml:space="preserve">
+        <value>Обмеження довжини історії</value>
+    </data>
+    <data name="setting_option_system" xml:space="preserve">
+        <value>Системна</value>
+    </data>
+    <data name="setting_option_theme_dark" xml:space="preserve">
+        <value>Темна</value>
+    </data>
+    <data name="setting_option_theme_light" xml:space="preserve">
+        <value>Світла</value>
     </data>
 </root>
