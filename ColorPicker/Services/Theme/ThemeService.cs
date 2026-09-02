@@ -13,8 +13,7 @@ public static class ThemeService
 
     private static void UpdateApplicationTheme(object newIndex)
     {
-        CurrentTheme = Enum.TryParse<ApplicationTheme>(SettingsModels.ApplicationTheme.GetCurrentOption(), out var theme) 
-            ? theme : ApplicationTheme.System;
+        CurrentTheme = newIndex is int index ? (ApplicationTheme)index : ApplicationTheme.System;
         SetTheme(CurrentTheme);
     }
     

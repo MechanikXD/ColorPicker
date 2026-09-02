@@ -231,4 +231,16 @@
     <data name="setting_option_theme_light" xml:space="preserve">
         <value>Світла</value>
     </data>
+    <data name="setting_system_title" xml:space="preserve">
+        <value>Налаштування додатку</value>
+    </data>
+    <data name="setting_history_settings_group" xml:space="preserve">
+        <value>Історія</value>
+    </data>
+    <data name="setting_color_settings_group" xml:space="preserve">
+        <value>Кольори</value>
+    </data>
+    <data name="settings_title" xml:space="preserve">
+        <value>Налаштування</value>
+    </data>
 </root>

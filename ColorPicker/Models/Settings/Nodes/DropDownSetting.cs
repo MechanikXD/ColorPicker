@@ -3,7 +3,7 @@ namespace ColorPicker.Models.Settings.Nodes;
 public class DropDownSetting : ActiveSetting
 {
     public string Subtitle { get; init; } = "";
-    public required IReadOnlyList<string> Options { get; init; }
+    public IReadOnlyList<string> Options { get; set; } = [];
     
     public required int DefaultOption { get; init; }
 

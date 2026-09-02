@@ -34,10 +34,10 @@ public class SerializableSettings
             switch (setting)
             {
                 case ToggleSetting toggle when toggle.DefaultValue != toggle.Value:
-                    toggles.Add(toggle.Title, toggle.Value);
+                    toggles.Add(toggle.Id, toggle.Value);
                     break;
                 case DropDownSetting dropDown when dropDown.DefaultOption != dropDown.CurrentIndex:
-                    dropdowns.Add(dropDown.Title, dropDown.CurrentIndex);
+                    dropdowns.Add(dropDown.Id, dropDown.CurrentIndex);
                     break;
             }
         }

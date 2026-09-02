@@ -1,4 +1,5 @@
 using ColorPicker.Models.Settings.Nodes;
+using ColorPicker.Resources.Strings;
 
 namespace ColorPicker.Models.Settings;
 
@@ -7,9 +8,21 @@ public static class SettingsLayout
     public static IReadOnlyList<SettingNode> GetLayout()
     {
         return [
-            new GroupSetting {Title = "setting_color_settings_group", Children = GetColorRelatedSettings() },
-            new GroupSetting {Title = "setting_history_settings_group", Children = GetHistoryRelatedSettings() },
-            new TitleSetting {Title = "setting_system_title"},
+            new GroupSetting
+            {
+                Id = "setting_color_settings_group",
+                RefreshLocalization = self => self.Title = AppResources.setting_color_settings_group, Children = GetColorRelatedSettings()
+            },
+            new GroupSetting
+            {
+                Id = "setting_history_settings_group",
+                RefreshLocalization = self => self.Title = AppResources.setting_history_settings_group, Children = GetHistoryRelatedSettings()
+            },
+            new TitleSetting
+            {
+                Id = "setting_system_title",
+                RefreshLocalization = self => self.Title = AppResources.setting_system_title
+            },
             SettingsModels.ApplicationLanguage,
             SettingsModels.ApplicationTheme
         ];

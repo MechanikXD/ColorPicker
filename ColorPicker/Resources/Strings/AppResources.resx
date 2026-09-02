@@ -231,4 +231,16 @@
     <data name="setting_option_theme_light" xml:space="preserve">
         <value>Light</value>
     </data>
+    <data name="settings_title" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="setting_system_title" xml:space="preserve">
+        <value>System Settings</value>
+    </data>
+    <data name="setting_history_settings_group" xml:space="preserve">
+        <value>History Settings</value>
+    </data>
+    <data name="setting_color_settings_group" xml:space="preserve">
+        <value>Color Settings</value>
+    </data>
 </root>

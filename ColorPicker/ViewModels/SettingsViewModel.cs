@@ -1,8 +1,11 @@
 using System.Windows.Input;
 using ColorPicker.Models.Settings;
 using ColorPicker.Models.Settings.Nodes;
+using ColorPicker.Resources.Strings;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Settings;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -22,7 +25,7 @@ public class SettingsViewModel : BaseViewModel
     {
         get;
         private set => SetField(ref field, value);
-    } = "settings_title";
+    } = AppResources.settings_title;
 
     public bool CanGoBack => _stack.Count > 0;
 
@@ -44,11 +47,12 @@ public class SettingsViewModel : BaseViewModel
         {
             if (_stack.Count == 0) return;
             var (title, nodes) = _stack.Pop();
-            CurrentTitle = title;
+            CurrentTitle = _stack.Count == 0 ? AppResources.settings_title : title;
             CurrentNodes = nodes;
             OnPropertyChanged(nameof(CanGoBack));
         });
-        
+
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
         if (settingsSaveLoadService is SettingsSaveLoadService saveLoadService) LoadSettings(saveLoadService);
     }
 
@@ -64,5 +68,11 @@ public class SettingsViewModel : BaseViewModel
         if (!CanGoBack) return false;
         GoBackCommand.Execute(null);
         return true;
+    }
+    
+    private void RefreshLocalization()
+    {
+        if (_stack.Count == 0) CurrentTitle = AppResources.settings_title;
+        CurrentNodes = CurrentNodes.ToArray(); // Update current nodes
     }
 }

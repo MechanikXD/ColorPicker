@@ -470,5 +470,29 @@ namespace ColorPicker.Resources.Strings {
                 return ResourceManager.GetString("setting_option_theme_light", resourceCulture);
             }
         }
+        
+        internal static string setting_system_title {
+            get {
+                return ResourceManager.GetString("setting_system_title", resourceCulture);
+            }
+        }
+        
+        internal static string setting_history_settings_group {
+            get {
+                return ResourceManager.GetString("setting_history_settings_group", resourceCulture);
+            }
+        }
+        
+        internal static string setting_color_settings_group {
+            get {
+                return ResourceManager.GetString("setting_color_settings_group", resourceCulture);
+            }
+        }
+        
+        internal static string settings_title {
+            get {
+                return ResourceManager.GetString("settings_title", resourceCulture);
+            }
+        }
     }
 }

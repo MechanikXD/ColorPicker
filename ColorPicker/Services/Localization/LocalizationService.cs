@@ -7,11 +7,12 @@ namespace ColorPicker.Services.Localization;
 
 public static class LocalizationService
 {
+    private const string SYSTEM_CULTURE_KEY = "System";
     public static string CurrentCulture { get; private set; } = "";
 
     private static readonly Dictionary<string, string> CultureCodeProxy = new()
     {
-        [AppResources.setting_option_system] = "",
+        [SYSTEM_CULTURE_KEY] = "",
         ["English"] = "en",
         ["Українська"] = "uk"
     };
@@ -23,7 +24,8 @@ public static class LocalizationService
 
     private static void UpdateCurrentCulture(object newIndex)
     {
-        CurrentCulture = CultureCodeProxy[SettingsModels.ApplicationLanguage.GetCurrentOption()];
+        CurrentCulture = newIndex is 0 ? CultureCodeProxy[SYSTEM_CULTURE_KEY] : 
+            CultureCodeProxy[SettingsModels.ApplicationLanguage.GetCurrentOption()];
         SetCulture(CurrentCulture);
     }
     
