@@ -3,8 +3,10 @@ using ColorPicker.Models.Colors;
 using ColorPicker.Models.StaticData;
 using ColorPicker.Resources.Strings;
 using ColorPicker.Services.Color;
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.Palette;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -122,6 +124,8 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         CancelCommand = new Command(async void (_) => await ShellNavigationService.GoBackAsync());
         AddToPaletteCommand = new Command(_ => ShowAddToPalettePrompt());
         ConfirmEditCommand = new Command(_ => ShowConfirmEditPrompt());
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
     }
 
     private void ShowAddToPalettePrompt()
@@ -255,5 +259,30 @@ public class ManualColorViewModel : BaseViewModel, IQueryAttributable
         }
 
         if (ShowCombinationsPanel) CombinationsPanel?.TargetColor = CurrentColor;
+    }
+
+    public string LocalizedCancel => AppResources.button_cancel;
+    public string LocalizedAdd => AppResources.button_add;
+    public string LocalizedSave => AppResources.button_save;
+    public string LocalizedCopy => AppResources.m_color_copy;
+    public string LocalizedHue => AppResources.value_hue;
+    public string LocalizedSaturation => AppResources.value_saturation;
+    public string LocalizedValue => AppResources.value_value;
+    public string LocalizedRed => AppResources.value_red;
+    public string LocalizedGreen => AppResources.value_green;
+    public string LocalizedBlue => AppResources.value_blue;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedCancel));
+        OnPropertyChanged(nameof(LocalizedAdd));
+        OnPropertyChanged(nameof(LocalizedSave));
+        OnPropertyChanged(nameof(LocalizedCopy));
+        OnPropertyChanged(nameof(LocalizedHue));
+        OnPropertyChanged(nameof(LocalizedSaturation));
+        OnPropertyChanged(nameof(LocalizedValue));
+        OnPropertyChanged(nameof(LocalizedRed));
+        OnPropertyChanged(nameof(LocalizedGreen));
+        OnPropertyChanged(nameof(LocalizedBlue));
     }
 }

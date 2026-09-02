@@ -3,6 +3,8 @@ using System.Windows.Input;
 using ColorPicker.Models.History;
 using ColorPicker.Resources.Strings;
 using ColorPicker.Services.History;
+using ColorPicker.Services.Localization;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ColorPicker.ViewModels;
 
@@ -23,6 +25,8 @@ public class HistoryViewModel : BaseViewModel
         _historyService.Entries.CollectionChanged += (_, _) => UpdateEntryFields();
         RemoveEntryCommand = new Command<HistoryEntry>(RemoveEntry);
         ClearAllCommand = new Command(ClearHistory);
+        
+        WeakReferenceMessenger.Default.Register<LocalizationService.CultureChangedMessage>(this, (_, _) => RefreshLocalization());
         UpdateEntryFields();
     }
 
@@ -38,4 +42,17 @@ public class HistoryViewModel : BaseViewModel
     }
 
     private void ClearHistory() => _historyService.Clear();
+
+    public string LocalizedTitle => AppResources.history_title;
+    public string LocalizedClearAll => AppResources.history_clear_all;
+    public string LocalizedEmpty => AppResources.history_empty_history;
+    public string LocalizedEmptySubtext => AppResources.history_empty_history_subtext;
+    
+    private void RefreshLocalization()
+    {
+        OnPropertyChanged(nameof(LocalizedTitle));
+        OnPropertyChanged(nameof(LocalizedClearAll));
+        OnPropertyChanged(nameof(LocalizedEmpty));
+        OnPropertyChanged(nameof(LocalizedEmptySubtext));
+    }
 }

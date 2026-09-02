@@ -2,8 +2,6 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
-             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
-             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.BottomNavBar"
              x:DataType="vm:BottomNavViewModel">
 
@@ -76,7 +74,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=main}" />
-                    <Label Text="{localization:Translate navbar_home}"
+                    <Label Text="{Binding LocalizedNavBarHome}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=main}" />
@@ -99,7 +97,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=palettes}" />
-                    <Label Text="{localization:Translate navbar_palette}"
+                    <Label Text="{Binding LocalizedNavBarPalettes}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=palettes}" />
@@ -122,7 +120,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=history}" />
-                    <Label Text="{localization:Translate navbar_history}"
+                    <Label Text="{Binding LocalizedNavBarHistory}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=history}" />
@@ -142,7 +140,7 @@
                            FontSize="{StaticResource NavIconSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=settings}" />
-                    <Label Text="{localization:Translate navbar_settings}"
+                    <Label Text="{Binding LocalizedNavBarSettings}"
                            FontSize="{StaticResource NavFontSize}"
                            HorizontalOptions="Center"
                            TextColor="{Binding ActiveRoute, Converter={StaticResource RouteToColorConverter}, ConverterParameter=settings}" />

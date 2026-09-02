@@ -1,12 +1,23 @@
-using ColorPicker.Models.StaticData;
+using ColorPicker.Models.Settings;
 
 namespace ColorPicker.Services.Theme;
 
-public class ThemeService : IThemeService
+public static class ThemeService
 {
-    public ApplicationTheme CurrentTheme { get; private set; } = ApplicationTheme.System;
+    public static ApplicationTheme CurrentTheme { get; private set; } = ApplicationTheme.System;
+
+    public static void Initialize()
+    {
+        SettingsModels.ApplicationTheme.OnSettingChanged += UpdateApplicationTheme;
+    }
+
+    private static void UpdateApplicationTheme(object newIndex)
+    {
+        CurrentTheme = newIndex is int index ? (ApplicationTheme)index : ApplicationTheme.System;
+        SetTheme(CurrentTheme);
+    }
     
-    public void SetTheme(ApplicationTheme newTheme)
+    public static void SetTheme(ApplicationTheme newTheme)
     {
         CurrentTheme = newTheme;
 
@@ -19,14 +30,5 @@ public class ThemeService : IThemeService
                 _ => AppTheme.Unspecified
             };
         }
-        
-        Preferences.Default.Set(UserStorageKeys.SELECTED_THEME_STORAGE_KEY, newTheme.ToString());
-    }
-
-    public void ApplySavedTheme()
-    {
-        var saved = Preferences.Default.Get(UserStorageKeys.SELECTED_THEME_STORAGE_KEY, nameof(ApplicationTheme.System));
-        var theme = Enum.TryParse<ApplicationTheme>(saved, out var parsed) ? parsed : ApplicationTheme.System;
-        SetTheme(theme);
     }
 }

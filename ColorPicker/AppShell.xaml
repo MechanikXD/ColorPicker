@@ -12,7 +12,7 @@
     <ShellContent Route="palettes" ContentTemplate="{DataTemplate v:PalettePage}" />
     <ShellContent Route="camera" ContentTemplate="{DataTemplate v:CameraPage}" />
     <ShellContent Route="history" ContentTemplate="{DataTemplate v:HistoryPage}" />
-    <!--<ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />-->
+    <ShellContent Route="settings" ContentTemplate="{DataTemplate v:SettingsPage}" />
 
     <Shell.Resources>
         <ShellContent x:Key="ManualColorRoute" Route="manualcolor"

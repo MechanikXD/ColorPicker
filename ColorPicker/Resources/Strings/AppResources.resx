@@ -201,4 +201,46 @@
     <data name="history_empty_history_subtext" xml:space="preserve">
         <value>Colors you scan or pick manually will appear here.</value>
     </data>
+    <data name="c_combinations_accuracy" xml:space="preserve">
+        <value>Accuracy</value>
+    </data>
+    <data name="setting_combination_ratio_step" xml:space="preserve">
+        <value>Combination's Color Ratio Step</value>
+    </data>
+    <data name="setting_max_combinations_count" xml:space="preserve">
+        <value>Max Combination per Color</value>
+    </data>
+    <data name="setting_max_history_lenght" xml:space="preserve">
+        <value>Max History Length</value>
+    </data>
+    <data name="setting_restrict_history_lenght" xml:space="preserve">
+        <value>Restricted History Length</value>
+    </data>
+    <data name="setting_application_theme" xml:space="preserve">
+        <value>Application Theme</value>
+    </data>
+    <data name="setting_application_language" xml:space="preserve">
+        <value>Application Language</value>
+    </data>
+    <data name="setting_option_system" xml:space="preserve">
+        <value>System</value>
+    </data>
+    <data name="setting_option_theme_dark" xml:space="preserve">
+        <value>Dark</value>
+    </data>
+    <data name="setting_option_theme_light" xml:space="preserve">
+        <value>Light</value>
+    </data>
+    <data name="settings_title" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="setting_system_title" xml:space="preserve">
+        <value>System Settings</value>
+    </data>
+    <data name="setting_history_settings_group" xml:space="preserve">
+        <value>History Settings</value>
+    </data>
+    <data name="setting_color_settings_group" xml:space="preserve">
+        <value>Color Settings</value>
+    </data>
 </root>

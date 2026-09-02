@@ -1,22 +1,23 @@
 using System.Collections.Concurrent;
+using System.Globalization;
 using ColorPicker.Models.Colors;
+using ColorPicker.Models.Settings;
 
 namespace ColorPicker.Services.Color;
 
 public static class ColorCombinationService
 {
-    private const double COMBINATION_RATIO_STEP = 0.1;
-    private const int MAX_COMBINATION_COUNT = 10;
-    
     public static async Task<IList<ColorCombination>> GetCombinationsAsync(Microsoft.Maui.Graphics.Color source, 
         ColorPalette palette, CancellationToken ct = default)
     {
         if (palette.Palette.Count <= 1) return [];
-
+        var combinationRatioStep = double.Parse(SettingsModels.ColorSettings.CombinationRatioStep.GetCurrentOption(), NumberStyles.Any, CultureInfo.InvariantCulture);
+        var maxCombinationCount = int.Parse(SettingsModels.ColorSettings.MaxCombinationCount.GetCurrentOption());
+        
         return await Task.Run(() =>
         {
             var targetLab = CieColorTransformService.RgbToLab(source);
-            const int COMBINATIONS_PER_PAIR = (int)(1 / COMBINATION_RATIO_STEP);
+            var combinationsPerPair = (int)(1 / combinationRatioStep);
             
             var paletteList = palette.Palette;
             var totalCount = paletteList.Count;
@@ -34,9 +35,9 @@ public static class ColorCombinationService
                     var bestRatio = 0.0;
                     var bestRgb = new Rgb(0, 0, 0);
 
-                    for (var step = 1; step < COMBINATIONS_PER_PAIR; step++)
+                    for (var step = 1; step < combinationsPerPair; step++)
                     {
-                        var ratio = COMBINATION_RATIO_STEP * step;
+                        var ratio = combinationRatioStep * step;
                         var combinedRed = (int)(color1.Red * ratio + color2.Red * (1 - ratio));
                         var combinedGreen = (int)(color1.Green * ratio + color2.Green * (1 - ratio));
                         var combinedBlue = (int)(color1.Blue * ratio + color2.Blue * (1 - ratio));
@@ -65,7 +66,7 @@ public static class ColorCombinationService
                 }
             });
 
-            return bag.OrderByDescending(c => c.Accuracy).Take(MAX_COMBINATION_COUNT).ToList();
+            return bag.OrderByDescending(c => c.Accuracy).Take(maxCombinationCount).ToList();
         }, ct);
     }
     

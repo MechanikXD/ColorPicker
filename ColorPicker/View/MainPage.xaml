@@ -4,10 +4,8 @@
              xmlns:vm="clr-namespace:ColorPicker.ViewModels"
              xmlns:v="clr-namespace:ColorPicker.View"
              xmlns:m="clr-namespace:ColorPicker.Models.Suggestion"
-             xmlns:text="clr-namespace:ColorPicker.Services.Theme"
              xmlns:selectors="clr-namespace:ColorPicker.Services.Selectors"
              xmlns:colorPicker="clr-namespace:ColorPicker"
-             xmlns:localization="clr-namespace:ColorPicker.Services.Localization"
              x:Class="ColorPicker.View.MainPage"
              x:DataType="vm:MainViewModel"
              Shell.NavBarIsVisible="False">
@@ -159,16 +157,16 @@
     -->
     <Grid RowDefinitions="*, Auto">
 
-        <!-- ── Scrollable body ───────────────────────────────────────── -->
+        <!-- Scrollable body -->
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Padding="20,52,20,16" Spacing="0">
 
                 <!-- Title / greeting -->
-                <Label Text="{localization:Translate main_welcome_message}"
+                <Label Text="{Binding LocalizedWelcome}"
                        Style="{StaticResource TitleLabelStyle}"
                        FontSize="26"
                        Margin="0,0,0,4" />
-                <Label Text="{localization:Translate main_pick_a_color}"
+                <Label Text="{Binding LocalizedPickAColor}"
                        Style="{StaticResource BodyLabelStyle}"
                        Margin="0,0,0,28" />
 
@@ -177,11 +175,11 @@
                         Margin="0,0,0,28">
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="4">
-                            <Label Text="{localization:Translate main_manual_color_selection}"
+                            <Label Text="{Binding LocalizedColorSelection}"
                                    FontAttributes="Bold" FontSize="15"
                                    TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                                Dark={StaticResource DarkTextPrimary}}" />
-                            <Label Text="{localization:Translate main_manual_color_selection_subtext}"
+                            <Label Text="{Binding LocalizedColorSelectionSubtext}"
                                    Style="{StaticResource BodyLabelStyle}" FontSize="12" />
                         </VerticalStackLayout>
 
@@ -202,7 +200,7 @@
                 </Border>
 
                 <!-- Suggestions section header -->
-                <Label Text="{localization:Translate main_suggestions}"
+                <Label Text="{Binding LocalizedSuggestions}"
                        FontAttributes="Bold" FontSize="17"
                        TextColor="{AppThemeBinding Light={StaticResource LightTextPrimary},
                                                    Dark={StaticResource DarkTextPrimary}}"
@@ -224,10 +222,10 @@
                             <VerticalStackLayout Spacing="6" HorizontalOptions="Center" Padding="8">
                                 <Label Text="ℹ" FontSize="28" HorizontalOptions="Center"
                                        TextColor="{StaticResource Accent}" />
-                                <Label Text="{localization:Translate main_suggestions_empty}"
+                                <Label Text="{Binding LocalizedSuggestionsEmpty}"
                                        Style="{StaticResource BodyLabelStyle}"
                                        HorizontalOptions="Center" />
-                                <Label Text="{localization:Translate main_suggestions_empty_subtext}"
+                                <Label Text="{Binding LocalizedSuggestionsEmptySubtext}"
                                        Style="{StaticResource BodyLabelStyle}"
                                        FontSize="11"
                                        HorizontalOptions="Center"

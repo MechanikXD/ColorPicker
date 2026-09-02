@@ -1,3 +1,4 @@
+using ColorPicker.Services.Localization;
 using ColorPicker.Services.Navigation;
 using ColorPicker.Services.SaveLoad;
 using ColorPicker.Services.Theme;
@@ -7,10 +8,11 @@ namespace ColorPicker;
 
 public partial class App : Application
 {
-    public App(AppShell appShell, IThemeService themeService, IEnumerable<ISaveLoadService> saveLoadServices)
+    public App(AppShell appShell, IEnumerable<ISaveLoadService> saveLoadServices)
     {
         InitializeComponent();
-        themeService.ApplySavedTheme();
+        ThemeService.Initialize();
+        LocalizationService.Initialize();
         foreach (var service in saveLoadServices) service.Load();
         MainPage = appShell;
     }
@@ -31,6 +33,7 @@ public partial class App : Application
         _ = s.GetService<PalettePage>();
         _ = s.GetService<CameraPage>();
         _ = s.GetService<HistoryPage>();
+        _ = s.GetService<SettingsPage>();
 
         _ = s.GetService<ManualColorPage>();
         _ = s.GetService<ColorScanResultPage>();
